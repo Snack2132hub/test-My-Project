@@ -10,7 +10,7 @@ const kanit = Kanit({
 });
 
 export const metadata: Metadata = {
-  title: "My Project https://img.icons8.com/?size=100&id=60963&format=png&color=000000",
+  title: "My Project ",
   description: "Starter layout with header, navbar, main, and footer",
 };
 
