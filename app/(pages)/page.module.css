@@ -1,0 +1,31 @@
+.wrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.title {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.main {
+  flex: 1;
+  border: 1px dashed #cbd5e1;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  padding: 2rem;
+  color: #475569;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}

@@ -1,0 +1,143 @@
+.topBar {
+  height: 0.75rem;
+  background: #fb923c;
+}
+
+.nav {
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.inner {
+  display: flex;
+  height: 4rem;
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (min-width: 640px) {
+  .inner {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    padding-inline: 2rem;
+  }
+}
+
+.brand {
+  font-size: var(--h4);
+  font-weight: var(--bold);
+  color: #f97316;
+  text-decoration: none;
+}
+
+.menu {
+  display: none;
+  align-items: center;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0 1rem 0 auto;
+  padding: 0;
+  font-size: var(--description);
+  font-weight: var(--regular);
+  color: #334155;
+}
+
+@media (min-width: 768px) {
+  .menu {
+    display: flex;
+  }
+}
+
+.menu a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  color: #f97316;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdownTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.dropdownTrigger:hover {
+  color: #f97316;
+}
+
+.caret {
+  font-size: var(--caption);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  left: 0;
+  min-width: 13rem;
+  margin: 0;
+  padding: 0.5rem;
+  list-style: none;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+  z-index: 30;
+}
+
+.dropdownMenu a {
+  display: block;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  white-space: nowrap;
+}
+
+.dropdownMenu a:hover {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.dropdown:hover .dropdownMenu,
+.dropdown:focus-within .dropdownMenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.langBtn {
+  border: 1px solid #fdba74;
+  border-radius: 999px;
+  background: #ffffff;
+  padding: 0.25rem 0.75rem;
+  font-size: var(--caption);
+  font-weight: var(--medium);
+  color: #f97316;
+  cursor: pointer;
+}
+
+.langBtn:hover {
+  background: #fff7ed;
+}
