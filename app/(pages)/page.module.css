@@ -4,6 +4,82 @@
   flex-direction: column;
 }
 
+/* ===== Hero Banner - Full Frame ===== */
+.heroBanner {
+  position: relative;
+  width: 100vw;
+  height: 100vh; /* เต็มหน้าจอ */
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  /* ตัดขอบ container */
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  width: 100vw;
+}
+
+.heroImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.heroImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ===== Hero Content ===== */
+.heroContent {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.1) 0%,
+    rgba(15, 23, 42, 0.3) 40%,
+    rgba(15, 23, 42, 0.6) 80%,
+    rgba(15, 23, 42, 0.8) 100%
+  );
+}
+
+.heroTextWrapper {
+  max-width: 800px;
+  text-align: center;
+  padding: 2rem;
+}
+
+.heroTitle {
+  margin: 0 0 0.5rem 0;
+  color: #ffffff;
+  font-size: 4rem;
+  font-weight: 700;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.5rem;
+  font-weight: 300;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.02em;
+}
+
+/* ===== Content Below Banner ===== */
+.contentWrapper {
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem 0;
+  background: #f8fafc;
+}
+
 .header {
   margin-bottom: 1.5rem;
   border: 1px solid #e2e8f0;
@@ -28,4 +104,102 @@
   padding: 2rem;
   color: #475569;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+/* ===== Responsive ===== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .heroTitle {
+    font-size: 3.5rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.25rem;
+  }
+}
+
+/* Tablet เล็ก */
+@media (max-width: 768px) {
+  .heroBanner {
+    height: 90vh;
+    min-height: 90vh;
+    max-height: 90vh;
+  }
+
+  .heroTitle {
+    font-size: 2.75rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.125rem;
+  }
+
+  .heroContent {
+    padding: 1.5rem;
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.1) 0%,
+      rgba(15, 23, 42, 0.4) 50%,
+      rgba(15, 23, 42, 0.7) 80%,
+      rgba(15, 23, 42, 0.9) 100%
+    );
+  }
+
+  .heroTextWrapper {
+    padding: 1.5rem;
+  }
+}
+
+/* มือถือ */
+@media (max-width: 480px) {
+  .heroBanner {
+    height: 80vh;
+    min-height: 80vh;
+    max-height: 80vh;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroSubtitle {
+    font-size: 0.95rem;
+  }
+
+  .heroContent {
+    padding: 1rem;
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.2) 0%,
+      rgba(15, 23, 42, 0.5) 40%,
+      rgba(15, 23, 42, 0.8) 70%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+  }
+
+  .heroTextWrapper {
+    padding: 1rem;
+  }
+
+  .contentWrapper {
+    padding: 1rem 0;
+  }
+}
+
+/* มือถือเล็กมาก */
+@media (max-width: 360px) {
+  .heroBanner {
+    height: 70vh;
+    min-height: 70vh;
+    max-height: 70vh;
+  }
+
+  .heroTitle {
+    font-size: 1.5rem;
+  }
+
+  .heroSubtitle {
+    font-size: 0.85rem;
+  }
 }
