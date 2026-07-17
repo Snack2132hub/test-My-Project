@@ -7,7 +7,7 @@ export default function Home() {
       {/* Hero Banner */}
       <section className="relative w-full h-[clamp(250px,40vw,500px)] bg-gray-200 overflow-hidden">
         <Image
-          src="/img/indexbanner/herobannertest.png"
+          src="/img/indexbanner/herobannertest01.png"
           alt="Hero Banner"
           fill
           className="object-cover object-top"
@@ -47,9 +47,10 @@ export default function Home() {
             {/* Announcement Card 1 */}
             <div className="rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 bg-white aspect-[3/4] relative transform hover:-translate-y-2 cursor-pointer group">
               <Image
-                    src="/img/announce2.jpg"
+                    src="/img/indexnews/test01.jpg"
                     alt="เปลี่ยนแปลงเวลาให้บริการ"
                     fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
             </div>
             {/* Announcement Card 2 */}
@@ -58,6 +59,7 @@ export default function Home() {
                     src="/img/indexnews/test01.jpg"
                     alt="เปลี่ยนแปลงเวลาให้บริการ"
                     fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
             </div>
             {/* Announcement Card 3 */}
@@ -66,6 +68,7 @@ export default function Home() {
                     src="/img/indexnews/test01.jpg"
                     alt="เปลี่ยนแปลงเวลาให้บริการ"
                     fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
             </div>
           </div>
