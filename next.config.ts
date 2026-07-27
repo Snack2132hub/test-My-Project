@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   output: "standalone",
+
   images: {
+    qualities: [75, 95], // เพิ่มบรรทัดนี้
+
     remotePatterns: [
       {
         protocol: "https",
