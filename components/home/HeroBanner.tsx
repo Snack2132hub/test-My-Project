@@ -19,7 +19,15 @@ const banners = [
     showContent: true, // แสดงกล่องข้อความและปุ่มกด
   },
   {
-    src: "/img/indexbanner/herobannertest02.png",
+    src: "/img/indexbanner/herobannertest03.png",
+    title: "",
+    subtitle: "",
+    description: "",
+    buttonText: "",
+    showContent: false, // ซ่อนกล่องข้อความ ให้เห็นเฉพาะรูปภาพเต็มแผ่น
+  },
+  {
+    src: "/img/indexbanner/herobannertest04.png",
     title: "",
     subtitle: "",
     description: "",
@@ -48,7 +56,7 @@ export default function HeroBanner() {
 
   // ตั้งเวลาสไลด์อัตโนมัติทุกๆ 8 วินาที
   useEffect(() => {
-    const timer = setInterval(handleNext, 8000);
+    const timer = setInterval(handleNext, 3000);
     return () => clearInterval(timer);
   }, []);
 

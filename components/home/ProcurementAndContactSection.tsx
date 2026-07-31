@@ -13,6 +13,7 @@ import {
   Printer,
   Mail,
   Globe,
+  ExternalLink,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -215,20 +216,32 @@ export default function ProcurementAndContactSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 pt-4">
           {/* ฝั่งซ้าย: สื่อวิดีโอ */}
           <div className="flex flex-col">
-            <div className="flex items-center gap-2.5 mb-4 text-[#ea580c]">
-              <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-[#ea580c]">
-                <Play className="w-5 h-5 fill-[#ea580c]" />
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2.5 text-[#ea580c]">
+                <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-[#ea580c]">
+                  <Play className="w-5 h-5 fill-[#ea580c]" />
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 drop-shadow-xs">
+                  สื่อวิดีโอ
+                </h2>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 drop-shadow-xs">
-                สื่อวิดีโอ
-              </h2>
+              <a
+                href="https://youtu.be/XxGFqrPq7lk?si=h2hWjMh4_kSWRcrs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full text-xs font-semibold shadow-xs transition-colors"
+              >
+                <Play className="w-3.5 h-3.5 fill-white" />
+                <span>ดูบน YouTube</span>
+                <ExternalLink className="w-3 h-3 ml-0.5" />
+              </a>
             </div>
 
             <div className="bg-white/95 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-orange-100/80 p-2 relative group aspect-[16/10] flex items-center justify-center">
               {isVideoPlaying ? (
                 <iframe
                   className="w-full h-full rounded-xl sm:rounded-2xl"
-                  src="https://www.youtube.com/embed/5Peo-ivmupE?autoplay=1"
+                  src="https://www.youtube.com/embed/XxGFqrPq7lk?autoplay=1"
                   title="วิดีโอแนะนำโรงพยาบาลปากช่องนานา"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -239,9 +252,10 @@ export default function ProcurementAndContactSection() {
                   className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer group/video"
                 >
                   <Image
-                    src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800"
+                    src="https://img.youtube.com/vi/XxGFqrPq7lk/hqdefault.jpg"
                     alt="สื่อวิดีโอแนะนำโรงพยาบาล"
                     fill
+                    referrerPolicy="no-referrer"
                     className="object-cover group-hover/video:scale-105 transition-transform duration-500"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
@@ -250,10 +264,20 @@ export default function ProcurementAndContactSection() {
                       <Play className="w-8 h-8 sm:w-10 sm:h-10 fill-current ml-1" />
                     </div>
                   </div>
-                  <div className="absolute bottom-3 left-3 right-3 bg-black/60 backdrop-blur-md p-3 rounded-xl text-white">
+                  <div className="absolute bottom-3 left-3 right-3 bg-black/60 backdrop-blur-md p-3 rounded-xl text-white flex items-center justify-between gap-2">
                     <p className="text-xs sm:text-sm font-medium line-clamp-1">
                       วิดีโอแนะนำโรงพยาบาลปากช่องนานา - มุ่งสู่บริการสุขภาพมาตรฐานสากล
                     </p>
+                    <a
+                      href="https://youtu.be/XxGFqrPq7lk?si=h2hWjMh4_kSWRcrs"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="shrink-0 flex items-center gap-1 px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold transition-colors"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      <span className="hidden sm:inline">เปิด YouTube</span>
+                    </a>
                   </div>
                 </div>
               )}
@@ -327,7 +351,7 @@ export default function ProcurementAndContactSection() {
                     <span className="font-bold text-xs">LINE</span>
                   </a>
                   <a
-                    href="https://youtube.com"
+                    href="https://youtu.be/XxGFqrPq7lk?si=h2hWjMh4_kSWRcrs"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-8 h-8 rounded-full bg-[#FF0000] text-white flex items-center justify-center hover:opacity-90 transition-opacity shadow-xs"
