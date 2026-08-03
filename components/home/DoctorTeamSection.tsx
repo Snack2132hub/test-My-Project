@@ -68,7 +68,7 @@ export default function DoctorTeamSection() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full py-2">
             {doctors.map((doctor) => (
               <div key={doctor.id} className="flex flex-col items-center text-center group cursor-pointer">
-                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 to-[#ffedd5]/90 border border-orange-100 shadow-sm group-hover:shadow-md transition-all duration-300">
+                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 to-[#ffedd5]/90 border border-orange-100 shadow-sm group-hover:shadow-md transition-all duration-300 mb-4">
                   {/* 📌 [จุดเปลี่ยนรูปแพทย์] 
                       สามารถเปลี่ยน src ของรูปหมอในอาร์เรย์ doctors ด้านบน 
                   */}
@@ -80,11 +80,15 @@ export default function DoctorTeamSection() {
                     sizes="(max-width: 768px) 100vw, 25vw"
                   />
                 </div>
-                <h3 className="mt-4 text-base font-bold text-gray-800 group-hover:text-[#f97316] transition-colors">
+                <h4 className=" text-[18px] font-bold text-gray-800 group-hover:text-[#f97316] transition-colors">
                   {doctor.name}
-                </h3>
-                <p className="text-xs text-gray-500 mt-0.5">{doctor.position}</p>
-                <p className="text-xs text-gray-500">{doctor.specialty}</p>
+                </h4>
+                <p className="text-[14px] text-gray-500">
+                  {doctor.position}
+                </p>
+                <p className="text-[14px] text-gray-500">
+                  {doctor.specialty}
+                </p>
               </div>
             ))}
           </div>

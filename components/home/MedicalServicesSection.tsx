@@ -158,11 +158,11 @@ export default function MedicalServicesSection() {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={servicePage}
-                    initial={{ opacity: 0, x: 30 }}
+                    initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -30 }}
-                    transition={{ duration: 0.35, ease: "easeInOut" }}
-                    className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-8 gap-x-4 sm:gap-x-6 md:gap-x-8 place-items-center w-full py-2"
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
+                    className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-8 gap-x-4 sm:gap-x-6 md:gap-x-8 place-items-start justify-items-center w-full py-2"
                   >
                     {services
                       .slice(
@@ -172,27 +172,22 @@ export default function MedicalServicesSection() {
                       .map((service, index) => {
                         const IconComponent = service.icon;
                         return (
-                          <motion.div
-                            key={index}
-                            whileHover={{ y: -6, scale: 1.03 }}
-                            transition={{
-                              type: "spring",
-                              stiffness: 300,
-                              damping: 20,
-                            }}
+                          <div
+                            key={`${service.title}-${index}`}
                             className="flex flex-col items-center text-center group cursor-pointer w-full"
                           >
                             {/* ปุ่มวงกลมไอคอน */}
-                            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[#ffa154] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] flex items-center justify-center text-white shadow-md group-hover:shadow-xl group-hover:shadow-orange-200/50 transition-all duration-300 relative border border-white/10">
-                              <div className="absolute inset-0 rounded-full bg-orange-400 opacity-0 group-hover:opacity-20 group-hover:scale-110 transition-all duration-300 blur-xs" />
+                            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[#ffa154] to-[#f97316] group-hover:from-[#f97316] group-hover:to-[#ea580c] group-hover:opacity-80 flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition-all duration-300 relative border border-white/10 shrink-0">
                               <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white stroke-[1.5] relative z-10" />
                             </div>
 
-                            {/* ชื่อนวัตกรรม/คลินิก */}
-                            <span className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base font-medium text-gray-700 group-hover:text-[#f97316] transition-colors leading-snug tracking-tight max-w-[130px] block">
-                              {service.title}
-                            </span>
-                          </motion.div>
+                            {/* ชื่อนวัตกรรม/คลินิก - กำหนดความสูงและจัดชิดบนไม่ให้ดันไอคอน */}
+                            <div className="mt-3 sm:mt-4 h-10 sm:h-12 flex items-start justify-center w-full">
+                              <span className="text-xs sm:text-sm md:text-base font-medium text-gray-700 group-hover:text-[#f97316] group-hover:opacity-80 transition-all duration-300 leading-snug tracking-tight max-w-[130px] block text-center">
+                                {service.title}
+                              </span>
+                            </div>
+                          </div>
                         );
                       })}
                   </motion.div>
@@ -209,7 +204,7 @@ export default function MedicalServicesSection() {
               </button>
             </div>
 
-            {/* จุดบอกหน้าที่ของการสไลด์ */}
+            {/* จุดบอกตำแหน่งของการสไลด์ (ต่อหน้า หน้าละ 5 รายการ) */}
             <div className="flex justify-center items-center gap-2 mt-8">
               {Array.from({ length: totalServicePages }).map((_, idx) => (
                 <button
@@ -231,30 +226,25 @@ export default function MedicalServicesSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-10 gap-x-4 sm:gap-x-6 md:gap-x-8 place-items-center w-full px-2 sm:px-6 py-2"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-10 gap-x-4 sm:gap-x-6 md:gap-x-8 place-items-start justify-items-center w-full px-2 sm:px-6 py-2"
           >
             {services.map((service, index) => {
               const IconComponent = service.icon;
               return (
-                <motion.div
+                <div
                   key={index}
-                  whileHover={{ y: -6, scale: 1.03 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 20,
-                  }}
                   className="flex flex-col items-center text-center group cursor-pointer w-full"
                 >
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[#ffa154] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] flex items-center justify-center text-white shadow-md group-hover:shadow-xl group-hover:shadow-orange-200/50 transition-all duration-300 relative border border-white/10">
-                    <div className="absolute inset-0 rounded-full bg-orange-400 opacity-0 group-hover:opacity-20 group-hover:scale-110 transition-all duration-300 blur-xs" />
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[#ffa154] to-[#f97316] group-hover:from-[#f97316] group-hover:to-[#ea580c] group-hover:opacity-80 flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition-all duration-300 relative border border-white/10 shrink-0">
                     <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white stroke-[1.5] relative z-10" />
                   </div>
 
-                  <span className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base font-medium text-gray-700 group-hover:text-[#f97316] transition-colors leading-snug tracking-tight max-w-[130px] block">
-                    {service.title}
-                  </span>
-                </motion.div>
+                  <div className="mt-3 sm:mt-4 h-10 sm:h-12 flex items-start justify-center w-full">
+                    <span className="text-xs sm:text-sm md:text-base font-medium text-gray-700 group-hover:text-[#f97316] group-hover:opacity-80 transition-all duration-300 leading-snug tracking-tight max-w-[130px] block text-center">
+                      {service.title}
+                    </span>
+                  </div>
+                </div>
               );
             })}
           </motion.div>

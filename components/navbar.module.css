@@ -1,3 +1,4 @@
+
 .topBar {
   height: 0.75rem;
   background: #fb923c;
@@ -6,6 +7,7 @@
 .nav {
   border-bottom: 1px solid #e2e8f0;
   background: #ffffff;
+  font-family: "Kanit", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .inner {

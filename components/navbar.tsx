@@ -12,6 +12,13 @@ import {
   X,
 } from "lucide-react";
 
+import { Kanit } from "next/font/google";
+
+const kanit = Kanit({
+  subsets: ["thai", "latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
 export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -24,7 +31,7 @@ export default function Navbar() {
   return (
     <header className="w-full relative z-50 font-sans shadow-xs">
       {/* 1. แถบ Top Bar สีเขียวมรกต (Emerald Teal Top Bar) */}
-      <div className="bg-[#00bba7] text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs sm:text-sm">
+      <div className="bg-[#ff8c1a] text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs sm:text-sm">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* เบอร์โทรศัพท์ฝั่งซ้าย */}
           <div className="flex items-center gap-2 font-medium">
@@ -35,82 +42,92 @@ export default function Navbar() {
           {/* Social Media & Maps Links ฝั่งขวา */}
           <div className="flex items-center gap-3">
             <a
-              href="https://facebook.com"
+              href="https://www.facebook.com/pnnh.go.th/?_rdc=1&_rdr"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:opacity-80 transition-opacity p-1"
               aria-label="Facebook"
             >
-              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
+              <Image
+                src="/img/facebook.png"
+                alt="Facebook"
+                width={20}
+                height={20}
+                className="object-contain"
+              />
             </a>
             <a
-              href="https://line.me"
+              href="https://page.line.me/388bkozc?openQrModal=true"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:opacity-80 transition-opacity p-1 font-bold text-[11px] leading-none"
               aria-label="Line"
             >
-              LINE
+              <Image
+                src="/img/linelogo.png"
+                alt="Line"
+                width={20}
+                height={20}
+                className="object-contain"
+              />
             </a>
             <a
-              href="https://youtu.be/XxGFqrPq7lk?si=h2hWjMh4_kSWRcrs"
+              href="https://www.youtube.com/channel/UCRJNFYMJhUnOLTbkA2vQqUw"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:opacity-80 transition-opacity p-1"
               aria-label="YouTube"
             >
-              <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
+              <Image
+                src="/img/youtubelogo.png"
+                alt="YouTube"
+                width={20}
+                height={20}
+                className="object-contain"
+              />
             </a>
             <a
-              href="https://maps.google.com"
+              href="https://www.google.co.th/maps/place/%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B8%9E%E0%B8%A2%E0%B8%B2%E0%B8%9A%E0%B8%B2%E0%B8%A5%E0%B8%9B%E0%B8%B2%E0%B8%81%E0%B8%8A%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%99%E0%B8%B2%E0%B8%99%E0%B8%B2/@14.6807633,101.3996733,18z/data=!4m6!3m5!1s0x311c2b17943fd687:0x507a8f81c859f147!8m2!3d14.6806741!4d101.4000776!16s%2Fg%2F11j8_wkstf?hl=th&entry=ttu&g_ep=EgoyMDI2MDcyOS4wIKXMDSoASAFQAw%3D%3D"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:opacity-80 transition-opacity p-1"
               aria-label="Map Location"
             >
-              <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <Image
+                src="/img/maplogo.png"
+                alt="Map Location"
+                width={20}
+                height={20}
+                className="object-contain"
+              />
             </a>
           </div>
         </div>
       </div>
 
       {/* 2. เมนูหลัก Navbar สีขาว */}
-      <nav className="bg-white border-b border-gray-100 py-3 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+      <nav className={`${kanit.className} bg-white border-b border-gray-100 h-18 px-4 sm:px-6 lg:px-8`}>
+        <div className="max-w-7xl mx-auto flex h-full items-center justify-between">
           {/* โลโก้โรงพยาบาลปากช่องนานา */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
               <Image
-                src="/img/indexbanner/herobannertest01.png"
+                src="/img/logopnnh.png"
                 alt="โรงพยาบาลปากช่องนานา"
-                width={48}
-                height={48}
-                className="object-contain rounded-full shadow-xs"
+                width={100}
+                height={100}
+                className="object-contain"
               />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-base sm:text-xl text-[#ea580c] leading-tight tracking-tight group-hover:text-[#c2410c] transition-colors">
-                โรงพยาบาล
-              </span>
-              <span className="font-bold text-base sm:text-xl text-[#ea580c] leading-none tracking-tight group-hover:text-[#c2410c] transition-colors">
-                ปากช่องนานา
-              </span>
-            </div>
           </Link>
 
           {/* เมนูหลักบน Desktop */}
-          <ul className="hidden md:flex items-center gap-1 lg:gap-3 text-sm font-semibold text-gray-700">
+          <ul className="hidden md:flex items-center gap-1 lg:gap-3 text-sm font-normal text-[#76757C]">
             {/* หน้าหลัก */}
             <li>
               <Link
                 href="/"
                 className={`px-3 py-2 rounded-md transition-all duration-200 block ${
                   pathname === "/"
-                    ? "text-[#f97316] border-b-2 border-[#f97316]"
+                    ? "text-[#f97316]"
                     : "hover:text-[#f97316]"
                 }`}
               >
@@ -132,7 +149,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                      className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ประวัติโรงพยาบาล
                     </Link>
@@ -140,7 +157,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                      className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       วิสัยทัศน์ / พันธกิจ
                     </Link>
@@ -148,7 +165,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                      className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ผู้บริหารโรงพยาบาล
                     </Link>
@@ -156,7 +173,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                      className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       โครงสร้างองค์กร
                     </Link>
@@ -175,7 +192,7 @@ export default function Navbar() {
                 href="/patient-services"
                 className={`flex items-center gap-1 px-3 py-2 rounded-md transition-all duration-200 ${
                   pathname?.startsWith("/patient-services")
-                    ? "text-[#f97316] border-b-2 border-[#f97316]"
+                    ? "text-[#f97316] "
                     : "hover:text-[#f97316]"
                 }`}
               >
@@ -186,7 +203,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="/patient-services"
-                      className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ศูนย์รักษาเฉพาะทาง
                     </Link>
@@ -194,7 +211,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="/patient-services?dept=emergency"
-                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ศูนย์อุบัติเหตุ-ฉุกเฉิน
                     </Link>
@@ -202,7 +219,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="/patient-services?dept=internal"
-                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ศูนย์อายุรกรรม
                     </Link>
@@ -210,7 +227,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="/patient-services?dept=surgery"
-                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ศูนย์ศัลยกรรม
                     </Link>
@@ -218,7 +235,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="/patient-services?dept=pediatrics"
-                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       โปรแกรมฉีดวัคซีน
                     </Link>
@@ -226,7 +243,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="#"
-                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ลงทะเบียนผู้ป่วยใหม่
                     </Link>
@@ -321,47 +338,47 @@ export default function Navbar() {
             <Link
               href="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-base font-semibold text-gray-800 hover:bg-orange-50 hover:text-[#f97316]"
+              className="block px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50 hover:text-[#f97316]"
             >
               หน้าหลัก
             </Link>
             <Link
               href="/patient-services"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-base font-semibold text-[#f97316] bg-orange-50"
+              className="block px-4 py-2.5 rounded-lg text-base font-normal text-[#f97316] bg-orange-50"
             >
               ศูนย์บริการผู้ป่วย (ศูนย์รักษาเฉพาะทาง)
             </Link>
             <button
               onClick={() => toggleDropdown("mobile-about")}
-              className="w-full flex justify-between items-center px-4 py-2.5 rounded-lg text-base font-semibold text-gray-800 hover:bg-orange-50"
+              className="w-full flex justify-between items-center px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
             >
               เกี่ยวกับ <ChevronDown className="w-4 h-4" />
             </button>
             <button
               onClick={() => toggleDropdown("mobile-services")}
-              className="w-full flex justify-between items-center px-4 py-2.5 rounded-lg text-base font-semibold text-gray-800 hover:bg-orange-50"
+              className="w-full flex justify-between items-center px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
             >
               งานบริการ <ChevronDown className="w-4 h-4" />
             </button>
             <Link
               href="#"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-base font-semibold text-gray-800 hover:bg-orange-50"
+              className="block px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
             >
               ค้นหาแพทย์
             </Link>
             <Link
               href="#"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-base font-semibold text-gray-800 hover:bg-orange-50"
+              className="block px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
             >
               INTRANET
             </Link>
             <Link
               href="#"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-base font-semibold text-gray-800 hover:bg-orange-50"
+              className="block px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
             >
               ติดต่อ
             </Link>

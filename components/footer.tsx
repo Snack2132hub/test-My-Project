@@ -3,32 +3,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Phone, User } from "lucide-react";
+import { Kanit } from "next/font/google";
+
+const kanit = Kanit({
+  subsets: ["thai", "latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white border-t-4 border-[#00bba7] pt-14 pb-12 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8">
+    <footer className={`${kanit.className} bg-white border-t-4 border-[#00bba7] pt-14 pb-12 px-4 sm:px-6 lg:px-8`}>
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[1.3fr_1fr_0.9fr_1.1fr] gap-10 md:gap-8">
         {/* คอลัมน์ที่ 1: โลโก้ + เบอร์โทร + ปุ่มโซเชียลสีส้ม */}
-        <div className="md:col-span-4 flex flex-col space-y-5">
+         <div className="flex flex-col space-y-4">
           {/* โลโก้โรงพยาบาล */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 relative flex items-center justify-center">
               <Image
-                src="/img/indexbanner/herobannertest01.png"
+                src="/img/logopnnh.png"
                 alt="โรงพยาบาลปากช่องนานา"
-                width={48}
-                height={48}
-                className="object-contain rounded-full"
+                width={120}
+                height={120}
+                className="object-contain"
               />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-xl text-[#ea580c] leading-tight">
-                โรงพยาบาล
-              </span>
-              <span className="font-bold text-xl text-[#ea580c] leading-none">
-                ปากช่องนานา
-              </span>
-            </div>
           </Link>
 
           {/* เบอร์โทรศัพท์ */}
@@ -39,47 +35,11 @@ export default function Footer() {
 
           <div className="w-full h-px bg-gray-200 my-1 max-w-[280px]" />
 
-          {/* ปุ่มโซเชียลสี่เหลี่ยมสีส้ม 4 ปุ่ม */}
-          <div className="flex items-center gap-2.5 pt-1">
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-md bg-[#ea580c] hover:bg-[#c2410c] text-white flex items-center justify-center font-bold text-lg transition-colors shadow-xs"
-              aria-label="Facebook"
-            >
-              f
-            </a>
-            <a
-              href="https://line.me"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-md bg-[#ea580c] hover:bg-[#c2410c] text-white flex items-center justify-center font-bold text-xs transition-colors shadow-xs"
-              aria-label="Line"
-            >
-              LINE
-            </a>
-            <a
-              href="https://youtu.be/XxGFqrPq7lk?si=h2hWjMh4_kSWRcrs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-md bg-[#ea580c] hover:bg-[#c2410c] text-white flex items-center justify-center font-bold text-xs transition-colors shadow-xs"
-              aria-label="YouTube"
-            >
-              YT
-            </a>
-            <a
-              href="/patient-services"
-              className="w-10 h-10 rounded-md bg-[#ea580c] hover:bg-[#c2410c] text-white flex items-center justify-center transition-colors shadow-xs"
-              aria-label="Patient Services"
-            >
-              <User className="w-5 h-5 stroke-[2.5]" />
-            </a>
-          </div>
+          
         </div>
 
         {/* คอลัมน์ที่ 2: OUR PAGES */}
-        <div className="md:col-span-2.5 flex flex-col space-y-4">
+         <div className="flex flex-col space-y-4">
           <div className="flex flex-col">
             <h3 className="text-base sm:text-lg font-bold text-gray-900 tracking-wider uppercase">
               OUR PAGES
@@ -111,7 +71,7 @@ export default function Footer() {
         </div>
 
         {/* คอลัมน์ที่ 3: SERVICE */}
-        <div className="md:col-span-2.5 flex flex-col space-y-4">
+         <div className="flex flex-col space-y-4">
           <div className="flex flex-col">
             <h3 className="text-base sm:text-lg font-bold text-gray-900 tracking-wider uppercase">
               SERVICE
@@ -143,7 +103,7 @@ export default function Footer() {
         </div>
 
         {/* คอลัมน์ที่ 4: SERVICE DEPARTMENT */}
-        <div className="md:col-span-3 flex flex-col space-y-4">
+         <div className="flex flex-col space-y-4">
           <div className="flex flex-col">
             <h3 className="text-base sm:text-lg font-bold text-gray-900 tracking-wider uppercase">
               SERVICE DEPARTMENT

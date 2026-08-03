@@ -20,31 +20,34 @@ export default function AnnouncementsSection() {
         {/* การ์ดประกาศ 3 ใบ */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
           {/* การ์ดประกาศที่ 1 */}
-          <div className="rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 bg-white aspect-[3/4] relative transform hover:-translate-y-2 cursor-pointer group">
+          <div className="rounded-3xl overflow-hidden shadow-lg transition-all duration-300 bg-white aspect-[3/4] relative cursor-pointer group">
             <Image
               src="/img/indexnews/test01.jpg"
               alt="เปลี่ยนแปลงเวลาให้บริการ 1"
               fill
+              className="object-cover transition-all duration-300 group-hover:grayscale group-hover:opacity-80"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           </div>
 
           {/* การ์ดประกาศที่ 2 */}
-          <div className="rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 bg-white aspect-[3/4] relative transform hover:-translate-y-2 cursor-pointer group">
+          <div className="rounded-3xl overflow-hidden shadow-lg transition-all duration-300 bg-white aspect-[3/4] relative cursor-pointer group">
             <Image
               src="/img/indexnews/test01.jpg"
               alt="เปลี่ยนแปลงเวลาให้บริการ 2"
               fill
+              className="object-cover transition-all duration-300 group-hover:grayscale group-hover:opacity-80"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           </div>
 
           {/* การ์ดประกาศที่ 3 */}
-          <div className="rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 bg-white aspect-[3/4] relative transform hover:-translate-y-2 cursor-pointer group">
+          <div className="rounded-3xl overflow-hidden shadow-lg transition-all duration-300 bg-white aspect-[3/4] relative cursor-pointer group">
             <Image
               src="/img/indexnews/test01.jpg"
               alt="เปลี่ยนแปลงเวลาให้บริการ 3"
               fill
+              className="object-cover transition-all duration-300 group-hover:grayscale group-hover:opacity-80"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           </div>

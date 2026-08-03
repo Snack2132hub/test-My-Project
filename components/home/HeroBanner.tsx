@@ -26,7 +26,7 @@ const banners = [
     buttonText: "",
     showContent: false, // ซ่อนกล่องข้อความ ให้เห็นเฉพาะรูปภาพเต็มแผ่น
   },
-  {
+   {
     src: "/img/indexbanner/herobannertest04.png",
     title: "",
     subtitle: "",
@@ -56,19 +56,19 @@ export default function HeroBanner() {
 
   // ตั้งเวลาสไลด์อัตโนมัติทุกๆ 8 วินาที
   useEffect(() => {
-    const timer = setInterval(handleNext, 3000);
+    const timer = setInterval(handleNext, 8000);
     return () => clearInterval(timer);
   }, []);
 
   return (
     <section className="relative w-full h-[clamp(280px,45vw,550px)] bg-gray-200 overflow-hidden group">
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={currentIndex}
-          initial={{ opacity: 0.4 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0.4 }}
-          transition={{ duration: 0.6 }}
+          exit={{ opacity: 1 }}
+          transition={{ duration: 0 }}
           className="absolute inset-0 w-full h-full"
         >
           {/* Layer รูปภาพแบนเนอร์ */}
@@ -85,17 +85,23 @@ export default function HeroBanner() {
           {/* แสดงข้อความโอเวอร์เลย์เมื่อ showContent เป็น true */}
           {banners[currentIndex].showContent !== false && (
             <>
-              {/* แถบสีดำโปร่งแสงปรับให้อ่านข้อความง่ายขึ้น */}
-              <div className="absolute inset-0 bg-linear-to-r from-black/40 via-black/10 to-transparent md:bg-linear-to-r md:from-black/50 md:via-black/20 md:to-transparent" />
+              {/* แถบสีดำโปร่งแสงปรับให้อ่านข้อความง่ายขึ้น (เน้นฝั่งขวา) */}
+              <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-black/25 to-transparent" />
 
-              {/* ข้อความและปุ่มบนแบนเนอร์ */}
-              <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-32 text-white">
-                <div className="max-w-xl space-y-3 sm:space-y-4">
+              {/* ข้อความและปุ่มบนแบนเนอร์ - จัดชิดขวา */}
+              <div className="absolute inset-0 flex flex-col justify-center items-end text-right px-6 sm:px-12 md:px-20 lg:px-32 text-white">
+                <motion.div
+                  key={`content-${currentIndex}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className="max-w-xl space-y-3 sm:space-y-4 flex flex-col items-end"
+                >
                   {banners[currentIndex].subtitle && (
                     <motion.span
-                      initial={{ opacity: 0, x: -50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
                       className="inline-block text-[#fbbf24] text-xs sm:text-sm font-semibold uppercase tracking-wider bg-black/30 px-3 py-1 rounded-full backdrop-blur-xs"
                     >
                       {banners[currentIndex].subtitle}
@@ -104,9 +110,9 @@ export default function HeroBanner() {
 
                   {banners[currentIndex].title && (
                     <motion.h1
-                      initial={{ opacity: 0, x: -60 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
                       className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white drop-shadow-md leading-tight"
                     >
                       {banners[currentIndex].title}
@@ -115,9 +121,9 @@ export default function HeroBanner() {
 
                   {banners[currentIndex].description && (
                     <motion.p
-                      initial={{ opacity: 0, x: -40 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
                       className="text-xs sm:text-sm md:text-base text-gray-100 drop-shadow-xs max-w-md font-light leading-relaxed"
                     >
                       {banners[currentIndex].description}
@@ -126,9 +132,9 @@ export default function HeroBanner() {
 
                   {banners[currentIndex].buttonText && (
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.4 }}
+                      transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
                       className="pt-2 sm:pt-4"
                     >
                       <button className="px-5 py-2 sm:px-6 sm:py-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white font-medium text-xs sm:text-sm rounded-full transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5">
@@ -136,7 +142,7 @@ export default function HeroBanner() {
                       </button>
                     </motion.div>
                   )}
-                </div>
+                </motion.div>
               </div>
             </>
           )}
