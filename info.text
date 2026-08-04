@@ -1,0 +1,21 @@
+<--ภาษาที่ใช้-->
+TypeScript (ไฟล์ .ts/.tsx)
+JavaScript แบบ ESM สำหรับ config บางไฟล์ (ไฟล์ .mjs)
+CSS สำหรับสไตล์รวมและ CSS Modules ใน components -> globals.css
+
+<--เฟรมเวิร์กและไลบรารีหลัก-->
+Next.js 16 (App Router) + React ดูใน package.json
+TypeScript ดูใน package.json และ config ใน tsconfig.json
+Tailwind CSS v4 ผ่าน PostCSS plugin: postcss.config.mjs, globals.css
+
+<--โครงสร้างการทำงานของโปรเจกต์-->
+Layout กลางทั้งเว็บ: layout.tsx
+หน้าแรกเป็นการประกอบ section หลายก้อนจาก components/home: page.tsx
+Navbar/Footer ถูก render จาก layout และทำงานฝั่ง client: navbar.tsx
+ใช้ path alias แบบ @/ จาก tsconfig: tsconfig.json
+
+<--คำสั่งใช้งาน-->
+Run: npm run dev
+Build: npm run build
+Start: npm run start
+Import.SQL.Check: docker compose --env-file .env.docker logs -f db

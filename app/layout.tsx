@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import ScrollToTop from "../components/home/ScrollToTop";
 import "../styles/globals.css";
 
 const kanit = Kanit({
@@ -11,7 +10,7 @@ const kanit = Kanit({
 });
 
 export const metadata: Metadata = {
-  title: "My Project",
+  title: "My Project ",
   description: "Starter layout with header, navbar, main, and footer",
 };
 
@@ -22,16 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="th" className={`${kanit.className} h-full antialiased`}>
-      <body>
-
+      <body className="flex min-h-full flex-col">
         <Navbar />
-
-        {children}
-
+        <main className="flex-1">{children}</main>
         <Footer />
-
-        <ScrollToTop />
-
       </body>
     </html>
   );

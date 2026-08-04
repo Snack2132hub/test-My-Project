@@ -1,0 +1,46 @@
+คู่มือเริ่มต้นระบบ Production
+=============================
+
+ไฟล์นี้คือเช็กลิสต์สั้นๆ สำหรับนำโปรเจกต์นี้ขึ้นใช้งานจริงบนโฮสต์
+
+1) เตรียมไฟล์ environment
+- คัดลอกไฟล์ .env.production.example เป็น .env.production
+- กรอกค่าฐานข้อมูลจริงให้ครบ:
+  DB_HOST
+  DB_PORT
+  DB_NAME
+  DB_USER
+  DB_PASSWORD
+- ให้ flag ต่อไปนี้เป็น false ใน production เสมอ:
+  NEXT_PUBLIC_SHOW_DB_TEST=false
+  ENABLE_DB_DEBUG_ENDPOINT=false
+
+2) Build และ Start production containers
+- รัน: npm run docker:prod:up
+
+3) ตรวจสอบ logs ของ container
+- รัน: npm run docker:prod:logs
+
+4) หยุด production containers
+- รัน: npm run docker:prod:down
+
+5) เครื่องมือเสริมในเครื่อง (ใช้เฉพาะ dev)
+- เปิด phpMyAdmin เฉพาะตอนจำเป็น:
+  npm run docker:tools:up
+- ห้ามเปิด phpMyAdmin ใน production
+
+6) เช็กลิสต์ก่อน Go-live
+- ยืนยันว่าหน้าแรกเปิดได้ที่พอร์ต 3000
+- ยืนยันว่าเปิดใช้งานเฉพาะ API routes ที่จำเป็น
+- ยืนยันว่า endpoint ทดสอบ /api/doctors ถูกปิดใน production
+- ยืนยันว่า credential ฐานข้อมูลไม่ได้ถูก commit เข้า git
+- ยืนยันว่ามี reverse proxy และ HTTPS บนโฮสต์จริง
+
+7) ลำดับ deploy มาตรฐาน (ครั้งที่ deploy)
+- อัปเดตโค้ดบนเซิร์ฟเวอร์
+- อัปเดต .env.production (ถ้ามีการเปลี่ยนค่า)
+- รัน: npm run docker:prod:up
+- ตรวจสอบ logs และสถานะ health
+- ทดสอบหน้าและฟีเจอร์สำคัญ
+
+เสร็จสิ้น

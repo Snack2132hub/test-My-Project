@@ -1,0 +1,15 @@
+services:
+  web:
+    build:
+      context: .
+      target: runner
+    image: pnnh-web:prod
+    container_name: pnnh-web-prod
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      NEXT_PUBLIC_SHOW_DB_TEST: "false"
+      ENABLE_DB_DEBUG_ENDPOINT: "false"
+    ports:
+      - "3000:3000"
