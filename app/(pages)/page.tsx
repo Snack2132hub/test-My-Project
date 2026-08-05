@@ -12,6 +12,7 @@ import DoctorTeamSection from "@/components/home/DoctorTeamSection";
 import AfterHoursClinicSection from "@/components/home/AfterHoursClinicSection";
 import NewsAndActivitiesSection from "@/components/home/NewsAndActivitiesSection";
 import ProcurementAndContactSection from "@/components/home/ProcurementAndContactSection";
+import ScrollToTop from "@/components/home/ScrollToTop";
 
 type DbDebugPayload = {
   ok: boolean;
@@ -28,31 +29,24 @@ type DbDebugPayload = {
  * รวบรวมส่วนประกอบต่างๆ (Components) จากโฟลเดอร์ components/home เพื่อความเป็นระเบียบและง่ายต่อการแก้ไข
  */
 export default function Home() {
-  const [showDbTestPanel, setShowDbTestPanel] = useState(false);
+  const [showDbTestPanel] = useState(() => {
+    if (typeof window !== "undefined") {
+      const query = new URLSearchParams(window.location.search);
+      return query.get("dbtest") === "1";
+    }
+    return false;
+  });
   const [isDbConnected, setIsDbConnected] = useState(false);
   const [dbError, setDbError] = useState<string>("");
   const [connectedTable, setConnectedTable] = useState<string>("-");
   const [doctorId, setDoctorId] = useState<string>("-");
   const [doctorImage, setDoctorImage] = useState<string>("-");
-  const [isLoadingDoctor, setIsLoadingDoctor] = useState(true);
+  const [isLoadingDoctor, setIsLoadingDoctor] = useState(showDbTestPanel);
 
   useEffect(() => {
-    const query = new URLSearchParams(window.location.search);
-    setShowDbTestPanel(query.get("dbtest") === "1");
-  }, []);
+    if (!showDbTestPanel) return;
 
-  useEffect(() => {
-    if (!showDbTestPanel) {
-      setIsDbConnected(false);
-      setDbError("");
-      setConnectedTable("-");
-      setDoctorId("-");
-      setDoctorImage("-");
-      setIsLoadingDoctor(false);
-      return;
-    }
-
-    setIsLoadingDoctor(true);
+    let isMounted = true;
     const checkDbConnection = async () => {
       try {
         const response = await fetch("/api/doctors?debug=1", { cache: "no-store" });
@@ -62,27 +56,36 @@ export default function Home() {
           throw new Error(payload.message || "Failed to connect database");
         }
 
-        setIsDbConnected(true);
-        setDbError("");
-        setConnectedTable(payload.table || "-");
-        setDoctorId(
-          payload.data?.dr_id !== undefined && payload.data?.dr_id !== null
-            ? String(payload.data.dr_id)
-            : "-"
-        );
-        setDoctorImage(payload.data?.dr_img || "-");
+        if (isMounted) {
+          setIsDbConnected(true);
+          setDbError("");
+          setConnectedTable(payload.table || "-");
+          setDoctorId(
+            payload.data?.dr_id !== undefined && payload.data?.dr_id !== null
+              ? String(payload.data.dr_id)
+              : "-"
+          );
+          setDoctorImage(payload.data?.dr_img || "-");
+        }
       } catch (error) {
-        setIsDbConnected(false);
-        setDbError(error instanceof Error ? error.message : "Unknown error");
-        setConnectedTable("-");
-        setDoctorId("-");
-        setDoctorImage("-");
+        if (isMounted) {
+          setIsDbConnected(false);
+          setDbError(error instanceof Error ? error.message : "Unknown error");
+          setConnectedTable("-");
+          setDoctorId("-");
+          setDoctorImage("-");
+        }
       } finally {
-        setIsLoadingDoctor(false);
+        if (isMounted) {
+          setIsLoadingDoctor(false);
+        }
       }
     };
 
     checkDbConnection();
+    return () => {
+      isMounted = false;
+    };
   }, [showDbTestPanel]);
 
   return (
@@ -116,6 +119,9 @@ export default function Home() {
 
       {/* 10. ส่วนข่าวจัดซื้อจัดจ้าง สมัครงาน สื่อวิดีโอ และ ติดต่อเรา */}
       <ProcurementAndContactSection />
+
+      {/* ปุ่มเลื่อนกลับขึ้นบนสุด */}
+      <ScrollToTop />
 
       {showDbTestPanel && (
         <aside className="fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] max-w-xl">

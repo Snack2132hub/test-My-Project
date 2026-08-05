@@ -16,7 +16,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-
+import { useRouter } from "next/navigation";
 /**
  * ข้อมูลข่าวจัดซื้อจัดจ้าง และ ข่าวสมัครงาน (3 หน้า หน้าละ 6 รายการ)
  */
@@ -30,6 +30,9 @@ const procurementData = {
       { id: 4, title: "ประกวดราคาซื้อเครื่องติดตามการทำงานของหัวใจและสัญญาณชีพ ระดับกลาง จำนวน ๕ เครื่อง ด้วยวิธีประกวดราคาอิเล็กทรอนิกส์", date: "20 มิถุนายน 2569" },
       { id: 5, title: "ประกาศจัดซื้อจัดจ้างเวชภัณฑ์ยาและวัสดุการแพทย์ ประจำไตรมาสที่ ๔/๒๕๖๙ โรงพยาบาลปากช่องนานา", date: "18 มิถุนายน 2569" },
       { id: 6, title: "เผยแพร่แผนการจัดซื้อจัดจ้าง เครื่องเอ็กซเรย์เคลื่อนที่ขนาดไม่น้อยกว่า ๓๐๐ mA ประจำปีงบประมาณ ๒๕๖๙", date: "15 มิถุนายน 2569" },
+      { id: 19, title: "ประกาศจัดซื้อจัดจ้างเวชภัณฑ์ยาและวัสดุการแพทย์ ประจำไตรมาสที่ ๔/๒๕๖๙ โรงพยาบาลปากช่องนานา", date: "18 มิถุนายน 2569" },
+      { id: 20, title: "เผยแพร่แผนการจัดซื้อจัดจ้าง เครื่องเอ็กซเรย์เคลื่อนที่ขนาดไม่น้อยกว่า ๓๐๐ mA ประจำปีงบประมาณ ๒๕๖๙", date: "15 มิถุนายน 2569" },
+    
     ],
     // หน้า 2
     [
@@ -80,7 +83,7 @@ const procurementData = {
     ],
   ],
 };
-
+const ITEMS_PER_PAGE = 8;
 /**
  * คอมโพเนนต์ ProcurementAndContactSection
  * ประกอบด้วย:
@@ -92,7 +95,17 @@ export default function ProcurementAndContactSection() {
   const [procurementTab, setProcurementTab] = useState<"procurement" | "jobs">("procurement");
   const [procurementPage, setProcurementPage] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const router = useRouter();
+const currentNews = procurementData[procurementTab].flat();
 
+const totalPages = Math.ceil(
+  currentNews.length / ITEMS_PER_PAGE
+);
+
+const paginatedNews = currentNews.slice(
+  procurementPage * ITEMS_PER_PAGE,
+  (procurementPage + 1) * ITEMS_PER_PAGE
+);
   return (
     <section
       className="relative py-20 px-4 sm:px-6 lg:px-8 w-full overflow-hidden bg-cover bg-center bg-no-repeat"
@@ -143,14 +156,10 @@ export default function ProcurementAndContactSection() {
               </button>
             </div>
 
-            {/* ปุ่มดูทั้งหมด */}
-            <button className="mb-2 px-5 py-1.5 rounded-full bg-white/90 hover:bg-[#f97316] text-[#f97316] hover:text-white border border-[#f97316] font-medium text-xs sm:text-sm transition-all duration-300 shadow-xs cursor-pointer">
-              ทั้งหมด
-            </button>
           </div>
 
           {/* กรอบกล่องหลักข่าวจัดซื้อจัดจ้าง/สมัครงาน */}
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl md:rounded-3xl border-2 border-orange-200/90 shadow-xl p-5 sm:p-8 min-h-[360px] flex flex-col justify-between">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl md:rounded-3xl border-2 border-orange-200/90 shadow-xl px-4 sm:px-5 py-3 min-h-[40px] flex flex-col justify-between">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${procurementTab}-${procurementPage}`}
@@ -160,48 +169,67 @@ export default function ProcurementAndContactSection() {
                 transition={{ duration: 0.25 }}
                 className="divide-y divide-gray-100"
               >
-                {(procurementData[procurementTab][procurementPage] || procurementData[procurementTab][0]).map((item) => (
-                  <div
-                    key={item.id}
-                    className="py-3.5 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 group cursor-pointer hover:bg-orange-50/50 px-3 rounded-xl transition-colors"
-                  >
-                    <h3 className="text-sm sm:text-base font-medium text-gray-800 group-hover:text-[#f97316] transition-colors line-clamp-1 leading-snug">
-                      {item.title}
-                    </h3>
-                    <span className="text-xs text-gray-400 font-light shrink-0">
-                      {item.date}
-                    </span>
-                  </div>
-                ))}
+                {paginatedNews.map((item) => (
+                    <div
+                      key={item.id}
+                      className="py-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1 group cursor-pointer hover:bg-orange-50/40 rounded-lg transition-colors"
+                    >
+                      <h4 className="text-[18px] font-bold text-gray-800 group-hover:text-[#f97316] transition-colors line-clamp-1 leading-snug">
+                        {item.title}
+                      </h4>
+
+                      <span className="text-[16px] text-gray-400 font-light shrink-0">
+                        {item.date}
+                      </span>
+                    </div>
+  ))}
               </motion.div>
             </AnimatePresence>
+            <div className="flex justify-end mt-4 pr-4">
+              <button
+                onClick={() => {
+                  if (procurementTab === "procurement") {
+                    router.push("/procurement");
+                  } else {
+                    router.push("/jobs");
+                  }
+                }}
+                className="px-5 py-2 rounded-full bg-[#f97316] text-white hover:bg-[#ea580c] transition-all duration-300 shadow-md cursor-pointer"
+              >
+                ดูทั้งหมด
+              </button>
+</div>
           </div>
 
           {/* ปุ่มสลับหน้า (Pagination) */}
           <div className="flex justify-center items-center gap-3 mt-6">
             <button
-              onClick={() => setProcurementPage((prev) => (prev > 0 ? prev - 1 : 2))}
+                onClick={() => setProcurementPage((prev) => prev > 0 ? prev - 1 : totalPages - 1)}
               className="p-1.5 text-[#f97316] hover:text-[#ea580c] cursor-pointer transition-colors"
               aria-label="Previous procurement page"
             >
               <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
             </button>
 
-            {[0, 1, 2].map((idx) => (
-              <button
-                key={idx}
-                onClick={() => setProcurementPage(idx)}
-                className={`rounded-full transition-all duration-300 cursor-pointer ${
-                  procurementPage === idx
-                    ? "w-3.5 h-3.5 bg-[#f97316] shadow-xs scale-110"
-                    : "w-3.5 h-3.5 bg-gray-300 hover:bg-gray-400"
-                }`}
-                aria-label={`Go to procurement page ${idx + 1}`}
-              />
-            ))}
+            {Array.from(
+              { length: totalPages },
+              (_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setProcurementPage(idx)}
+                  className={`w-10 h-10 rounded-full text-sm font-semibold transition-all duration-300 ${
+                    procurementPage === idx
+                      ? "bg-[#f97316] text-white"
+                      : "bg-white text-gray-600 hover:bg-orange-100"
+                  }`}
+                >
+                  {idx + 1}
+                </button>
+              )
+            )}
 
             <button
-              onClick={() => setProcurementPage((prev) => (prev < 2 ? prev + 1 : 0))}
+              onClick={() => setProcurementPage((prev) => prev < totalPages - 1 ? prev + 1 : 0 )}
               className="p-1.5 text-[#f97316] hover:text-[#ea580c] cursor-pointer transition-colors"
               aria-label="Next procurement page"
             >
@@ -296,7 +324,7 @@ export default function ProcurementAndContactSection() {
             </div>
 
             {/* การ์ดรายละเอียดการติดต่อ + แผนที่ */}
-            <div className="bg-white/95 rounded-2xl sm:rounded-3xl shadow-lg border border-orange-100/80 p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-12 gap-5 items-center flex-1">
+            <div className="bg-white/95 rounded-2xl sm:rounded-3xl shadow-lg border border-orange-100/80 p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-12 gap-5 items-start flex-1">
               {/* ข้อมูลติดต่อ ฝั่งซ้ายของการ์ด */}
               <div className="sm:col-span-7 flex flex-col justify-between space-y-3.5">
                 <div>
@@ -331,44 +359,7 @@ export default function ProcurementAndContactSection() {
                 </div>
 
                 {/* ปุ่มโซเชียลมีเดีย 4 ไอคอน */}
-                <div className="flex items-center gap-2.5 pt-2">
-                  <a
-                    href="https://facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:opacity-90 transition-opacity shadow-xs"
-                    aria-label="Facebook"
-                  >
-                    <span className="font-bold text-xs">f</span>
-                  </a>
-                  <a
-                    href="https://line.me"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full bg-[#00B900] text-white flex items-center justify-center hover:opacity-90 transition-opacity shadow-xs"
-                    aria-label="Line"
-                  >
-                    <span className="font-bold text-xs">LINE</span>
-                  </a>
-                  <a
-                    href="https://youtu.be/XxGFqrPq7lk?si=h2hWjMh4_kSWRcrs"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full bg-[#FF0000] text-white flex items-center justify-center hover:opacity-90 transition-opacity shadow-xs"
-                    aria-label="YouTube"
-                  >
-                    <Play className="w-4 h-4 fill-white" />
-                  </a>
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center hover:opacity-90 transition-opacity shadow-xs"
-                    aria-label="Instagram"
-                  >
-                    <span className="font-bold text-xs">IG</span>
-                  </a>
-                </div>
+                
               </div>
 
               {/* แผนที่ Google Maps ฝั่งขวาของการ์ด */}

@@ -194,7 +194,7 @@ export default function NewsAndActivitiesSection() {
                 className="flex flex-col group cursor-pointer transition-all duration-300"
               >
                 {/* กรอบรูปภาพโปสเตอร์ข่าว */}
-                <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm group-hover:shadow-md transition-shadow">
+                <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm group-hover:shadow-md transition-shadow mb-3">
                   {/* 📌 [จุดเปลี่ยนรูปโปสเตอร์ข่าว] 
                       สามารถเปลี่ยน src ของข่าวได้จากอาร์เรย์ newsData ด้านบน
                   */}
@@ -207,14 +207,14 @@ export default function NewsAndActivitiesSection() {
                   />
 
                   <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/90 shadow-xs flex items-center justify-center text-[#f97316]">
-                    <Sparkles className="w-4 h-4 stroke-[2]" />
+                    <Sparkles size={18} className="stroke-[2]" />
                   </div>
                 </div>
 
                 {/* ข้อความรายละเอียดข่าว */}
-                <h3 className="mt-3 text-sm sm:text-base font-bold text-gray-800 leading-snug group-hover:text-[#f97316] transition-colors line-clamp-2">
+                <h4 className="mt-5 text-[18px] font-bold text-gray-800 leading-snug group-hover:text-[#f97316] transition-colors line-clamp-2">
                   {item.title}
-                </h3>
+                </h4>
                 <p className="mt-1 text-xs text-gray-400 font-light">
                   {item.date}
                 </p>

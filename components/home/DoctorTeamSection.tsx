@@ -80,7 +80,7 @@ export default function DoctorTeamSection() {
                     sizes="(max-width: 768px) 100vw, 25vw"
                   />
                 </div>
-                <h4 className=" text-[18px] font-bold text-gray-800 group-hover:text-[#f97316] transition-colors">
+                <h4 className=" text-[18px] font-bold text-gray-800  transition-colors">
                   {doctor.name}
                 </h4>
                 <p className="text-[14px] text-gray-500">

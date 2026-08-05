@@ -63,7 +63,7 @@ export default function AfterHoursClinicSection() {
           </div>
 
           {/* คอลัมน์ขวา: ปุ่มสลับเดือน และ การ์ดข้อมูลบริการ */}
-          <div className="lg:col-span-5 flex flex-col gap-5">
+          <div className="lg:col-span-5 flex flex-col gap-5 lg:sticky lg:top-6 self-start">
             {/* ปุ่มสลับเดือน (เดือนนี้ / เดือนหน้า) */}
             <div className="flex items-center gap-3">
               <button
