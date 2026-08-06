@@ -14,8 +14,8 @@ Layout กลางทั้งเว็บ: layout.tsx
 Navbar/Footer ถูก render จาก layout และทำงานฝั่ง client: navbar.tsx
 ใช้ path alias แบบ @/ จาก tsconfig: tsconfig.json
 
-<--คำสั่งใช้งาน-->
-Run: npm run dev
-Build: npm run build
-Start: npm run start
+<--คำสั่งใช้งาน (รันจากโฟลเดอร์ frontend/)-->
+Run: cd frontend && npm run dev
+Build: cd frontend && npm run build
+Start: cd frontend && npm run start
 Import.SQL.Check: docker compose --env-file .env.docker logs -f db

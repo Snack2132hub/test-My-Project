@@ -28,8 +28,6 @@ import {
   Award,
   Building,
   Info,
-  MapPin,
-  ExternalLink,
 } from "lucide-react";
 
 // -------------------------------------------------------------
@@ -565,6 +563,7 @@ function PatientServicesContent() {
   useEffect(() => {
     const dept = searchParams?.get("dept");
     if (dept && centersData.some((c) => c.id === dept)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedCenterId(dept);
     }
   }, [searchParams]);
@@ -574,6 +573,7 @@ function PatientServicesContent() {
 
   // อัปเดต slide index เมื่อเปลี่ยนศูนย์
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentSlideIndex(0);
   }, [selectedCenterId]);
 
@@ -594,7 +594,7 @@ function PatientServicesContent() {
       {/* ------------------------------------------------------------- */}
       <section className="relative bg-gradient-to-r from-teal-900 via-teal-800 to-emerald-900 text-white pt-10 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden shadow-md">
         {/* Geometric Hexagon / Light Grid Pattern Overlay */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-[#00bba7]_1px,transparent_1px] [background-size:16px_16px]" />
+        <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#00bba7_1px,transparent_1px)] [background-size:16px_16px]" />
         
         {/* Light Glow Effects */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />

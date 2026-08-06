@@ -6,7 +6,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Phone,
-  MapPin,
   ChevronDown,
   Menu,
   X,

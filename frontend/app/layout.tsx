@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
 import "../styles/globals.css";
 
 const kanit = Kanit({
@@ -22,9 +20,7 @@ export default function RootLayout({
   return (
     <html lang="th" className={`${kanit.className} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );

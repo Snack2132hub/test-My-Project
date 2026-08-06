@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Phone, User } from "lucide-react";
+import { Phone } from "lucide-react";
 import { Kanit } from "next/font/google";
 
 const kanit = Kanit({

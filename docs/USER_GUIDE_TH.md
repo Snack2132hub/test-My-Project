@@ -16,9 +16,10 @@ npm --version
 
 ## 2. ติดตั้งและเปิดเว็บไซต์บนเครื่อง
 
-เปิด Terminal ที่โฟลเดอร์โปรเจกต์ แล้วใช้คำสั่งต่อไปนี้:
+โค้ดฝั่งเว็บ (Next.js) อยู่ในโฟลเดอร์ `frontend/` เปิด Terminal ที่โฟลเดอร์นั้น แล้วใช้คำสั่งต่อไปนี้:
 
 ```bash
+cd frontend
 npm install
 npm run dev
 ```
@@ -38,20 +39,25 @@ npm run dev
 
 ## 3. ภาพรวมโครงสร้าง
 
+โปรเจกต์แบ่งเป็นสองโฟลเดอร์หลักที่ root: `frontend/` (เว็บไซต์ Next.js) และ `backend/` (Express API สำหรับทดสอบการเชื่อมต่อฐานข้อมูล)
+
 ```text
-app/
-  layout.tsx                         Layout กลาง: ฟอนต์, Navbar, เนื้อหา, Footer
-  (pages)/
-    page.tsx                          หน้าแรก (/)
-    patient-services/
-      page-patient-services.tsx       หน้าศูนย์บริการผู้ป่วย
-components/
-  navbar.tsx                          เมนูด้านบน
-  footer.tsx                          ส่วนท้ายเว็บ
-  home/                               ส่วนประกอบของหน้าแรก
-public/img/                           รูปภาพที่เรียกผ่าน URL /img/...
-styles/globals.css                    Tailwind และสไตล์/ตัวแปรกลาง
-next.config.ts                        การตั้งค่า Next.js และโดเมนรูปภาพภายนอก
+frontend/
+  app/
+    layout.tsx                         Layout กลาง: ฟอนต์, Navbar, เนื้อหา, Footer
+    (pages)/
+      page.tsx                          หน้าแรก (/)
+      patient-services/
+        page-patient-services.tsx       หน้าศูนย์บริการผู้ป่วย
+  components/
+    navbar.tsx                          เมนูด้านบน
+    footer.tsx                          ส่วนท้ายเว็บ
+    home/                               ส่วนประกอบของหน้าแรก
+  public/img/                           รูปภาพที่เรียกผ่าน URL /img/...
+  styles/globals.css                    Tailwind และสไตล์/ตัวแปรกลาง
+  next.config.ts                        การตั้งค่า Next.js และโดเมนรูปภาพภายนอก
+backend/
+  src/index.ts                         Express server (API ทดสอบฐานข้อมูล)
 ```
 
 โฟลเดอร์ `(pages)` เป็น Route Group ของ Next.js: มีไว้จัดระเบียบโฟลเดอร์และไม่ปรากฏใน URL ดังนั้น `app/(pages)/page.tsx` คือ URL `/`
@@ -105,7 +111,7 @@ next.config.ts                        การตั้งค่า Next.js แ
 
 ## 7. หน้าศูนย์บริการผู้ป่วย
 
-โค้ดหน้าบริการผู้ป่วยอยู่ที่ `app/(pages)/patient-services/page-patient-services.tsx`
+โค้ดหน้าบริการผู้ป่วยอยู่ที่ `frontend/app/(pages)/patient-services/page-patient-services.tsx`
 
 - `centersData` เป็นแหล่งข้อมูลหลักของแต่ละศูนย์: ชื่อ, คำอธิบาย, แบนเนอร์, รายการบริการ, เวลาเปิด, แพทย์ และสิ่งอำนวยความสะดวก
 - URL สามารถระบุศูนย์ที่ต้องการได้ด้วย query string เช่น `/patient-services?dept=emergency`
@@ -119,7 +125,7 @@ Next.js จะสร้าง route จากไฟล์ที่ชื่อ `
 ก่อนใช้งานลิงก์ `/patient-services` ให้เปลี่ยนชื่อไฟล์เป็น:
 
 ```text
-app/(pages)/patient-services/page.tsx
+frontend/app/(pages)/patient-services/page.tsx
 ```
 
 หลังเปลี่ยนชื่อ ให้เปิด `/patient-services` และทดสอบ query เช่น `/patient-services?dept=internal`
@@ -133,7 +139,7 @@ app/(pages)/patient-services/page.tsx
 
 ## 9. ตรวจสอบก่อนส่งงาน
 
-ทำตามลำดับนี้:
+ทำตามลำดับนี้ (ในโฟลเดอร์ `frontend/`):
 
 ```bash
 npm run lint

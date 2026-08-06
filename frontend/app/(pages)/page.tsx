@@ -29,19 +29,24 @@ type DbDebugPayload = {
  * รวบรวมส่วนประกอบต่างๆ (Components) จากโฟลเดอร์ components/home เพื่อความเป็นระเบียบและง่ายต่อการแก้ไข
  */
 export default function Home() {
-  const [showDbTestPanel] = useState(() => {
-    if (typeof window !== "undefined") {
-      const query = new URLSearchParams(window.location.search);
-      return query.get("dbtest") === "1";
-    }
-    return false;
-  });
+  const [showDbTestPanel, setShowDbTestPanel] = useState(false);
   const [isDbConnected, setIsDbConnected] = useState(false);
   const [dbError, setDbError] = useState<string>("");
   const [connectedTable, setConnectedTable] = useState<string>("-");
   const [doctorId, setDoctorId] = useState<string>("-");
   const [doctorImage, setDoctorImage] = useState<string>("-");
-  const [isLoadingDoctor, setIsLoadingDoctor] = useState(showDbTestPanel);
+  const [isLoadingDoctor, setIsLoadingDoctor] = useState(false);
+
+  useEffect(() => {
+    // window.location is only available post-hydration, so this can't be derived during render
+    // without a server/client mismatch — an effect-based sync from the URL is unavoidable here.
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("dbtest") === "1") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsLoadingDoctor(true);
+      setShowDbTestPanel(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (!showDbTestPanel) return;
