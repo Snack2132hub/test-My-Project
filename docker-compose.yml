@@ -25,7 +25,7 @@ services:
 
   backend:
     build:
-      context: ../backend
+      context: ./backend
     container_name: pnnh-backend
     restart: unless-stopped
     ports:
@@ -35,7 +35,7 @@ services:
     environment:
       PORT: "4000"
     volumes:
-      - ../backend:/app
+      - ./backend:/app
       - /app/node_modules
     depends_on:
       db:
