@@ -565,6 +565,7 @@ function PatientServicesContent() {
   useEffect(() => {
     const dept = searchParams?.get("dept");
     if (dept && centersData.some((c) => c.id === dept)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedCenterId(dept);
     }
   }, [searchParams]);
@@ -574,6 +575,7 @@ function PatientServicesContent() {
 
   // อัปเดต slide index เมื่อเปลี่ยนศูนย์
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentSlideIndex(0);
   }, [selectedCenterId]);
 

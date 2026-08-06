@@ -5,7 +5,7 @@ services:
       target: dev
     container_name: pnnh-web
     ports:
-      - "3001:3000"
+      - "3000:3000"
     env_file:
       - .env.docker
     environment:
@@ -13,8 +13,29 @@ services:
       WATCHPACK_POLLING: "true"
       NEXT_PUBLIC_SHOW_DB_TEST: "true"
       ENABLE_DB_DEBUG_ENDPOINT: "true"
+      NEXT_PUBLIC_API_URL: "http://localhost:4000"
     volumes:
       - .:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_started
+
+  backend:
+    build:
+      context: ../backend
+    container_name: pnnh-backend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env.docker
+    environment:
+      PORT: "4000"
+    volumes:
+      - ../backend:/app
       - /app/node_modules
     depends_on:
       db:

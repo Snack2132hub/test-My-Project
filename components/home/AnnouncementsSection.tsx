@@ -4,6 +4,59 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Megaphone, ChevronLeft, ChevronRight, Eye, X } from "lucide-react";
 
+type DbStatus = {
+  ok: boolean;
+  connected?: boolean;
+  table?: string;
+  data?: { dr_id: number; dr_img: string | null } | null;
+  message?: string;
+};
+
+function DbStatusCard() {
+  const [status, setStatus] = useState<DbStatus | null>(null);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/doctors/debug`)
+      .then((r) => r.json())
+      .then((d: DbStatus) => setStatus(d))
+      .catch(() => setStatus({ ok: false, message: "ไม่สามารถเชื่อมต่อได้" }));
+  }, []);
+
+  if (!status) return null;
+
+  const isConnected = status.ok && status.connected;
+
+  return (
+    <div
+      className={`rounded-2xl border px-6 py-4 mb-10 max-w-xl mx-auto grid grid-cols-2 gap-x-8 gap-y-1 text-sm ${
+        isConnected
+          ? "bg-green-50 border-green-200 text-green-900"
+          : "bg-red-50 border-red-200 text-red-900"
+      }`}
+    >
+      <div>
+        <span className="font-semibold">สถานะ:</span>{" "}
+        {isConnected ? "เชื่อมต่อฐานข้อมูลสำเร็จ" : status.message ?? "เชื่อมต่อไม่สำเร็จ"}
+      </div>
+      {status.table && (
+        <div>
+          <span className="font-semibold">ตารางที่เชื่อม:</span> {status.table}
+        </div>
+      )}
+      {status.data && (
+        <>
+          <div>
+            <span className="font-semibold">รหัสแพทย์:</span> {status.data.dr_id}
+          </div>
+          <div>
+            <span className="font-semibold">รูปภาพ:</span> {status.data.dr_img}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export interface AnnouncementItem {
   id: number;
   image: string;
@@ -146,6 +199,8 @@ export default function AnnouncementsSection() {
             ประกาศ !!!
           </h2>
         </div>
+
+        <DbStatusCard />
 
         {/* Container สไลเดอร์ลากรูปภาพ */}
         <div className="relative group/carousel">
