@@ -24,32 +24,24 @@ type DbDebugPayload = {
   message?: string;
 };
 
+// NEXT_PUBLIC_* env vars are inlined at build time, identically on server and client,
+// so this is safe to read directly without an effect (no hydration mismatch risk).
+const isDbTestEnabled = process.env.NEXT_PUBLIC_SHOW_DB_TEST === "true";
+
 /**
  * หน้าหลัก (Home Page) โรงพยาบาลปากช่องนานา
  * รวบรวมส่วนประกอบต่างๆ (Components) จากโฟลเดอร์ components/home เพื่อความเป็นระเบียบและง่ายต่อการแก้ไข
  */
 export default function Home() {
-  const [showDbTestPanel, setShowDbTestPanel] = useState(false);
   const [isDbConnected, setIsDbConnected] = useState(false);
   const [dbError, setDbError] = useState<string>("");
   const [connectedTable, setConnectedTable] = useState<string>("-");
   const [doctorId, setDoctorId] = useState<string>("-");
   const [doctorImage, setDoctorImage] = useState<string>("-");
-  const [isLoadingDoctor, setIsLoadingDoctor] = useState(false);
+  const [isLoadingDoctor, setIsLoadingDoctor] = useState(isDbTestEnabled);
 
   useEffect(() => {
-    // window.location is only available post-hydration, so this can't be derived during render
-    // without a server/client mismatch — an effect-based sync from the URL is unavoidable here.
-    const query = new URLSearchParams(window.location.search);
-    if (query.get("dbtest") === "1") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsLoadingDoctor(true);
-      setShowDbTestPanel(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!showDbTestPanel) return;
+    if (!isDbTestEnabled) return;
 
     let isMounted = true;
     const checkDbConnection = async () => {
@@ -91,7 +83,7 @@ export default function Home() {
     return () => {
       isMounted = false;
     };
-  }, [showDbTestPanel]);
+  }, []);
 
   return (
     <div className="flex flex-col w-full bg-slate-50 flex-1">
@@ -128,7 +120,7 @@ export default function Home() {
       {/* ปุ่มเลื่อนกลับขึ้นบนสุด */}
       <ScrollToTop />
 
-      {showDbTestPanel && (
+      {isDbTestEnabled && (
         <aside className="fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] max-w-xl">
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 shadow-lg" style={{ color: "#0f172a" }}>
             {isLoadingDoctor && (
