@@ -140,14 +140,21 @@ export default function Navbar() {
               onMouseEnter={() => setActiveDropdown("about")}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button className="flex items-center gap-1 px-3 py-2 hover:text-[#f97316] cursor-pointer transition-colors">
+              <Link
+                href="/about/vision-mission"
+                className={`flex items-center gap-1 px-3 py-2 rounded-md transition-all duration-200 ${
+                  pathname?.startsWith("/about")
+                    ? "text-[#f97316] font-medium"
+                    : "hover:text-[#f97316]"
+                }`}
+              >
                 เกี่ยวกับ <ChevronDown className="w-4 h-4 stroke-[2]" />
-              </button>
+              </Link>
               {activeDropdown === "about" && (
                 <ul className="absolute left-0 top-full w-56 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   <li>
                     <Link
-                      href="#"
+                      href="/about/history"
                       className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ประวัติโรงพยาบาล
@@ -155,7 +162,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      href="#"
+                      href="/about/vision-mission"
                       className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       วิสัยทัศน์ / พันธกิจ
@@ -163,7 +170,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      href="#"
+                      href="/about/executives"
                       className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ผู้บริหารโรงพยาบาล
@@ -171,7 +178,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      href="#"
+                      href="/about/organization"
                       className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       โครงสร้างองค์กร
@@ -352,8 +359,40 @@ export default function Navbar() {
               onClick={() => toggleDropdown("mobile-about")}
               className="w-full flex justify-between items-center px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
             >
-              เกี่ยวกับ <ChevronDown className="w-4 h-4" />
+              เกี่ยวกับ <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === "mobile-about" ? "rotate-180" : ""}`} />
             </button>
+            {activeDropdown === "mobile-about" && (
+              <div className="pl-6 space-y-1 bg-gray-50 py-2 rounded-lg">
+                <Link
+                  href="/about/history"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  ประวัติโรงพยาบาล
+                </Link>
+                <Link
+                  href="/about/vision-mission"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  วิสัยทัศน์ / พันธกิจ
+                </Link>
+                <Link
+                  href="/about/executives"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  ผู้บริหารโรงพยาบาล
+                </Link>
+                <Link
+                  href="/about/organization"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  โครงสร้างองค์กร
+                </Link>
+              </div>
+            )}
             <button
               onClick={() => toggleDropdown("mobile-services")}
               className="w-full flex justify-between items-center px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
