@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Calendar, Stethoscope, Heart } from "lucide-react";
 
 /**
@@ -13,23 +14,33 @@ export default function ActionButtonsBar() {
     <section className="w-full relative z-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row shadow-lg rounded-b-2xl overflow-hidden">
         {/* ปุ่ม 1: นัดหมายแพทย์ */}
-        <button className="flex-1 flex items-center justify-center gap-2.5 bg-[#1877F2] hover:bg-[#1565c0] text-white py-4 md:py-5 transition-colors font-medium text-base md:text-lg cursor-pointer">
+        <Link
+          href="/patient-services?dept=appointment"
+          className="flex-1 flex items-center justify-center gap-2.5 bg-[#1877F2] hover:bg-[#1565c0] text-white py-4 md:py-5 transition-colors font-medium text-base md:text-lg cursor-pointer text-center"
+        >
           <Calendar className="w-6 h-6 md:w-7 md:h-7" />
           นัดหมายแพทย์
-        </button>
+        </Link>
 
         {/* ปุ่ม 2: ศูนย์การรักษาเฉพาะทาง */}
-        <button className="flex-1 flex items-center justify-center gap-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white py-4 md:py-5 transition-colors font-medium text-base md:text-lg border-t border-white/20 md:border-t-0 md:border-l cursor-pointer">
+        <Link
+          href="/specialized-centers"
+          className="flex-1 flex items-center justify-center gap-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white py-4 md:py-5 transition-colors font-medium text-base md:text-lg border-t border-white/20 md:border-t-0 md:border-l cursor-pointer text-center"
+        >
           <Stethoscope className="w-6 h-6 md:w-7 md:h-7" />
           ศูนย์การรักษาเฉพาะทาง
-        </button>
+        </Link>
 
         {/* ปุ่ม 3: โปรโมชั่นและแพ็คเกจ */}
-        <button className="flex-1 flex items-center justify-center gap-2.5 bg-[#fbbf24] hover:bg-[#f59e0b] text-white py-4 md:py-5 transition-colors font-medium text-base md:text-lg border-t border-white/20 md:border-t-0 md:border-l cursor-pointer">
+        <Link
+          href="/patient-services?dept=promotions"
+          className="flex-1 flex items-center justify-center gap-2.5 bg-[#fbbf24] hover:bg-[#f59e0b] text-white py-4 md:py-5 transition-colors font-medium text-base md:text-lg border-t border-white/20 md:border-t-0 md:border-l cursor-pointer text-center"
+        >
           <Heart className="w-6 h-6 md:w-7 md:h-7" fill="currentColor" />
           โปรโมชั่นและแพ็คเกจ
-        </button>
+        </Link>
       </div>
     </section>
   );
 }
+

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, type Dispatch, type SetStateAction } from 'react'
+import HealthCheckupManager from '@/components/admin/HealthCheckupManager'
 import {
   LayoutDashboard,
   Hospital,
@@ -173,6 +174,24 @@ function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, set
                     {item.id === 'patient' && (
                       <>
                         <button
+                          onClick={() => { setActiveNav('health-checkup'); setSidebarOpen(false) }}
+                          className="text-left text-sm py-1.5 px-2 rounded-md transition-colors duration-150 flex items-center gap-2"
+                          style={{
+                            color: activeNav === 'health-checkup' ? '#1a56db' : '#6b7a99',
+                            fontWeight: activeNav === 'health-checkup' ? 600 : 400,
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = '#f0f4fd'; e.currentTarget.style.color = '#1a56db' }}
+                          onMouseLeave={(e) => {
+                            if (activeNav !== 'health-checkup') {
+                              e.currentTarget.style.background = 'transparent'
+                              e.currentTarget.style.color = '#6b7a99'
+                            }
+                          }}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full border border-current inline-block flex-shrink-0" />
+                          ศูนย์ตรวจสุขภาพ
+                        </button>
+                        <button
                           className="text-left text-sm py-1.5 px-2 rounded-md transition-colors duration-150 flex items-center gap-2"
                           style={{ color: '#6b7a99' }}
                           onMouseEnter={(e) => { e.currentTarget.style.background = '#f0f4fd'; e.currentTarget.style.color = '#1a56db' }}
@@ -302,8 +321,13 @@ export default function Dashboard({ username, onLogout }: Props) {
 
         {/* Main content */}
         <main className="flex-1 overflow-auto p-4 md:p-6">
-          <div className="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto">
-            {/* Slider */}
+          {activeNav === 'health-checkup' ? (
+            <div className="max-w-6xl mx-auto">
+              <HealthCheckupManager />
+            </div>
+          ) : (
+            <div className="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto">
+              {/* Slider */}
             <div className="flex-1 min-w-0">
               <div className="relative rounded-2xl overflow-hidden shadow-md aspect-video bg-gray-200">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -364,6 +388,7 @@ export default function Dashboard({ username, onLogout }: Props) {
               </div>
             </div>
           </div>
+          )}
         </main>
       </div>
 

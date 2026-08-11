@@ -208,10 +208,34 @@ export default function Navbar() {
                 <ul className="absolute left-0 top-full w-60 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   <li>
                     <Link
-                      href="/patient-services"
+                      href="/specialized-centers"
                       className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ศูนย์รักษาเฉพาะทาง
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/health-checkup"
+                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] font-medium transition-colors"
+                    >
+                      ศูนย์ตรวจสุขภาพ (หน้าหลัก)
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/health-checkup/checkup-program"
+                      className="block pl-7 pr-4 py-2 text-xs text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                    >
+                      • โปรแกรมตรวจสุขภาพ
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/health-checkup/vaccine-program"
+                      className="block pl-7 pr-4 py-2 text-xs text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                    >
+                      • โปรแกรมฉีดวัคซีน
                     </Link>
                   </li>
                   <li>

@@ -12,7 +12,7 @@ const kanit = Kanit({
 
 export default function Footer() {
   return (
-    <footer className={`${kanit.className} bg-white border-t-4 border-[#00bba7] pt-14 pb-12 px-4 sm:px-6 lg:px-8`}>
+    <footer className={`${kanit.className} bg-white border-t border-gray-200 pt-14 pb-12 px-4 sm:px-6 lg:px-8`}>
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[1.3fr_1fr_0.9fr_1.1fr] gap-10 md:gap-8">
         {/* คอลัมน์ที่ 1: โลโก้ + เบอร์โทร + ปุ่มโซเชียลสีส้ม */}
          <div className="flex flex-col space-y-4">

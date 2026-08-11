@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   ChevronLeft,
   ChevronRight,
@@ -299,14 +300,14 @@ export default function MedicalServicesSection() {
           </motion.div>
         )}
 
-        {/* ปุ่มสลับแสดง/ซ่อน ดูทั้งหมด */}
+        {/* ปุ่มไปหน้าดูบริการทั้งหมด */}
         <div className="flex justify-center mt-12 sm:mt-14">
-          <button
-            onClick={() => setShowAllServices(!showAllServices)}
-            className="px-10 py-3 sm:px-12 sm:py-3.5 bg-white hover:bg-[#f97316] text-[#f97316] hover:text-white border-2 border-[#f97316] font-medium text-sm sm:text-base rounded-full transition-all duration-300 shadow-xs hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5 active:scale-98"
+          <Link
+            href="/medical-services"
+            className="px-10 py-3 sm:px-12 sm:py-3.5 bg-white hover:bg-[#f97316] text-[#f97316] hover:text-white border-2 border-[#f97316] font-medium text-sm sm:text-base rounded-full transition-all duration-300 shadow-xs hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5 active:scale-98 inline-block text-center"
           >
-            {showAllServices ? "ย่อลง" : "ดูทั้งหมด"}
-          </button>
+            ดูทั้งหมด
+          </Link>
         </div>
       </div>
     </section>

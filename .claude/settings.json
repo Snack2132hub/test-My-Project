@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tasklist //FI \"PID eq 4168\" //FI \"PID eq 2844\" //FO LIST)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" --max-time 10 http://localhost:3001/)",
+      "Bash(taskkill //PID 4168 //F)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" --max-time 8 http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" --max-time 15 http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" --max-time 40 http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" --max-time 30 http://localhost:3000/)",
+      "Bash(taskkill //PID 26044 //F)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" --max-time 30 http://127.0.0.1:3000/)",
+      "Bash(node test_db_tmp.mjs)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" --max-time 90 http://localhost:3000/)"
+    ]
+  }
+}
