@@ -6,27 +6,35 @@ interface Props {
 }
 
 export default function LoginPage({ onLogin }: Props) {
-  const [username, setUsername] = useState('admin')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!username.trim()) {
-      setError('กรุณาใส่ Username')
-      return
-    }
-    if (!password.trim()) {
-      setError('กรุณาใส่ Password')
-      return
-    }
+    if (!username.trim()) { setError('กรุณาใส่ Username'); return }
+    if (!password.trim()) { setError('กรุณาใส่ Password'); return }
+
     setError('')
     setLoading(true)
-    setTimeout(() => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username.trim(), password }),
+      })
+      const data = await res.json()
+      if (data.ok) {
+        onLogin(data.full_name || data.username)
+      } else {
+        setError(data.message || 'เข้าสู่ระบบไม่สำเร็จ')
+      }
+    } catch {
+      setError('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้')
+    } finally {
       setLoading(false)
-      onLogin(username)
-    }, 800)
+    }
   }
 
   return (
