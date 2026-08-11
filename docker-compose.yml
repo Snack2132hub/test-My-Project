@@ -32,7 +32,7 @@ services:
     ports:
       - "4000:4000"
     env_file:
-      - .env.docker
+      - ./frontend/.env.docker
     environment:
       PORT: "4000"
     volumes:
