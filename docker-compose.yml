@@ -1,13 +1,13 @@
 services:
   web:
     build:
-      context: .
+      context: ./frontend
       target: dev
     container_name: pnnh-web
     ports:
       - "3000:3000"
     env_file:
-      - .env.docker
+      - ./frontend/.env.docker
     environment:
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
@@ -15,7 +15,7 @@ services:
       ENABLE_DB_DEBUG_ENDPOINT: "true"
       NEXT_PUBLIC_API_URL: "http://localhost:4000"
     volumes:
-      - .:/app
+      - ./frontend:/app
       - /app/node_modules
       - /app/.next
     depends_on:
