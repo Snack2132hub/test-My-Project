@@ -263,12 +263,7 @@ export default function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      href="/patient-services?dept=pediatrics"
-                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      โปรแกรมฉีดวัคซีน
-                    </Link>
+                    
                   </li>
                   <li>
                     <Link
