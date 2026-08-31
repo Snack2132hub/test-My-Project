@@ -58,8 +58,8 @@ export default function Footer() {
               </Link>
             </li>
             <li className="pt-3">
-              <Link href="#" className="hover:text-[#ea580c] transition-colors block">
-                แพทย์
+              <Link href="/doctors" className="hover:text-[#ea580c] transition-colors block">
+                บุคลากรแพทย์
               </Link>
             </li>
             <li className="pt-3">

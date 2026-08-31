@@ -41,10 +41,6 @@ export default function HealthCheckupManager() {
     description: "",
   });
 
-  useEffect(() => {
-    fetchData();
-  }, [activeTab]);
-
   const getApiEndpoint = () => {
     if (activeTab === "checkup") return "/api/health-checkup/checkup-programs";
     if (activeTab === "vaccines") return "/api/health-checkup/vaccine-programs";
@@ -65,6 +61,10 @@ export default function HealthCheckupManager() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [activeTab]);
 
   const handleOpenAddModal = () => {
     setEditingItem(null);

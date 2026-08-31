@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bed, Stethoscope, UserCheck } from "lucide-react";
+import { Bed, Stethoscope } from "lucide-react";
 
 /**
  * Custom House with Cross Icon matching the hospital design

@@ -1,56 +1,38 @@
 import { NextResponse } from "next/server";
-import type { RowDataPacket } from "mysql2";
-
-import getPool from "@/lib/db";
+import { DOCTORS_DATA, getDoctorById } from "@/lib/doctorsData";
 
 export const dynamic = "force-dynamic";
 
-type DoctorDebugRow = RowDataPacket & {
-  dr_id: number;
-  dr_img: string | null;
-};
-
 export async function GET(request: Request) {
-  const requestUrl = new URL(request.url);
-  const host = request.headers.get("host") ?? "";
-  const isDebugEnabledByEnv = process.env.ENABLE_DB_DEBUG_ENDPOINT === "true";
-  const isLocalhost =
-    host === "localhost" ||
-    host === "127.0.0.1" ||
-    host.startsWith("localhost:") ||
-    host.startsWith("127.0.0.1:");
-  const isLocalDebugRequest =
-    isLocalhost && requestUrl.searchParams.get("debug") === "1";
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+  const dept = searchParams.get("dept");
+  const position = searchParams.get("position");
 
-  if (!isDebugEnabledByEnv && !isLocalDebugRequest) {
-    return NextResponse.json({ ok: false, message: "Not found" }, { status: 404 });
+  if (id) {
+    const doctor = getDoctorById(id);
+    if (!doctor) {
+      return NextResponse.json({ ok: false, message: "Doctor not found" }, { status: 404 });
+    }
+    return NextResponse.json({ ok: true, data: doctor });
   }
 
-  try {
-    const pool = getPool();
-    const [rows] = await pool.query<DoctorDebugRow[]>(
-      "SELECT dr_id, dr_img FROM doctor_detail ORDER BY dr_id ASC LIMIT 1"
-    );
+  let result = DOCTORS_DATA;
 
-    return NextResponse.json({
-      ok: true,
-      connected: true,
-      table: "doctor_detail",
-      data: rows[0]
-        ? {
-            dr_id: rows[0].dr_id,
-            dr_img: rows[0].dr_img,
-          }
-        : null,
-    });
-  } catch (error) {
-    console.error("Failed to check database connection", error);
-    return NextResponse.json(
-      {
-        ok: false,
-        message: "Cannot connect to database",
-      },
-      { status: 500 }
+  if (dept && dept !== "ทั้งหมด") {
+    result = result.filter(
+      (d) =>
+        d.departmentCategory.includes(dept) || d.department.includes(dept)
     );
   }
+
+  if (position && position !== "ทั้งหมด") {
+    result = result.filter((d) => d.position.includes(position));
+  }
+
+  return NextResponse.json({
+    ok: true,
+    total: result.length,
+    data: result,
+  });
 }
