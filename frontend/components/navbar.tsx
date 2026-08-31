@@ -28,9 +28,9 @@ export default function Navbar() {
   };
 
   return (
-    <header className="w-full relative z-50 font-sans shadow-xs">
-      {/* 1. แถบ Top Bar สีเขียวมรกต (Emerald Teal Top Bar) */}
-      <div className="bg-[#ff8c1a] text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs sm:text-sm">
+    <>
+      {/* 1. แถบ Top Bar (ไม่ sticky - เลื่อนหายตามหน้าเว็บ) */}
+      <div className="w-full bg-[#ff8c1a] text-white py-1.5 px-4 sm:px-6 lg:px-8 text-xs sm:text-sm font-sans">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* เบอร์โทรศัพท์ฝั่งซ้าย */}
           <div className="flex items-center gap-2 font-medium">
@@ -104,8 +104,8 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* 2. เมนูหลัก Navbar สีขาว */}
-      <nav className={`${kanit.className} bg-white border-b border-gray-100 h-18 px-4 sm:px-6 lg:px-8`}>
+      {/* 2. เมนูหลัก Navbar สีขาว (Sticky ติดขอบบนเมื่อเลื่อนจอ) */}
+      <nav className={`${kanit.className} sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-xs h-18 px-4 sm:px-6 lg:px-8 transition-shadow`}>
         <div className="max-w-7xl mx-auto flex h-full items-center justify-between">
           {/* โลโก้โรงพยาบาลปากช่องนานา */}
           <Link href="/" className="flex items-center gap-3 group">
@@ -260,14 +260,6 @@ export default function Navbar() {
                       className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ศูนย์ศัลยกรรม
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/patient-services?dept=pediatrics"
-                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      โปรแกรมฉีดวัคซีน
                     </Link>
                   </li>
                   <li>
@@ -447,8 +439,6 @@ export default function Navbar() {
           </div>
         )}
       </nav>
-    </header>
+    </>
   );
 }
-
-
