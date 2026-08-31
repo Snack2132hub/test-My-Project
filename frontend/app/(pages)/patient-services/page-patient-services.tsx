@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
@@ -594,7 +594,7 @@ function PatientServicesContent() {
       {/* ------------------------------------------------------------- */}
       {/* 1. TOP HEADER BREADCRUMB BANNER WITH GEOMETRIC PATTERN        */}
       {/* ------------------------------------------------------------- */}
-      <section className="relative bg-gradient-to-r from-teal-900 via-teal-800 to-emerald-900 text-white pt-10 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden shadow-md">
+      <section className="relative bg-linear-to-r from-teal-900 via-teal-800 to-emerald-900 text-white pt-10 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden shadow-md">
         {/* Geometric Hexagon / Light Grid Pattern Overlay */}
         <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-[#00bba7]_1px,transparent_1px] [background-size:16px_16px]" />
         
@@ -636,7 +636,7 @@ function PatientServicesContent() {
           {/* LEFT SIDEBAR: รายชื่อ 12 ศูนย์เฉพาะทาง (Orange Buttons)  */}
           {/* ========================================================= */}
           <aside className="lg:col-span-4 xl:col-span-3 bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden sticky top-6">
-            <div className="bg-gradient-to-r from-[#ea580c] to-[#f97316] p-4 text-white font-bold text-lg flex items-center gap-2">
+            <div className="bg-linear-to-r from-[#ea580c] to-[#f97316] p-4 text-white font-bold text-lg flex items-center gap-2">
               <Building className="w-5 h-5 text-white" />
               <span>ศูนย์รักษาเฉพาะทาง</span>
             </div>
@@ -727,7 +727,7 @@ function PatientServicesContent() {
                     />
 
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />
 
                     {/* Prev & Next Slide Buttons */}
                     {currentCenter.banners.length > 1 && (
@@ -913,7 +913,7 @@ function PatientServicesContent() {
                 </div>
 
                 {/* 5. CALL TO ACTION / APPOINTMENT BANNER */}
-                <div className="bg-gradient-to-r from-[#ea580c] to-[#c2410c] rounded-2xl p-6 sm:p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-lg">
+                <div className="bg-linear-to-r from-[#ea580c] to-[#c2410c] rounded-2xl p-6 sm:p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-lg">
                   <div className="space-y-2 text-center sm:text-left">
                     <h3 className="text-xl sm:text-2xl font-bold">
                       ต้องการทำนัดหมายหรือสอบถามข้อมูลเพิ่มเติม?
@@ -952,7 +952,7 @@ function PatientServicesContent() {
       {/* 3. MODAL นัดหมายแพทย์ออนไลน์ (Appointment Modal)              */}
       {/* ------------------------------------------------------------- */}
       {isAppointmentModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs duration-200">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative space-y-5 border border-gray-100">
             <button
               onClick={() => setIsAppointmentModalOpen(false)}

@@ -35,4 +35,57 @@ router.get("/", async (req, res) => {
   }
 });
 
+// POST /api/news
+router.post("/", async (req, res) => {
+  const { title, category, image_url, content } = req.body;
+  if (!title || !category) {
+    res.status(400).json({ ok: false, message: "กรุณาระบุหัวข้อและหมวดหมู่" });
+    return;
+  }
+  const validCategories = ["after_hours", "pr_news", "activity"];
+  if (!validCategories.includes(category)) {
+    res.status(400).json({ ok: false, message: "category ไม่ถูกต้อง" });
+    return;
+  }
+  try {
+    const [result]: any = await getPool().query(
+      "INSERT INTO news (title, category, image_url, content, published_at, is_active) VALUES (?, ?, ?, ?, NOW(), 1)",
+      [title, category, image_url || "", content || ""]
+    );
+    res.json({ ok: true, id: result.insertId });
+  } catch {
+    res.status(500).json({ ok: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
+// PUT /api/news/:id
+router.put("/:id", async (req, res) => {
+  const { title, category, image_url, content, is_active } = req.body;
+  const id = Number(req.params.id);
+  if (!title || !category) {
+    res.status(400).json({ ok: false, message: "กรุณาระบุหัวข้อและหมวดหมู่" });
+    return;
+  }
+  try {
+    await getPool().query(
+      "UPDATE news SET title=?, category=?, image_url=?, content=?, is_active=? WHERE id=?",
+      [title, category, image_url || "", content || "", is_active ?? 1, id]
+    );
+    res.json({ ok: true });
+  } catch {
+    res.status(500).json({ ok: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
+// DELETE /api/news/:id
+router.delete("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  try {
+    await getPool().query("DELETE FROM news WHERE id=?", [id]);
+    res.json({ ok: true });
+  } catch {
+    res.status(500).json({ ok: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
 export default router;

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 
@@ -9,7 +9,7 @@ import Image from "next/image";
  */
 export default function OnlineAppointmentSection() {
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 w-full bg-gradient-to-b from-[#ffedd5]/80 via-[#fed7aa]/40 to-[#ffedd5]/60 border-t border-orange-100">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 w-full bg-linear-to-b from-[#ffedd5]/80 via-[#fed7aa]/40 to-[#ffedd5]/60 border-t border-orange-100">
       <div className="max-w-6xl mx-auto">
         {/* หัวข้อส่วนระบบนัดหมายออนไลน์ */}
         <div className="flex flex-col items-center mb-14 text-center">

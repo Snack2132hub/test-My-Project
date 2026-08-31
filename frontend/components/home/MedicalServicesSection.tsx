@@ -28,70 +28,22 @@ import { motion } from "motion/react";
  * รายการคลินิกและบริการทางการแพทย์
  */
 const services = [
-  {
-    title: "ศูนย์ตรวจสุขภาพ",
-    icon: Stethoscope,
-  },
-  {
-    title: "คลินิกพิเศษนอกเวลา",
-    icon: Clock,
-  },
-  {
-    title: "จองห้องพิเศษ",
-    icon: Bed,
-  },
-  {
-    title: "โปรแกรมฉีดวัคซีน",
-    icon: Syringe,
-  },
-  {
-    title: "ลงทะเบียนผู้ป่วยใหม่",
-    icon: UserPlus,
-  },
-  {
-    title: "คลินิกทันตกรรม",
-    icon: Smile,
-  },
-  {
-    title: "คลินิกโรคหัวใจ",
-    icon: HeartPulse,
-  },
-  {
-    title: "คลินิกจักษุและสายตา",
-    icon: Eye,
-  },
-  {
-    title: "คลินิกกุมารเวช",
-    icon: Baby,
-  },
-  {
-    title: "คลินิกกระดูกและข้อ",
-    icon: Bone,
-  },
-  {
-    title: "คลินิกกายภาพบำบัด",
-    icon: Activity,
-  },
-  {
-    title: "ศูนย์ศัลยกรรมผ่าตัด",
-    icon: Scissors,
-  },
-  {
-    title: "ศูนย์อุบัติเหตุ-ฉุกเฉิน",
-    icon: ShieldAlert,
-  },
-  {
-    title: "ศูนย์วินิจฉัยและเอ็กซเรย์",
-    icon: Microscope,
-  },
-  {
-    title: "ศูนย์ผิวหนังและความงาม",
-    icon: Sparkles,
-  },
-  {
-    title: "ตรวจวิเคราะห์ห้องแล็บ",
-    icon: FileText,
-  },
+  { title: "ศูนย์ตรวจสุขภาพ", icon: Stethoscope },
+  { title: "คลินิกพิเศษนอกเวลา", icon: Clock },
+  { title: "จองห้องพิเศษ", icon: Bed },
+  { title: "โปรแกรมฉีดวัคซีน", icon: Syringe },
+  { title: "ลงทะเบียนผู้ป่วยใหม่", icon: UserPlus },
+  { title: "คลินิกทันตกรรม", icon: Smile },
+  { title: "คลินิกโรคหัวใจ", icon: HeartPulse },
+  { title: "คลินิกจักษุและสายตา", icon: Eye },
+  { title: "คลินิกกุมารเวช", icon: Baby },
+  { title: "คลินิกกระดูกและข้อ", icon: Bone },
+  { title: "คลินิกกายภาพบำบัด", icon: Activity },
+  { title: "ศูนย์ศัลยกรรมผ่าตัด", icon: Scissors },
+  { title: "ศูนย์อุบัติเหตุ-ฉุกเฉิน", icon: ShieldAlert },
+  { title: "ศูนย์วินิจฉัยและเอ็กซเรย์", icon: Microscope },
+  { title: "ศูนย์ผิวหนังและความงาม", icon: Sparkles },
+  { title: "ตรวจวิเคราะห์ห้องแล็บ", icon: FileText },
 ];
 
 /**
@@ -126,13 +78,8 @@ export default function MedicalServicesSection() {
     scrollRef.current.scrollLeft = scrollLeftRef.current - walk;
   };
 
-  const handleMouseUp = () => {
-    isDraggingRef.current = false;
-  };
-
-  const handleMouseLeave = () => {
-    isDraggingRef.current = false;
-  };
+  const handleMouseUp = () => { isDraggingRef.current = false; };
+  const handleMouseLeave = () => { isDraggingRef.current = false; };
 
   // เลื่อนด้วยปุ่มลูกศร
   const scrollByAmount = (direction: "left" | "right") => {
@@ -142,11 +89,7 @@ export default function MedicalServicesSection() {
       direction === "left"
         ? scrollRef.current.scrollLeft - scrollAmount
         : scrollRef.current.scrollLeft + scrollAmount;
-
-    scrollRef.current.scrollTo({
-      left: targetScroll,
-      behavior: "smooth",
-    });
+    scrollRef.current.scrollTo({ left: targetScroll, behavior: "smooth" });
   };
 
   // คำนวณหาตำแหน่งของ Dot Indicator
@@ -155,22 +98,15 @@ export default function MedicalServicesSection() {
     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
     const maxScroll = scrollWidth - clientWidth;
     if (maxScroll <= 0) return;
-
     const progress = scrollLeft / maxScroll;
-    const index = Math.min(Math.round(progress * 3), 3);
-    setActiveDot(index);
+    setActiveDot(Math.min(Math.round(progress * 3), 3));
   };
 
   const scrollToDot = (dotIndex: number) => {
     if (!scrollRef.current) return;
     const { scrollWidth, clientWidth } = scrollRef.current;
     const maxScroll = scrollWidth - clientWidth;
-    const targetScroll = (dotIndex / 3) * maxScroll;
-
-    scrollRef.current.scrollTo({
-      left: targetScroll,
-      behavior: "smooth",
-    });
+    scrollRef.current.scrollTo({ left: (dotIndex / 3) * maxScroll, behavior: "smooth" });
   };
 
   return (
@@ -181,10 +117,10 @@ export default function MedicalServicesSection() {
           src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=1200"
           alt="Hospital Corridor Background"
           fill
-          className="object-cover opacity-[0.05] filter blur-xs"
+          className="object-cover opacity-[0.05] blur-xs"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#fbf8f3]/30 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-[#fbf8f3]/30 to-transparent" />
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
@@ -206,7 +142,7 @@ export default function MedicalServicesSection() {
                 className="hidden md:flex p-3 rounded-full bg-white hover:bg-[#fff7ed] text-[#f97316] hover:text-[#ea580c] shadow-md hover:shadow-lg border border-orange-100/70 transition-all cursor-pointer focus:outline-hidden transform active:scale-95 shrink-0 z-20"
                 aria-label="Previous services"
               >
-                <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
+                <ChevronLeft className="w-6 h-6" strokeWidth={2.5} />
               </button>
 
               {/* คอนเทนเนอร์แสดงรายการบริการ สามารถลากสไลด์ซ้าย-ขวาได้ */}
@@ -228,8 +164,8 @@ export default function MedicalServicesSection() {
                       className="snap-start flex-none w-[130px] sm:w-[150px] md:w-[170px] flex flex-col items-center text-center group cursor-pointer"
                     >
                       {/* ปุ่มวงกลมไอคอน */}
-                      <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[#ffa154] to-[#f97316] group-hover:from-[#f97316] group-hover:to-[#ea580c] group-hover:opacity-80 flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition-all duration-300 relative border border-white/10 shrink-0 pointer-events-none">
-                        <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white stroke-[1.5] relative z-10" />
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-linear-to-br from-[#ffa154] to-[#f97316] group-hover:from-[#f97316] group-hover:to-[#ea580c] group-hover:opacity-80 flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition-all duration-300 relative border border-white/10 shrink-0 pointer-events-none">
+                        <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white relative z-10" strokeWidth={1.5} />
                       </div>
 
                       {/* ชื่อนวัตกรรม/คลินิก */}
@@ -249,7 +185,7 @@ export default function MedicalServicesSection() {
                 className="hidden md:flex p-3 rounded-full bg-white hover:bg-[#fff7ed] text-[#f97316] hover:text-[#ea580c] shadow-md hover:shadow-lg border border-orange-100/70 transition-all cursor-pointer focus:outline-hidden transform active:scale-95 shrink-0 z-20"
                 aria-label="Next services"
               >
-                <ChevronRight className="w-6 h-6 stroke-[2.5]" />
+                <ChevronRight className="w-6 h-6" strokeWidth={2.5} />
               </button>
             </div>
 
@@ -284,8 +220,8 @@ export default function MedicalServicesSection() {
                   key={index}
                   className="flex flex-col items-center text-center group cursor-pointer w-full"
                 >
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[#ffa154] to-[#f97316] group-hover:from-[#f97316] group-hover:to-[#ea580c] group-hover:opacity-80 flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition-all duration-300 relative border border-white/10 shrink-0">
-                    <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white stroke-[1.5] relative z-10" />
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-linear-to-br from-[#ffa154] to-[#f97316] group-hover:from-[#f97316] group-hover:to-[#ea580c] group-hover:opacity-80 flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition-all duration-300 relative border border-white/10 shrink-0">
+                    <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white relative z-10" strokeWidth={1.5} />
                   </div>
 
                   <div className="mt-3 sm:mt-4 h-10 sm:h-12 flex items-start justify-center w-full">

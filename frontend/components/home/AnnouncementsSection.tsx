@@ -98,7 +98,7 @@ export default function AnnouncementsSection() {
     let isMounted = true;
     const fetchAnnouncements = async () => {
       try {
-        const res = await fetch("/api/announcements");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/announcements`);
         if (res.ok) {
           const json = await res.json();
           if (json.ok && Array.isArray(json.data) && json.data.length > 0) {

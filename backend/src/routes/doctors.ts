@@ -48,4 +48,54 @@ router.get("/debug", async (_req: Request, res: Response) => {
   }
 });
 
+// POST /api/doctors
+router.post("/", async (req: Request, res: Response) => {
+  const { dr_name, dr_department, dr_record1, position1, dr_img, dr_check1, dr_check2 } = req.body;
+  if (!dr_name || !dr_department) {
+    res.status(400).json({ ok: false, message: "กรุณาระบุชื่อแพทย์และแผนก" });
+    return;
+  }
+  try {
+    const [maxRows] = await getPool().query("SELECT MAX(dr_id) as maxId FROM doctor_detail") as [Array<RowDataPacket & { maxId: number }>, unknown];
+    const newId = (maxRows[0].maxId || 0) + 1;
+    await getPool().query(
+      "INSERT INTO doctor_detail (dr_id, dr_name, dr_department, dr_record1, position1, dr_img, dr_check1, dr_check2, date_add, user_add) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), 'admin')",
+      [newId, dr_name, dr_department, dr_record1 || "", position1 || "", dr_img || "", dr_check1 || "", dr_check2 || ""]
+    );
+    res.json({ ok: true, dr_id: newId });
+  } catch {
+    res.status(500).json({ ok: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
+// PUT /api/doctors/:id
+router.put("/:id", async (req: Request, res: Response) => {
+  const { dr_name, dr_department, dr_record1, position1, dr_img, dr_check1, dr_check2 } = req.body;
+  const id = Number(req.params.id);
+  if (!dr_name || !dr_department) {
+    res.status(400).json({ ok: false, message: "กรุณาระบุชื่อแพทย์และแผนก" });
+    return;
+  }
+  try {
+    await getPool().query(
+      "UPDATE doctor_detail SET dr_name=?, dr_department=?, dr_record1=?, position1=?, dr_img=?, dr_check1=?, dr_check2=?, edit_date=NOW(), edit_user='admin' WHERE dr_id=?",
+      [dr_name, dr_department, dr_record1 || "", position1 || "", dr_img || "", dr_check1 || "", dr_check2 || "", id]
+    );
+    res.json({ ok: true });
+  } catch {
+    res.status(500).json({ ok: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
+// DELETE /api/doctors/:id
+router.delete("/:id", async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  try {
+    await getPool().query("DELETE FROM doctor_detail WHERE dr_id=?", [id]);
+    res.json({ ok: true });
+  } catch {
+    res.status(500).json({ ok: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
 export default router;

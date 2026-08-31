@@ -42,7 +42,6 @@ export default function Home() {
   const [doctorId, setDoctorId] = useState<string>("-");
   const [doctorImage, setDoctorImage] = useState<string>("-");
   const [isLoadingDoctor, setIsLoadingDoctor] = useState(showDbTestPanel);
-
   useEffect(() => {
     if (!showDbTestPanel) return;
 

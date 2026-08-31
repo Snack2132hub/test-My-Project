@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { HeartPulse, Syringe } from "lucide-react";
@@ -42,7 +42,7 @@ export default function HealthCheckupSection() {
             </div>
 
             {/* แถบริบบิ้นสีส้มด้านล่างการ์ด */}
-            <div className="absolute bottom-4 left-0 w-[85%] sm:w-[80%] bg-gradient-to-r from-[#ffa154] via-[#f97316] to-[#f97316] text-white py-3 px-4 sm:px-5 rounded-r-2xl shadow-lg flex items-center justify-between z-10">
+            <div className="absolute bottom-4 left-0 w-[85%] sm:w-[80%] bg-linear-to-r from-[#ffa154] via-[#f97316] to-[#f97316] text-white py-3 px-4 sm:px-5 rounded-r-2xl shadow-lg flex items-center justify-between z-10">
               <div className="pr-2">
                 <h3 className="font-bold text-base sm:text-lg text-white leading-tight">
                   โปรแกรมตรวจสุขภาพ
@@ -78,7 +78,7 @@ export default function HealthCheckupSection() {
             </div>
 
             {/* แถบริบบิ้นสีส้มด้านล่างการ์ด */}
-            <div className="absolute bottom-4 left-0 w-[85%] sm:w-[80%] bg-gradient-to-r from-[#ffa154] via-[#f97316] to-[#f97316] text-white py-3 px-4 sm:px-5 rounded-r-2xl shadow-lg flex items-center justify-between z-10">
+            <div className="absolute bottom-4 left-0 w-[85%] sm:w-[80%] bg-linear-to-r from-[#ffa154] via-[#f97316] to-[#f97316] text-white py-3 px-4 sm:px-5 rounded-r-2xl shadow-lg flex items-center justify-between z-10">
               <div className="pr-2">
                 <h3 className="font-bold text-base sm:text-lg text-white leading-tight">
                   โปรแกรมฉีดวัคซีน
@@ -96,7 +96,7 @@ export default function HealthCheckupSection() {
 
         {/* ปุ่มดูทั้งหมด */}
         <div className="flex justify-center mt-12">
-          <button className="px-10 py-2.5 sm:px-12 sm:py-3 bg-gradient-to-r from-[#ffa154] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] text-white font-medium text-sm sm:text-base rounded-full shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-0.5 active:scale-98">
+          <button className="px-10 py-2.5 sm:px-12 sm:py-3 bg-linear-to-r from-[#ffa154] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] text-white font-medium text-sm sm:text-base rounded-full shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-0.5 active:scale-98">
             ดูทั้งหมด
           </button>
         </div>

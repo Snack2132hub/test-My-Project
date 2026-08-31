@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -61,14 +61,14 @@ export default function DoctorTeamSection() {
             className="p-3 rounded-full bg-white hover:bg-[#fff7ed] text-[#f97316] hover:text-[#ea580c] shadow-md hover:shadow-lg border border-orange-100 transition-all cursor-pointer focus:outline-hidden transform active:scale-95 shrink-0 z-10"
             aria-label="Previous doctors"
           >
-            <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
+            <ChevronLeft className="w-6 h-6" strokeWidth={2.5} />
           </button>
 
           {/* กริดแสดงการ์ดแพทย์ */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full py-2">
             {doctors.map((doctor) => (
               <div key={doctor.id} className="flex flex-col items-center text-center group cursor-pointer">
-                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 to-[#ffedd5]/90 border border-orange-100 shadow-sm group-hover:shadow-md transition-all duration-300 mb-4">
+                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-linear-to-b from-[#fed7aa]/50 to-[#ffedd5]/90 border border-orange-100 shadow-sm group-hover:shadow-md transition-all duration-300 mb-4">
                   {/* 📌 [จุดเปลี่ยนรูปแพทย์] 
                       สามารถเปลี่ยน src ของรูปหมอในอาร์เรย์ doctors ด้านบน 
                   */}
@@ -98,13 +98,13 @@ export default function DoctorTeamSection() {
             className="p-3 rounded-full bg-white hover:bg-[#fff7ed] text-[#f97316] hover:text-[#ea580c] shadow-md hover:shadow-lg border border-orange-100 transition-all cursor-pointer focus:outline-hidden transform active:scale-95 shrink-0 z-10"
             aria-label="Next doctors"
           >
-            <ChevronRight className="w-6 h-6 stroke-[2.5]" />
+            <ChevronRight className="w-6 h-6" strokeWidth={2.5} />
           </button>
         </div>
 
         {/* ปุ่มดูทั้งหมด */}
         <div className="flex justify-center mt-12">
-          <button className="px-10 py-2.5 sm:px-12 sm:py-3 bg-gradient-to-r from-[#ffa154] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] text-white font-medium text-sm sm:text-base rounded-full shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-0.5 active:scale-98">
+          <button className="px-10 py-2.5 sm:px-12 sm:py-3 bg-linear-to-r from-[#ffa154] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] text-white font-medium text-sm sm:text-base rounded-full shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-0.5 active:scale-98">
             ดูทั้งหมด
           </button>
         </div>

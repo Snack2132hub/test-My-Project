@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
@@ -115,7 +115,7 @@ const paginatedNews = currentNews.slice(
       }}
     >
       {/* โอเวอร์เลย์สีอุ่นนุ่มนวล */}
-      <div className="absolute inset-0 bg-gradient-to-b from-orange-50/50 via-amber-100/40 to-orange-200/60 backdrop-blur-[1px]" />
+      <div className="absolute inset-0 bg-linear-to-b from-orange-50/50 via-amber-100/40 to-orange-200/60 backdrop-blur-[1px]" />
 
       <div className="max-w-6xl mx-auto relative z-10 space-y-16">
         {/* ========================================== */}
@@ -208,7 +208,7 @@ const paginatedNews = currentNews.slice(
               className="p-1.5 text-[#f97316] hover:text-[#ea580c] cursor-pointer transition-colors"
               aria-label="Previous procurement page"
             >
-              <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+              <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
             </button>
 
             {Array.from(
@@ -233,7 +233,7 @@ const paginatedNews = currentNews.slice(
               className="p-1.5 text-[#f97316] hover:text-[#ea580c] cursor-pointer transition-colors"
               aria-label="Next procurement page"
             >
-              <ChevronRight className="w-5 h-5 stroke-[2.5]" />
+              <ChevronRight className="w-5 h-5" strokeWidth={2.5} />
             </button>
           </div>
         </div>
@@ -316,7 +316,7 @@ const paginatedNews = currentNews.slice(
           <div className="flex flex-col">
             <div className="flex items-center gap-2.5 mb-4 text-[#ea580c]">
               <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-[#ea580c]">
-                <Phone className="w-5 h-5 stroke-[2.5]" />
+                <Phone className="w-5 h-5" strokeWidth={2.5} />
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 drop-shadow-xs">
                 ติดต่อเรา

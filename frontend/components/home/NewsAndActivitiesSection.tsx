@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
@@ -136,7 +136,7 @@ export default function NewsAndActivitiesSection() {
               }}
               className={`flex items-center gap-2 px-5 py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-300 cursor-pointer ${
                 newsTab === "clinic"
-                  ? "bg-gradient-to-r from-[#ffa154] to-[#f97316] text-white shadow-md shadow-orange-200/70"
+                  ? "bg-linear-to-r from-[#ffa154] to-[#f97316] text-white shadow-md shadow-orange-200/70"
                   : "text-gray-500 hover:text-gray-800 hover:bg-white/60"
               }`}
             >
@@ -152,7 +152,7 @@ export default function NewsAndActivitiesSection() {
               }}
               className={`flex items-center gap-2 px-5 py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-300 cursor-pointer ${
                 newsTab === "pr"
-                  ? "bg-gradient-to-r from-[#ffa154] to-[#f97316] text-white shadow-md shadow-orange-200/70"
+                  ? "bg-linear-to-r from-[#ffa154] to-[#f97316] text-white shadow-md shadow-orange-200/70"
                   : "text-gray-500 hover:text-gray-800 hover:bg-white/60"
               }`}
             >
@@ -168,7 +168,7 @@ export default function NewsAndActivitiesSection() {
               }}
               className={`flex items-center gap-2 px-5 py-2 rounded-full font-medium text-xs sm:text-sm transition-all duration-300 cursor-pointer ${
                 newsTab === "activity"
-                  ? "bg-gradient-to-r from-[#ffa154] to-[#f97316] text-white shadow-md shadow-orange-200/70"
+                  ? "bg-linear-to-r from-[#ffa154] to-[#f97316] text-white shadow-md shadow-orange-200/70"
                   : "text-gray-500 hover:text-gray-800 hover:bg-white/60"
               }`}
             >
@@ -207,7 +207,7 @@ export default function NewsAndActivitiesSection() {
                   />
 
                   <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/90 shadow-xs flex items-center justify-center text-[#f97316]">
-                    <Sparkles size={18} className="stroke-[2]" />
+                    <Sparkles size={18} strokeWidth={2} />
                   </div>
                 </div>
 
@@ -230,7 +230,7 @@ export default function NewsAndActivitiesSection() {
             className="p-1.5 text-[#f97316] hover:text-[#ea580c] cursor-pointer transition-colors"
             aria-label="Previous news page"
           >
-            <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+            <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
           </button>
 
           {[0, 1, 2].map((idx) => (
@@ -251,7 +251,7 @@ export default function NewsAndActivitiesSection() {
             className="p-1.5 text-[#f97316] hover:text-[#ea580c] cursor-pointer transition-colors"
             aria-label="Next news page"
           >
-            <ChevronRight className="w-5 h-5 stroke-[2.5]" />
+            <ChevronRight className="w-5 h-5" strokeWidth={2.5} />
           </button>
         </div>
       </div>

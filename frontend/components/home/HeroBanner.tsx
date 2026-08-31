@@ -1,48 +1,41 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
-/**
- * ข้อมูลรูปภาพและข้อความสำหรับ Hero Banner สไลเดอร์
- * สามารถแก้ไข/เพิ่ม/ลบ แบนเนอร์ได้ที่อาร์เรย์นี้
- */
-const banners = [
-  {
-    src: "/img/indexbanner/herobannertest01.png",
-    title: "โรงพยาบาลปากช่องนานา",
-    subtitle: "Pakchongnana Hospital",
-    description: "ร่วมใจ ใฝ่บริการ บริการดุจญาติมิตร เพื่อสุขภาพที่ดีของท่าน",
-    buttonText: "เกี่ยวกับเรา",
-    showContent: true, // แสดงกล่องข้อความและปุ่มกด
-  },
-  {
-    src: "/img/indexbanner/herobannertest03.png",
-    title: "",
-    subtitle: "",
-    description: "",
-    buttonText: "",
-    showContent: false, // ซ่อนกล่องข้อความ ให้เห็นเฉพาะรูปภาพเต็มแผ่น
-  },
-   {
-    src: "/img/indexbanner/herobannertest04.png",
-    title: "",
-    subtitle: "",
-    description: "",
-    buttonText: "",
-    showContent: false, // ซ่อนกล่องข้อความ ให้เห็นเฉพาะรูปภาพเต็มแผ่น
-  },
+interface BannerData {
+  id: number;
+  image_url: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  button_text: string;
+  show_content: boolean;
+  is_active: boolean;
+}
+
+const DEFAULT_BANNERS: BannerData[] = [
+  { id: 1, image_url: "/img/indexbanner/herobannertest01.png", title: "โรงพยาบาลปากช่องนานา", subtitle: "Pakchongnana Hospital", description: "ร่วมใจ ใฝ่บริการ บริการดุจญาติมิตร เพื่อสุขภาพที่ดีของท่าน", button_text: "เกี่ยวกับเรา", show_content: true, is_active: true },
+  { id: 2, image_url: "/img/indexbanner/herobannertest03.png", title: "", subtitle: "", description: "", button_text: "", show_content: false, is_active: true },
+  { id: 3, image_url: "/img/indexbanner/herobannertest04.png", title: "", subtitle: "", description: "", button_text: "", show_content: false, is_active: true },
 ];
 
-/**
- * คอมโพเนนต์ HeroBanner (แบนเนอร์สไลเดอร์หน้าแรก)
- * - เล่นสไลด์อัตโนมัติทุก 8 วินาที
- * - มีปุ่มเลื่อน ซ้าย-ขวา และจุด Indicator ด้านล่าง
- */
 export default function HeroBanner() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [banners, setBanners] = useState<BannerData[]>(DEFAULT_BANNERS);
+
+  useEffect(() => {
+    fetch("/api/banners")
+      .then(r => r.json())
+      .then(json => {
+        if (json.ok && Array.isArray(json.data) && json.data.length > 0) {
+          setBanners(json.data.filter((b: BannerData) => b.is_active));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // เลื่อนไปสไลด์ถัดไป
   const handleNext = () => {
@@ -73,7 +66,7 @@ export default function HeroBanner() {
         >
           {/* Layer รูปภาพแบนเนอร์ */}
           <Image
-            src={banners[currentIndex].src}
+            src={banners[currentIndex].image_url}
             alt={`Hero Banner ${currentIndex + 1}`}
             fill
             className="object-cover object-top"
@@ -82,11 +75,11 @@ export default function HeroBanner() {
             quality={95}
           />
 
-          {/* แสดงข้อความโอเวอร์เลย์เมื่อ showContent เป็น true */}
-          {banners[currentIndex].showContent !== false && (
+          {/* แสดงข้อความโอเวอร์เลย์เมื่อ show_content เป็น true */}
+          {banners[currentIndex].show_content && (
             <>
               {/* แถบสีดำโปร่งแสงปรับให้อ่านข้อความง่ายขึ้น (เน้นฝั่งขวา) */}
-              <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-black/25 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-l from-black/60 via-black/25 to-transparent" />
 
               {/* ข้อความและปุ่มบนแบนเนอร์ - จัดชิดขวา */}
               <div className="absolute inset-0 flex flex-col justify-center items-end text-right px-6 sm:px-12 md:px-20 lg:px-32 text-white">
@@ -130,7 +123,7 @@ export default function HeroBanner() {
                     </motion.p>
                   )}
 
-                  {banners[currentIndex].buttonText && (
+                  {banners[currentIndex].button_text && (
                     <motion.div
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -138,7 +131,7 @@ export default function HeroBanner() {
                       className="pt-2 sm:pt-4"
                     >
                       <button className="px-5 py-2 sm:px-6 sm:py-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white font-medium text-xs sm:text-sm rounded-full transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5">
-                        {banners[currentIndex].buttonText}
+                        {banners[currentIndex].button_text}
                       </button>
                     </motion.div>
                   )}

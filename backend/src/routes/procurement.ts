@@ -34,4 +34,56 @@ router.get("/", async (req, res) => {
   }
 });
 
+// POST /api/procurement
+router.post("/", async (req, res) => {
+  const { title, type, document_url, deadline_at } = req.body;
+  if (!title || !type) {
+    res.status(400).json({ ok: false, message: "กรุณาระบุหัวข้อและประเภท" });
+    return;
+  }
+  if (!["procurement", "job"].includes(type)) {
+    res.status(400).json({ ok: false, message: "type ไม่ถูกต้อง" });
+    return;
+  }
+  try {
+    const [result]: any = await getPool().query(
+      "INSERT INTO procurement (title, type, document_url, published_at, deadline_at, is_active) VALUES (?, ?, ?, NOW(), ?, 1)",
+      [title, type, document_url || "", deadline_at || null]
+    );
+    res.json({ ok: true, id: result.insertId });
+  } catch {
+    res.status(500).json({ ok: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
+// PUT /api/procurement/:id
+router.put("/:id", async (req, res) => {
+  const { title, type, document_url, deadline_at, is_active } = req.body;
+  const id = Number(req.params.id);
+  if (!title || !type) {
+    res.status(400).json({ ok: false, message: "กรุณาระบุหัวข้อและประเภท" });
+    return;
+  }
+  try {
+    await getPool().query(
+      "UPDATE procurement SET title=?, type=?, document_url=?, deadline_at=?, is_active=? WHERE id=?",
+      [title, type, document_url || "", deadline_at || null, is_active ?? 1, id]
+    );
+    res.json({ ok: true });
+  } catch {
+    res.status(500).json({ ok: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
+// DELETE /api/procurement/:id
+router.delete("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  try {
+    await getPool().query("DELETE FROM procurement WHERE id=?", [id]);
+    res.json({ ok: true });
+  } catch {
+    res.status(500).json({ ok: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
 export default router;
