@@ -3,13 +3,6 @@
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit3, RefreshCw, Building2, Star, ChevronLeft, ChevronRight } from "lucide-react";
 
-const ICON_OPTIONS = [
-  { value: "house", label: "บ้าน (House)" },
-  { value: "bed", label: "เตียง (Bed)" },
-  { value: "user", label: "คน (User)" },
-  { value: "stethoscope", label: "หูฟัง (Stethoscope)" },
-];
-
 interface Center {
   id: number;
   title: string;
@@ -124,7 +117,6 @@ export default function CentersManager({ initialTab = "specialized" }: { initial
               <tr>
                 <th className="py-3 px-4 w-12">ลำดับ</th>
                 <th className="py-3 px-4">ชื่อศูนย์</th>
-                <th className="py-3 px-4">ไอคอน</th>
                 <th className="py-3 px-4">ลิงก์</th>
                 <th className="py-3 px-4 text-center">จัดการ</th>
               </tr>
@@ -134,9 +126,6 @@ export default function CentersManager({ initialTab = "specialized" }: { initial
                 <tr key={item.id} className="hover:bg-orange-50/30 transition-colors">
                   <td className="py-3 px-4 text-center text-gray-400 text-xs">{item.display_order}</td>
                   <td className="py-3 px-4 font-semibold text-gray-900">{item.title}</td>
-                  <td className="py-3 px-4">
-                    <span className="px-2 py-0.5 rounded-md text-xs bg-gray-100 text-gray-600">{item.iconType}</span>
-                  </td>
                   <td className="py-3 px-4 text-xs text-blue-600 max-w-[200px] truncate">{item.href || "-"}</td>
                   <td className="py-3 px-4 text-center">
                     <div className="flex items-center justify-center gap-2">
@@ -188,15 +177,6 @@ export default function CentersManager({ initialTab = "specialized" }: { initial
                   className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
 
-              {/* ไอคอน */}
-              <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">ไอคอน</label>
-                <select value={formData.iconType} onChange={e => setFormData({ ...formData, iconType: e.target.value })}
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
-                  {ICON_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                </select>
-              </div>
-
               {/* ลิงก์ */}
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">ลิงก์ (href)</label>
@@ -208,9 +188,15 @@ export default function CentersManager({ initialTab = "specialized" }: { initial
               {/* ลำดับ */}
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">ลำดับการแสดง</label>
-                <input type="number" min={1} value={formData.display_order}
-                  onChange={e => setFormData({ ...formData, display_order: Number(e.target.value) })}
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                <div className="flex items-stretch rounded-xl border border-gray-300 overflow-hidden focus-within:ring-2 focus-within:ring-orange-500">
+                  <button type="button" onClick={() => setFormData({ ...formData, display_order: Math.max(1, formData.display_order - 1) })}
+                    className="px-3 bg-gray-50 hover:bg-gray-100 text-gray-600 text-lg leading-none transition-colors border-r border-gray-200">−</button>
+                  <input type="text" inputMode="numeric" value={formData.display_order}
+                    onChange={e => setFormData({ ...formData, display_order: Number(e.target.value.replace(/\D/g, '')) || 1 })}
+                    className="flex-1 px-3 py-2 text-sm text-gray-900 text-center outline-none min-w-0" />
+                  <button type="button" onClick={() => setFormData({ ...formData, display_order: formData.display_order + 1 })}
+                    className="px-3 bg-gray-50 hover:bg-gray-100 text-gray-600 text-lg leading-none transition-colors border-l border-gray-200">+</button>
+                </div>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">

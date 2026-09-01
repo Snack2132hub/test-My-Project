@@ -141,7 +141,7 @@ export default function ProcurementManager() {
                 <th className="py-3 px-4">หัวข้อ</th>
                 <th className="py-3 px-4">เอกสาร/ลิงก์</th>
                 <th className="py-3 px-4">วันที่ประกาศ</th>
-                <th className="py-3 px-4">วันปิดรับ</th>
+                <th className="py-3 px-4">{activeTab === "job" ? "วันปิดรับสมัคร" : "วันสิ้นสุด"}</th>
                 <th className="py-3 px-4 text-center">จัดการ</th>
               </tr>
             </thead>
@@ -215,7 +215,7 @@ export default function ProcurementManager() {
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">ประเภท <span className="text-red-500">*</span></label>
                 <select value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })}
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
                   {TABS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
               </div>
@@ -236,16 +236,32 @@ export default function ProcurementManager() {
                   className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
 
-              {/* วันปิดรับ */}
-              <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">วันปิดรับสมัคร / วันสิ้นสุด</label>
-                <input type="date" value={formData.deadline_at} onChange={e => setFormData({ ...formData, deadline_at: e.target.value })}
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
-                {formData.deadline_at && (
-                  <button type="button" onClick={() => setFormData({ ...formData, deadline_at: "" })}
-                    className="mt-1 flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors">
-                    <X className="w-3 h-3" /> ล้างวันที่
-                  </button>
+              {/* วันที่ */}
+              <div className="grid grid-cols-2 gap-3">
+                {formData.type === "job" ? (
+                  <div className="col-span-2">
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">วันปิดรับสมัคร</label>
+                    <input type="date" value={formData.deadline_at} onChange={e => setFormData({ ...formData, deadline_at: e.target.value })}
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                    {formData.deadline_at && (
+                      <button type="button" onClick={() => setFormData({ ...formData, deadline_at: "" })}
+                        className="mt-1 flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors">
+                        <X className="w-3 h-3" /> ล้างวันที่
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="col-span-2">
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">วันสิ้นสุด / วันประกาศผล</label>
+                    <input type="date" value={formData.deadline_at} onChange={e => setFormData({ ...formData, deadline_at: e.target.value })}
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                    {formData.deadline_at && (
+                      <button type="button" onClick={() => setFormData({ ...formData, deadline_at: "" })}
+                        className="mt-1 flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors">
+                        <X className="w-3 h-3" /> ล้างวันที่
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, type Dispatch, type SetStateAction } from 'react'
+import { useState, useRef, useEffect, type Dispatch, type SetStateAction } from 'react'
 import {
   LayoutDashboard,
   Hospital,
@@ -13,8 +13,6 @@ import {
   ImageIcon,
   ChevronDown,
   ChevronUp,
-  ChevronLeft,
-  ChevronRight,
   Menu,
   X,
   type LucideIcon,
@@ -26,6 +24,9 @@ import ProcurementManager from '@/components/admin/ProcurementManager'
 import CentersManager from '@/components/admin/CentersManager'
 import AboutManager from '@/components/admin/AboutManager'
 import BannerManager from '@/components/admin/BannerManager'
+import DepartmentManager from '@/components/admin/DepartmentManager'
+import PatientRegistrationManager from '@/components/admin/PatientRegistrationManager'
+import AfterHoursManager from '@/components/admin/AfterHoursManager'
 
 interface Props {
   username: string
@@ -79,17 +80,12 @@ const navSections: NavSection[] = [
   },
 ]
 
-const recentUpdates = [
-  { date: '4/10/2565', actor: 'องค์กรแพทย์', detail: 'ลงข้อมูลแพทย์ นางปนัดดา เขมรัตน์ตระกูล' },
-  { date: '4/10/2565', actor: 'องค์กรแพทย์', detail: 'ลงข้อมูลแพทย์ นางปนัดดา เขมรัตน์ตระกูล' },
-  { date: '4/10/2565', actor: 'องค์กรแพทย์', detail: 'ลงข้อมูลแพทย์ นางปนัดดา เขมรัตน์ตระกูล' },
-]
+interface RecentItem {
+  date: string;
+  actor: string;
+  detail: string;
+}
 
-const hospitalImages = [
-  'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=900&h=500&fit=crop&auto=format',
-  'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=900&h=500&fit=crop&auto=format',
-  'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=900&h=500&fit=crop&auto=format',
-]
 
 function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, setSidebarOpen, onLogout }: SidebarProps) {
   return (
@@ -106,8 +102,8 @@ function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, set
           )}
           {section.items.map((item) => {
             const Icon = item.icon
-            const patientNavIds = ['centers-specialized', 'centers-special', 'hc-checkup', 'hc-vaccines']
-            const servicesNavIds = ['news', 'procurement']
+            const patientNavIds = ['centers-specialized', 'hc-checkup', 'hc-vaccines', 'dept-emergency', 'dept-internal', 'dept-surgery', 'patient-reg']
+            const servicesNavIds = ['news', 'procurement', 'centers-special', 'after-hours']
             const isActive =
               activeNav === item.id ||
               (item.id === 'hospital' && ['executives', 'org-chart'].includes(activeNav)) ||
@@ -188,21 +184,26 @@ function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, set
                       <>
                         {([
                           { label: 'ศูนย์รักษาเฉพาะทาง', nav: 'centers-specialized' },
-                          { label: 'ศูนย์รักษาพิเศษ', nav: 'centers-special' },
                           { label: 'โปรแกรมตรวจสุขภาพ', nav: 'hc-checkup' },
                           { label: 'โปรแกรมฉีดวัคซีน', nav: 'hc-vaccines' },
+                          { label: 'ศูนย์อุบัติเหตุ-ฉุกเฉิน', nav: 'dept-emergency' },
+                          { label: 'ศูนย์อายุรกรรม', nav: 'dept-internal' },
+                          { label: 'ศูนย์ศัลยกรรม', nav: 'dept-surgery' },
+                          { label: 'ลงทะเบียนผู้ป่วยใหม่', nav: 'patient-reg' },
                         ] as { label: string; nav: string }[]).map(({ label, nav }) => {
-                          const childActive = activeNav === nav
+                          const childActive = nav !== '' && activeNav === nav
+                          const isPlaceholder = nav === ''
                           return (
-                            <button key={nav}
-                              onClick={() => { setActiveNav(nav); setSidebarOpen(false); }}
+                            <button key={label}
+                              onClick={() => { if (nav) { setActiveNav(nav); setSidebarOpen(false); } }}
                               className="text-left text-sm py-1.5 px-2 rounded-md transition-colors duration-150 flex items-center gap-2"
-                              style={{ color: childActive ? '#1a56db' : '#6b7a99', fontWeight: childActive ? 600 : 400 }}
-                              onMouseEnter={(e) => { if (!childActive) { e.currentTarget.style.background = '#f0f4fd'; e.currentTarget.style.color = '#1a56db' } }}
-                              onMouseLeave={(e) => { if (!childActive) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#6b7a99' } }}
+                              style={{ color: childActive ? '#1a56db' : isPlaceholder ? '#b0b8cc' : '#6b7a99', fontWeight: childActive ? 600 : 400, cursor: isPlaceholder ? 'default' : 'pointer' }}
+                              onMouseEnter={(e) => { if (!childActive && !isPlaceholder) { e.currentTarget.style.background = '#f0f4fd'; e.currentTarget.style.color = '#1a56db' } }}
+                              onMouseLeave={(e) => { if (!childActive && !isPlaceholder) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#6b7a99' } }}
                             >
                               <span className="w-1.5 h-1.5 rounded-full border border-current inline-block shrink-0" />
                               {label}
+                              {isPlaceholder && <span className="text-xs ml-auto opacity-50">เร็วๆนี้</span>}
                             </button>
                           )
                         })}
@@ -211,20 +212,24 @@ function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, set
                     {item.id === 'services' && (
                       <>
                         {([
-                          { label: 'ข่าวสารทางการแพทย์ / กิจกรรม', nav: 'news' },
-                          { label: 'จัดซื้อจัดจ้าง / สมัครงาน', nav: 'procurement' },
+                          { label: 'ข่าวสารและกิจกรรมภายใน', nav: 'news' },
+                          { label: 'งานจัดซื้อจัดจ้าง / สมัครงาน', nav: 'procurement' },
+                          { label: 'คลินิกพิเศษนอกเวลา', nav: 'after-hours' },
+                          { label: 'ศูนย์รักษาพิเศษ', nav: 'centers-special' },
                         ] as { label: string; nav: string }[]).map(({ label, nav }) => {
-                          const childActive = activeNav === nav
+                          const childActive = nav !== '' && activeNav === nav
+                          const isPlaceholder = nav === ''
                           return (
-                            <button key={nav}
-                              onClick={() => { setActiveNav(nav); setSidebarOpen(false); }}
+                            <button key={label}
+                              onClick={() => { if (nav) { setActiveNav(nav); setSidebarOpen(false); } }}
                               className="text-left text-sm py-1.5 px-2 rounded-md transition-colors duration-150 flex items-center gap-2"
-                              style={{ color: childActive ? '#1a56db' : '#6b7a99', fontWeight: childActive ? 600 : 400 }}
-                              onMouseEnter={(e) => { if (!childActive) { e.currentTarget.style.background = '#f0f4fd'; e.currentTarget.style.color = '#1a56db' } }}
-                              onMouseLeave={(e) => { if (!childActive) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#6b7a99' } }}
+                              style={{ color: childActive ? '#1a56db' : isPlaceholder ? '#b0b8cc' : '#6b7a99', fontWeight: childActive ? 600 : 400, cursor: isPlaceholder ? 'default' : 'pointer' }}
+                              onMouseEnter={(e) => { if (!childActive && !isPlaceholder) { e.currentTarget.style.background = '#f0f4fd'; e.currentTarget.style.color = '#1a56db' } }}
+                              onMouseLeave={(e) => { if (!childActive && !isPlaceholder) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#6b7a99' } }}
                             >
                               <span className="w-1.5 h-1.5 rounded-full border border-current inline-block shrink-0" />
                               {label}
+                              {isPlaceholder && <span className="text-xs ml-auto opacity-50">เร็วๆนี้</span>}
                             </button>
                           )
                         })}
@@ -243,11 +248,20 @@ function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, set
 
 export default function Dashboard({ username, onLogout }: Props) {
   const [activeNav, setActiveNav] = useState('home')
-  const [slideIndex, setSlideIndex] = useState(0)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({})
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [recentUpdates, setRecentUpdates] = useState<RecentItem[]>([])
+  const [loadingActivity, setLoadingActivity] = useState(true)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    fetch('/api/admin/activity')
+      .then(r => r.json())
+      .then(json => { if (json.ok) setRecentUpdates(json.data) })
+      .catch(() => {})
+      .finally(() => setLoadingActivity(false))
+  }, [])
 
   const openSidebar = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
@@ -257,14 +271,11 @@ export default function Dashboard({ username, onLogout }: Props) {
     closeTimer.current = setTimeout(() => setSidebarOpen(false), 150)
   }
 
-  const prevSlide = () => setSlideIndex((i) => (i - 1 + hospitalImages.length) % hospitalImages.length)
-  const nextSlide = () => setSlideIndex((i) => (i + 1) % hospitalImages.length)
-
   return (
     <div className="flex flex-col min-h-screen" style={{ background: '#eef3f9' }}>
       {/* Top navbar */}
       <header
-        className="flex items-center justify-between px-4 md:px-6 py-3 shadow-sm z-30 relative"
+        className="flex items-center justify-between px-4 md:px-6 py-1 shadow-sm z-30 relative"
         style={{ background: '#ffffff', borderBottom: '1px solid #d1dcea' }}
       >
         <div className="flex items-center gap-3">
@@ -277,15 +288,11 @@ export default function Dashboard({ username, onLogout }: Props) {
           >
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <div
-            className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0"
-            style={{ background: '#1a56db' }}
-          >
-            P
-          </div>
-          <span className="font-bold text-lg tracking-wide" style={{ color: '#1a3a6b' }}>
-            PNNH
-          </span>
+          <img
+            src="/img/logopnnh.png"
+            alt="PNNH Logo"
+            className="w-24 h-24 object-contain shrink-0"
+          />
         </div>
 
         <div
@@ -333,7 +340,7 @@ export default function Dashboard({ username, onLogout }: Props) {
         {/* Sidebar — fixed on mobile, static on desktop */}
         <div
           className={`
-            fixed top-0 left-0 h-full w-64 z-20 pt-14 transition-transform duration-300
+            fixed top-0 left-0 h-full w-64 z-20 pt-28 transition-transform duration-300
             md:static md:translate-x-0 md:pt-0 md:h-auto md:z-auto
             ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           `}
@@ -396,67 +403,58 @@ export default function Dashboard({ username, onLogout }: Props) {
             <div className="max-w-6xl mx-auto">
               <CentersManager initialTab="special" />
             </div>
+          ) : activeNav === 'dept-emergency' ? (
+            <div className="max-w-6xl mx-auto">
+              <DepartmentManager initialDept="emergency" />
+            </div>
+          ) : activeNav === 'dept-internal' ? (
+            <div className="max-w-6xl mx-auto">
+              <DepartmentManager initialDept="internal" />
+            </div>
+          ) : activeNav === 'dept-surgery' ? (
+            <div className="max-w-6xl mx-auto">
+              <DepartmentManager initialDept="surgery" />
+            </div>
+          ) : activeNav === 'patient-reg' ? (
+            <div className="max-w-6xl mx-auto">
+              <PatientRegistrationManager />
+            </div>
+          ) : activeNav === 'after-hours' ? (
+            <div className="max-w-6xl mx-auto">
+              <AfterHoursManager />
+            </div>
           ) : (
-            <div className="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto">
-              {/* Slider */}
-              <div className="flex-1 min-w-0">
-                <div className="relative rounded-2xl overflow-hidden shadow-md aspect-video bg-gray-200">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={hospitalImages[slideIndex]}
-                    alt="โรงพยาบาลปากช่องนานา"
-                    className="w-full h-full object-cover transition-all duration-500"
-                  />
-                  <button
-                    onClick={prevSlide}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/80 hover:bg-white transition-colors flex items-center justify-center shadow text-gray-700"
-                  >
-                    <ChevronLeft size={18} />
-                  </button>
-                  <button
-                    onClick={nextSlide}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/80 hover:bg-white transition-colors flex items-center justify-center shadow text-gray-700"
-                  >
-                    <ChevronRight size={18} />
-                  </button>
-                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                    {hospitalImages.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setSlideIndex(i)}
-                        className="w-2 h-2 rounded-full transition-all"
-                        style={{ background: i === slideIndex ? '#1a56db' : 'rgba(255,255,255,0.7)' }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Recent updates panel */}
+            <div className="max-w-6xl mx-auto">
               <div
-                className="w-full lg:w-72 shrink-0 rounded-2xl p-5 shadow-md"
+                className="rounded-2xl p-6 shadow-md"
                 style={{ background: '#fff', border: '1px solid #d1dcea' }}
               >
-                <h2 className="font-semibold text-sm mb-4" style={{ color: '#1a2a4a' }}>
+                <h2 className="font-semibold text-lg mb-6" style={{ color: '#1a2a4a' }}>
                   ข้อมูลที่อัพเดทล่าสุด
                 </h2>
-                <div className="flex flex-col gap-4">
-                  {recentUpdates.map((item, i) => (
-                    <div key={i} className="flex gap-3">
-                      <div className="flex flex-col items-center pt-0.5 gap-1">
-                        <div className="w-2 h-2 rounded-full shrink-0" style={{ background: '#22c55e' }} />
-                        {i < recentUpdates.length - 1 && (
-                          <div className="w-px flex-1 min-h-4" style={{ background: '#d1dcea' }} />
-                        )}
+                {loadingActivity ? (
+                  <p className="text-sm text-center py-8" style={{ color: '#6b7a99' }}>กำลังโหลด...</p>
+                ) : recentUpdates.length === 0 ? (
+                  <p className="text-sm text-center py-8" style={{ color: '#6b7a99' }}>ยังไม่มีข้อมูล</p>
+                ) : (
+                  <div className="flex flex-col gap-5">
+                    {recentUpdates.map((item, i) => (
+                      <div key={i} className="flex gap-4">
+                        <div className="flex flex-col items-center pt-1 gap-1">
+                          <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: '#22c55e' }} />
+                          {i < recentUpdates.length - 1 && (
+                            <div className="w-px flex-1 min-h-5" style={{ background: '#d1dcea' }} />
+                          )}
+                        </div>
+                        <div className="pb-3">
+                          <p className="text-xs mb-0.5" style={{ color: '#6b7a99' }}>{item.date}</p>
+                          <p className="text-sm font-semibold" style={{ color: '#1a56db' }}>{item.actor}</p>
+                          <p className="text-sm mt-0.5 leading-relaxed" style={{ color: '#4a5a7a' }}>{item.detail}</p>
+                        </div>
                       </div>
-                      <div className="pb-2">
-                        <p className="text-xs mb-0.5" style={{ color: '#6b7a99' }}>{item.date}</p>
-                        <p className="text-xs font-semibold" style={{ color: '#1a56db' }}>{item.actor}</p>
-                        <p className="text-xs mt-0.5 leading-relaxed" style={{ color: '#4a5a7a' }}>{item.detail}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}

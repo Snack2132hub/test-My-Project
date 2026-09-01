@@ -272,9 +272,15 @@ export default function BannerManager() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1">ลำดับการแสดง</label>
-                  <input type="number" min={1} value={formData.display_order}
-                    onChange={e => setFormData({ ...formData, display_order: Number(e.target.value) })}
-                    className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  <div className="flex items-stretch rounded-xl border border-gray-300 overflow-hidden focus-within:ring-2 focus-within:ring-orange-500">
+                    <button type="button" onClick={() => setFormData({ ...formData, display_order: Math.max(1, formData.display_order - 1) })}
+                      className="px-3 bg-gray-50 hover:bg-gray-100 text-gray-600 text-lg leading-none transition-colors border-r border-gray-200">−</button>
+                    <input type="text" inputMode="numeric" value={formData.display_order}
+                      onChange={e => setFormData({ ...formData, display_order: Number(e.target.value.replace(/\D/g, '')) || 1 })}
+                      className="flex-1 px-3 py-2 text-sm text-gray-900 text-center outline-none min-w-0" />
+                    <button type="button" onClick={() => setFormData({ ...formData, display_order: formData.display_order + 1 })}
+                      className="px-3 bg-gray-50 hover:bg-gray-100 text-gray-600 text-lg leading-none transition-colors border-l border-gray-200">+</button>
+                  </div>
                 </div>
                 <div className="flex flex-col justify-end">
                   <div className="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50 border border-gray-200">

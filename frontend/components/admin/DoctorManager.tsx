@@ -154,12 +154,16 @@ export default function DoctorManager() {
                     <div className="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden border border-gray-200 shrink-0">
                       {d.dr_img ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={d.dr_img.startsWith("/") ? d.dr_img : `/img/${d.dr_img}`} alt={d.dr_name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-300">
-                          <Stethoscope className="w-5 h-5" />
-                        </div>
-                      )}
+                        <img
+                          src={d.dr_img.startsWith("/") ? d.dr_img : `/img/${d.dr_img}`}
+                          alt={d.dr_name}
+                          className="w-full h-full object-cover"
+                          onError={e => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden'); }}
+                        />
+                      ) : null}
+                      <div className={`w-full h-full flex items-center justify-center text-gray-300 ${d.dr_img ? 'hidden' : ''}`}>
+                        <Stethoscope className="w-5 h-5" />
+                      </div>
                     </div>
                   </td>
                   <td className="py-3 px-4 font-semibold text-gray-900">{d.dr_name}</td>
@@ -226,9 +230,11 @@ export default function DoctorManager() {
               {/* แผนก */}
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">แผนก <span className="text-red-500">*</span></label>
-                <input required value={formData.dr_department} onChange={e => setFormData({ ...formData, dr_department: e.target.value })}
-                  placeholder="เช่น สูติ-นรีเวชกรรม"
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                <select required value={formData.dr_department} onChange={e => setFormData({ ...formData, dr_department: e.target.value })}
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
+                  <option value="">-- เลือกแผนก --</option>
+                  {["อายุรกรรมทั่วไป","อายุรกรรมระบบหัวใจและหลอดเลือด","อายุรกรรมระบบทางเดินอาหาร","อายุรกรรมต่อมไร้ท่อ","ศัลยกรรมทั่วไป","ศัลยกรรมกระดูกและข้อ (ออร์โธปิดิกส์)","ศัลยกรรมระบบทางเดินปัสสาวะ","กุมารเวชกรรม","สูติ-นรีเวชกรรม","จักษุวิทยา","โสต ศอ นาสิก","ผิวหนัง","จิตเวช","ทันตกรรม","ฉุกเฉินและอุบัติเหตุ","เวชกรรมฟื้นฟู","รังสีวิทยา","อื่นๆ"].map(d => <option key={d} value={d}>{d}</option>)}
+                </select>
               </div>
 
               {/* ความเชี่ยวชาญ */}

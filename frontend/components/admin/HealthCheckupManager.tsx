@@ -327,16 +327,11 @@ export default function HealthCheckupManager({ initialTab = "announcements" }: {
 
               {activeTab === "vaccines" && (
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">
-                    หมวดหมู่
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    placeholder="เช่น ไข้หวัดใหญ่, ไข้เลือดออก, วัคซีน HPV"
-                    className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">หมวดหมู่</label>
+                  <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}
+                    className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
+                    {["วัคซีนทั่วไป","วัคซีนไข้หวัดใหญ่","วัคซีน HPV","วัคซีนไข้เลือดออก","วัคซีนตับอักเสบ A","วัคซีนตับอักเสบ B","วัคซีนนิวโมคอคคัส","วัคซีนโรคพิษสุนัขบ้า","วัคซีนเด็ก","วัคซีนผู้ใหญ่","อื่นๆ"].map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
                 </div>
               )}
 

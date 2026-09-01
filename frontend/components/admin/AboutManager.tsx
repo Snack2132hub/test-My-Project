@@ -333,25 +333,34 @@ export default function AboutManager({ initialTab = "executives" }: { initialTab
               {/* ตำแหน่ง */}
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">ตำแหน่ง <span className="text-red-500">*</span></label>
-                <input required value={form.position} onChange={e => setForm({ ...form, position: e.target.value })}
-                  placeholder="เช่น ผู้อำนวยการโรงพยาบาล"
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                <select required value={form.position} onChange={e => setForm({ ...form, position: e.target.value })}
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-gray-900">
+                  <option value="">-- เลือกตำแหน่ง --</option>
+                  {["ผู้อำนวยการโรงพยาบาล","รองผู้อำนวยการโรงพยาบาล","ผู้ช่วยผู้อำนวยการโรงพยาบาล","หัวหน้ากลุ่มงานเวชกรรม","หัวหน้ากลุ่มงานการพยาบาล","หัวหน้ากลุ่มงานทันตกรรม","หัวหน้ากลุ่มงานเภสัชกรรม","หัวหน้ากลุ่มงานรังสีวิทยา","หัวหน้ากลุ่มงานชันสูตร","หัวหน้ากลุ่มงานสุขภาพจิต","หัวหน้ากลุ่มงานเวชกรรมสังคม","หัวหน้ากลุ่มงานบริหารงานทั่วไป","นายแพทย์เชี่ยวชาญ","นายแพทย์ชำนาญการพิเศษ","นายแพทย์ชำนาญการ","อื่นๆ"].map(p => <option key={p} value={p}>{p}</option>)}
+                </select>
               </div>
 
               {/* สังกัด */}
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">สังกัด / หน่วยงาน</label>
-                <input value={form.department} onChange={e => setForm({ ...form, department: e.target.value })}
-                  placeholder="โรงพยาบาลปากช่องนานา"
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                <select value={form.department} onChange={e => setForm({ ...form, department: e.target.value })}
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-gray-900">
+                  {["โรงพยาบาลปากช่องนานา","กลุ่มงานเวชกรรม","กลุ่มงานการพยาบาล","กลุ่มงานทันตกรรม","กลุ่มงานเภสัชกรรม","กลุ่มงานรังสีวิทยา","กลุ่มงานชันสูตร","กลุ่มงานสุขภาพจิต","กลุ่มงานเวชกรรมสังคม","กลุ่มงานบริหารงานทั่วไป"].map(d => <option key={d} value={d}>{d}</option>)}
+                </select>
               </div>
 
               {/* ลำดับ */}
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">ลำดับการแสดง</label>
-                <input type="number" min={1} value={form.display_order}
-                  onChange={e => setForm({ ...form, display_order: Number(e.target.value) })}
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                <div className="flex items-stretch rounded-xl border border-gray-300 overflow-hidden focus-within:ring-2 focus-within:ring-orange-500">
+                  <button type="button" onClick={() => setForm({ ...form, display_order: Math.max(1, form.display_order - 1) })}
+                    className="px-3 bg-gray-50 hover:bg-gray-100 text-gray-600 text-lg leading-none transition-colors border-r border-gray-200">−</button>
+                  <input type="text" inputMode="numeric" value={form.display_order}
+                    onChange={e => setForm({ ...form, display_order: Number(e.target.value.replace(/\D/g, '')) || 1 })}
+                    className="flex-1 px-3 py-2 text-sm text-gray-900 text-center outline-none min-w-0" />
+                  <button type="button" onClick={() => setForm({ ...form, display_order: form.display_order + 1 })}
+                    className="px-3 bg-gray-50 hover:bg-gray-100 text-gray-600 text-lg leading-none transition-colors border-l border-gray-200">+</button>
+                </div>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">

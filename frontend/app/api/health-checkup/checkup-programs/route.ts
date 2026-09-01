@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import getPool from "@/lib/db";
 import {
   getMemoryCheckupPrograms,
   addMemoryCheckupProgram,
@@ -9,6 +8,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
+    const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
     const [rows] = await pool.query<any[]>(
       "SELECT id, title, price, location, time, contact, image, description FROM health_checkup_programs ORDER BY id ASC"
@@ -47,6 +47,7 @@ export async function POST(request: Request) {
     };
 
     try {
+      const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
       const [result]: any = await pool.query(
         "INSERT INTO health_checkup_programs (title, price, location, time, contact, image, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
