@@ -1,48 +1,33 @@
-﻿"use client";
+"use client";
 
+import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-/**
- * ข้อมูลรายชื่อและรูปภาพแพทย์
- * สามารถเพิ่ม/แก้ไข/ลบ ข้อมูลแพทย์ได้จากอาร์เรย์นี้
- */
-const doctors = [
-  {
-    id: 1,
-    name: "นพ.ปิยะพงษ์ อินทร์อัครพัฒน์",
-    position: "นายแพทย์ชำนาญการ",
-    specialty: "ศัลยศาสตร์ออร์โธปิดิกส์",
-    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=600",
-  },
-  {
-    id: 2,
-    name: "พญ.รจิตา หาญตระกูล",
-    position: "นายแพทย์ชำนาญการ",
-    specialty: "อายุรกรรม",
-    image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&q=80&w=600",
-  },
-  {
-    id: 3,
-    name: "นพ.วารินทร์ จันทร์ประเสริฐ",
-    position: "นายแพทย์ชำนาญการ",
-    specialty: "กุมารเวชกรรม",
-    image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=600",
-  },
-  {
-    id: 4,
-    name: "พญ.วิฒนา บงกชพร",
-    position: "นายแพทย์ชำนาญการ",
-    specialty: "เวชศาสตร์ครอบครัว",
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=600",
-  },
-];
+import { DOCTORS_DATA } from "@/lib/doctorsData";
 
 /**
  * คอมโพเนนต์ DoctorTeamSection (ส่วนทีมแพทย์เชี่ยวชาญ)
- * แสดงการ์ดรูปภาพแพทย์ 4 ท่านพร้อมตำแหน่งและความเชี่ยวชาญ
+ * แสดงการ์ดรูปภาพแพทย์ พร้อมเชื่อมต่อไปยังหน้ารายละเอียดแพทย์ และปุ่มดูทั้งหมดไปยังหน้าบุคลากรแพทย์
  */
 export default function DoctorTeamSection() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // ดึงรายชื่อแพทย์ตัวอย่างมาแสดงในหน้าแรก
+  const featuredDoctors = DOCTORS_DATA.slice(0, 12);
+  const itemsPerPage = 4;
+  const maxIndex = Math.max(0, featuredDoctors.length - itemsPerPage);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : maxIndex));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0));
+  };
+
+  const visibleDoctors = featuredDoctors.slice(currentIndex, currentIndex + itemsPerPage);
+
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 w-full bg-white border-t border-slate-100">
       <div className="max-w-6xl mx-auto">
@@ -58,20 +43,22 @@ export default function DoctorTeamSection() {
         <div className="relative flex items-center justify-between gap-2 sm:gap-4 max-w-6xl mx-auto">
           {/* ปุ่มเลื่อนซ้าย */}
           <button
+            onClick={handlePrev}
             className="p-3 rounded-full bg-white hover:bg-[#fff7ed] text-[#f97316] hover:text-[#ea580c] shadow-md hover:shadow-lg border border-orange-100 transition-all cursor-pointer focus:outline-hidden transform active:scale-95 shrink-0 z-10"
             aria-label="Previous doctors"
           >
-            <ChevronLeft className="w-6 h-6" strokeWidth={2.5} />
+            <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
           </button>
 
           {/* กริดแสดงการ์ดแพทย์ */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full py-2">
-            {doctors.map((doctor) => (
-              <div key={doctor.id} className="flex flex-col items-center text-center group cursor-pointer">
-                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-linear-to-b from-[#fed7aa]/50 to-[#ffedd5]/90 border border-orange-100 shadow-sm group-hover:shadow-md transition-all duration-300 mb-4">
-                  {/* 📌 [จุดเปลี่ยนรูปแพทย์] 
-                      สามารถเปลี่ยน src ของรูปหมอในอาร์เรย์ doctors ด้านบน 
-                  */}
+            {visibleDoctors.map((doctor) => (
+              <Link
+                key={doctor.id}
+                href={`/doctors/${doctor.id}`}
+                className="flex flex-col items-center text-center group cursor-pointer"
+              >
+                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 via-[#ffedd5]/80 to-[#fed7aa]/40 border border-orange-100 shadow-sm group-hover:shadow-md group-hover:border-orange-300 transition-all duration-300 mb-4">
                   <Image
                     src={doctor.image}
                     alt={doctor.name}
@@ -80,33 +67,38 @@ export default function DoctorTeamSection() {
                     sizes="(max-width: 768px) 100vw, 25vw"
                   />
                 </div>
-                <h4 className=" text-[18px] font-bold text-gray-800  transition-colors">
+                <h4 className="text-[17px] font-bold text-gray-800 group-hover:text-[#f97316] transition-colors leading-snug">
                   {doctor.name}
                 </h4>
-                <p className="text-[14px] text-gray-500">
+                <p className="text-[13px] text-[#f97316] font-medium mt-0.5">
                   {doctor.position}
                 </p>
-                <p className="text-[14px] text-gray-500">
-                  {doctor.specialty}
+                <p className="text-[13px] text-gray-500 mt-0.5 line-clamp-1">
+                  {doctor.department}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
 
           {/* ปุ่มเลื่อนขวา */}
           <button
+            onClick={handleNext}
             className="p-3 rounded-full bg-white hover:bg-[#fff7ed] text-[#f97316] hover:text-[#ea580c] shadow-md hover:shadow-lg border border-orange-100 transition-all cursor-pointer focus:outline-hidden transform active:scale-95 shrink-0 z-10"
             aria-label="Next doctors"
           >
-            <ChevronRight className="w-6 h-6" strokeWidth={2.5} />
+            <ChevronRight className="w-6 h-6 stroke-[2.5]" />
           </button>
         </div>
 
         {/* ปุ่มดูทั้งหมด */}
         <div className="flex justify-center mt-12">
-          <button className="px-10 py-2.5 sm:px-12 sm:py-3 bg-linear-to-r from-[#ffa154] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] text-white font-medium text-sm sm:text-base rounded-full shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-0.5 active:scale-98">
+          <Link
+            href="/doctors"
+            id="view-all-doctors-btn"
+            className="px-10 py-2.5 sm:px-12 sm:py-3 bg-gradient-to-r from-[#ffa154] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] text-white font-medium text-sm sm:text-base rounded-full shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-0.5 active:scale-98 inline-block text-center"
+          >
             ดูทั้งหมด
-          </button>
+          </Link>
         </div>
       </div>
     </section>

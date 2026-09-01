@@ -14,15 +14,17 @@ type DbStatus = {
 
 function DbStatusCard() {
   const [status, setStatus] = useState<DbStatus | null>(null);
+  const isEnabled = process.env.NEXT_PUBLIC_SHOW_DB_TEST === "true";
 
   useEffect(() => {
+    if (!isEnabled) return;
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/doctors/debug`)
       .then((r) => r.json())
       .then((d: DbStatus) => setStatus(d))
       .catch(() => setStatus({ ok: false, message: "ไม่สามารถเชื่อมต่อได้" }));
-  }, []);
+  }, [isEnabled]);
 
-  if (!status) return null;
+  if (!isEnabled || !status) return null;
 
   const isConnected = status.ok && status.connected;
 
@@ -98,7 +100,7 @@ export default function AnnouncementsSection() {
     let isMounted = true;
     const fetchAnnouncements = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/announcements`);
+        const res = await fetch("/api/announcements");
         if (res.ok) {
           const json = await res.json();
           if (json.ok && Array.isArray(json.data) && json.data.length > 0) {

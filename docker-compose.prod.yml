@@ -1,7 +1,7 @@
 services:
   web:
     build:
-      context: .
+      context: ./frontend
       target: runner
     image: pnnh-web:prod
     container_name: pnnh-web-prod

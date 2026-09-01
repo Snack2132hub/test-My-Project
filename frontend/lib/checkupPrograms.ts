@@ -17,7 +17,7 @@ export const INITIAL_CHECKUP_PROGRAMS: CheckupProgram[] = [
     location: "ศูนย์ตรวจสุขภาพ อาคารผู้ป่วยนอก ชั้น 2",
     time: "เปิดให้บริการ วันจันทร์ ถึง วันศุกร์ ตั้งแต่เวลา 08:00 น. - 16:00 น. ยกเว้นวันหยุดราชการ",
     contact: "044-311856 , 044-312568 ต่อ 631",
-    image: "/img/Frame 1000005894.png",
+    image: "/img/Health_check_up/h1.png",
     description: "ตรวจร่างกายทั่วไปโดยแพทย์ (Physical Examination), เอกซเรย์ทรวงอก (Chest X-Ray), ตรวจความสมบูรณ์ของเม็ดเลือด (Complete Blood Count), ตรวจปัสสาวะทั่วไป (Urine Analysis), ตรวจระดับน้ำตาลในเลือด (Fasting Blood Sugar), ตรวจระดับไขมันในเลือด (Cholesterol, Triglyceride, HDL, LDL), ตรวจการทำงานของไต (BUN, Creatinine), ตรวจการทำงานของตับ (Liver Function Test), ตรวจระดับกรดยูริกในเลือด (Uric Acid)",
   },
   {
@@ -27,7 +27,7 @@ export const INITIAL_CHECKUP_PROGRAMS: CheckupProgram[] = [
     location: "ศูนย์ตรวจสุขภาพ อาคารผู้ป่วยนอก ชั้น 2",
     time: "เปิดให้บริการ วันจันทร์ ถึง วันศุกร์ ตั้งแต่เวลา 08:00 น. - 16:00 น. ยกเว้นวันหยุดราชการ",
     contact: "044-311856 , 044-312568 ต่อ 631",
-    image: "/img/Frame 1000005894.png",
+    image: "/img/Health_check_up/h2.png",
     description: "ตรวจร่างกายทั่วไปโดยแพทย์ (Physical Examination), เอกซเรย์ทรวงอก (Chest X-Ray), ตรวจความสมบูรณ์ของเม็ดเลือด (Complete Blood Count), ตรวจปัสสาวะทั่วไป (Urine Analysis), ตรวจระดับไขมันในเลือด (Cholesterol, Triglyceride, HDL, LDL), ตรวจการทำงานของไต (BUN, Creatinine), ตรวจการทำงานของตับ (Liver Function Test), ตรวจระดับกรดยูริกในเลือด (Uric Acid), ตรวจระดับน้ำตาลในเลือด (Fasting Blood Sugar), ตรวจระดับน้ำตาลสะสมในเลือด (HbA1c), ตรวจคลื่นไฟฟ้าหัวใจ (EKG), ตรวจหาสารบ่งชี้มะเร็งตับ (AFP), ตรวจหาสารบ่งชี้มะเร็งต่อมลูกหมาก (PSA)",
   },
   {
@@ -37,7 +37,7 @@ export const INITIAL_CHECKUP_PROGRAMS: CheckupProgram[] = [
     location: "ศูนย์ตรวจสุขภาพ อาคารผู้ป่วยนอก ชั้น 2",
     time: "เปิดให้บริการ วันจันทร์ ถึง วันศุกร์ ตั้งแต่เวลา 08:00 น. - 16:00 น. ยกเว้นวันหยุดราชการ",
     contact: "044-311856 , 044-312568 ต่อ 631",
-    image: "/img/Frame 1000005894.png",
+    image: "/img/Health_check_up/h3.png",
     description: "ตรวจร่างกายทั่วไปโดยแพทย์ (Physical Examination), ตรวจเอกซเรย์ทรวงอก (Chest X-Ray), ตรวจความสมบูรณ์ของเม็ดเลือด (Complete Blood Count), ตรวจปัสสาวะทั่วไป (Urine Analysis), ตรวจอุจจาระทั่วไป (Stool Examination), ตรวจหาเลือดแฝงในอุจจาระ (Occult Blood), ตรวจมะเร็งปากมดลูก เฉพาะเพศหญิง (Pap smear)",
   },
 ];

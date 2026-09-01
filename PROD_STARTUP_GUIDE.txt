@@ -14,6 +14,10 @@
 - ให้ flag ต่อไปนี้เป็น false ใน production เสมอ:
   NEXT_PUBLIC_SHOW_DB_TEST=false
   ENABLE_DB_DEBUG_ENDPOINT=false
+- ตั้งค่าล็อกอินสำหรับหน้า /admin ให้เป็นค่าจริง (ห้ามใช้ค่า default จากไฟล์ dev):
+  ADMIN_USERNAME
+  ADMIN_PASSWORD
+  ADMIN_SESSION_SECRET (สุ่มด้วย: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
 
 2) Build และ Start production containers
 - รัน: npm run docker:prod:up
@@ -34,6 +38,7 @@
 - ยืนยันว่าเปิดใช้งานเฉพาะ API routes ที่จำเป็น
 - ยืนยันว่า endpoint ทดสอบ /api/doctors ถูกปิดใน production
 - ยืนยันว่า credential ฐานข้อมูลไม่ได้ถูก commit เข้า git
+- ยืนยันว่า ADMIN_USERNAME / ADMIN_PASSWORD / ADMIN_SESSION_SECRET ไม่ใช่ค่า default จากไฟล์ dev
 - ยืนยันว่ามี reverse proxy และ HTTPS บนโฮสต์จริง
 
 7) ลำดับ deploy มาตรฐาน (ครั้งที่ deploy)

@@ -274,13 +274,17 @@ export default function Navbar() {
               )}
             </li>
 
-            {/* ค้นหาแพทย์ */}
+            {/* บุคลากรแพทย์ / ค้นหาแพทย์ */}
             <li>
               <Link
-                href="#"
-                className="px-3 py-2 hover:text-[#f97316] transition-colors block"
+                href="/doctors"
+                className={`px-3 py-2 rounded-md transition-all duration-200 block ${
+                  pathname?.startsWith("/doctors")
+                    ? "text-[#f97316] font-medium"
+                    : "hover:text-[#f97316]"
+                }`}
               >
-                ค้นหาแพทย์
+                บุคลากรแพทย์
               </Link>
             </li>
 
@@ -416,11 +420,15 @@ export default function Navbar() {
               งานบริการ <ChevronDown className="w-4 h-4" />
             </button>
             <Link
-              href="#"
+              href="/doctors"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
+              className={`block px-4 py-2.5 rounded-lg text-base font-normal ${
+                pathname?.startsWith("/doctors")
+                  ? "text-[#f97316] bg-orange-50 font-medium"
+                  : "text-gray-800 hover:bg-orange-50 hover:text-[#f97316]"
+              }`}
             >
-              ค้นหาแพทย์
+              บุคลากรแพทย์ (ค้นหาแพทย์)
             </Link>
             <Link
               href="#"

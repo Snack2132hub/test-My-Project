@@ -6,32 +6,37 @@ interface Props {
 }
 
 export default function LoginPage({ onLogin }: Props) {
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState('admin')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!username.trim()) { setError('กรุณาใส่ Username'); return }
-    if (!password.trim()) { setError('กรุณาใส่ Password'); return }
-
+    if (!username.trim()) {
+      setError('กรุณาใส่ Username')
+      return
+    }
+    if (!password.trim()) {
+      setError('กรุณาใส่ Password')
+      return
+    }
     setError('')
     setLoading(true)
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
+      const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username.trim(), password }),
+        body: JSON.stringify({ username, password }),
       })
       const data = await res.json()
-      if (data.ok) {
-        onLogin(data.full_name || data.username)
-      } else {
-        setError(data.message || 'เข้าสู่ระบบไม่สำเร็จ')
+      if (!res.ok || !data.ok) {
+        setError(data.message || 'Username หรือ Password ไม่ถูกต้อง')
+        return
       }
+      onLogin(data.username ?? username)
     } catch {
-      setError('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้')
+      setError('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ กรุณาลองใหม่')
     } finally {
       setLoading(false)
     }
