@@ -1,14 +1,10 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  turbopack: {
-    root: path.resolve(__dirname, ".."),
-  },
 
   images: {
-    qualities: [75, 95], // เพิ่มบรรทัดนี้
+    qualities: [75, 95],
 
     remotePatterns: [
       {
