@@ -340,8 +340,12 @@ export default function Navbar() {
             {/* ติดต่อ */}
             <li>
               <Link
-                href="#"
-                className="px-3 py-2 hover:text-[#f97316] transition-colors block"
+                href="/contact"
+                className={`px-3 py-2 rounded-md transition-all duration-200 block ${
+                  pathname?.startsWith("/contact")
+                    ? "text-[#f97316] font-medium"
+                    : "hover:text-[#f97316]"
+                }`}
               >
                 ติดต่อ
               </Link>
@@ -438,9 +442,13 @@ export default function Navbar() {
               INTRANET
             </Link>
             <Link
-              href="#"
+              href="/contact"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
+              className={`block px-4 py-2.5 rounded-lg text-base font-normal ${
+                pathname?.startsWith("/contact")
+                  ? "text-[#f97316] bg-orange-50 font-medium"
+                  : "text-gray-800 hover:bg-orange-50 hover:text-[#f97316]"
+              }`}
             >
               ติดต่อ
             </Link>

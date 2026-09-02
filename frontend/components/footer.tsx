@@ -63,6 +63,11 @@ export default function Footer() {
               </Link>
             </li>
             <li className="pt-3">
+              <Link href="/contact" className="hover:text-[#ea580c] transition-colors block">
+                ติดต่อ
+              </Link>
+            </li>
+            <li className="pt-3">
               <Link href="#" className="hover:text-[#ea580c] transition-colors block">
                 ข่าวสาร
               </Link>
