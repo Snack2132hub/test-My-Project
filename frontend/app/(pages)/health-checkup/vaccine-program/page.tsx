@@ -37,6 +37,10 @@ export default function VaccineProgramPage() {
 
   const itemsPerPage = 6;
 
+  useEffect(() => {
+    fetchVaccines();
+  }, []);
+
   const fetchVaccines = async () => {
     try {
       setLoading(true);
@@ -51,10 +55,6 @@ export default function VaccineProgramPage() {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchVaccines();
-  }, []);
 
   // Categories
   const categories = [

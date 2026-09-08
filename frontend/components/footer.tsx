@@ -24,6 +24,7 @@ export default function Footer() {
                 width={120}
                 height={120}
                 className="object-contain"
+                style={{ height: "auto" }}
               />
           </Link>
 
@@ -60,11 +61,6 @@ export default function Footer() {
             <li className="pt-3">
               <Link href="/doctors" className="hover:text-[#ea580c] transition-colors block">
                 บุคลากรแพทย์
-              </Link>
-            </li>
-            <li className="pt-3">
-              <Link href="/contact" className="hover:text-[#ea580c] transition-colors block">
-                ติดต่อ
               </Link>
             </li>
             <li className="pt-3">

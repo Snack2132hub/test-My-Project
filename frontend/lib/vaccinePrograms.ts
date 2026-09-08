@@ -94,3 +94,7 @@ export function addMemoryVaccineProgram(item: Omit<VaccineProgram, "id">): Vacci
   globalVaccinePrograms = [newItem, ...globalVaccinePrograms];
   return newItem;
 }
+
+export function deleteMemoryVaccineProgram(id: number): void {
+  globalVaccinePrograms = globalVaccinePrograms.filter((a) => a.id !== id);
+}

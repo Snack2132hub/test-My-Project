@@ -5,7 +5,7 @@ import { ADMIN_SESSION_COOKIE, verifySessionToken } from "@/lib/adminAuth";
 
 export async function GET() {
   const store = await cookies();
-  const session = verifySessionToken(store.get(ADMIN_SESSION_COOKIE)?.value);
+  const session = await verifySessionToken(store.get(ADMIN_SESSION_COOKIE)?.value);
 
   return NextResponse.json({
     ok: true,

@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
+import type { TreatmentCenter } from "@/lib/treatmentCentersData";
 import {
   ShieldAlert,
   HeartPulse,
@@ -31,9 +32,9 @@ import {
 } from "lucide-react";
 
 // -------------------------------------------------------------
-// ข้อมูลศูนย์รักษาเฉพาะทาง (Specialized Treatment Centers Data)
+// ศูนย์รักษาเฉพาะทาง — ข้อมูลดึงจาก /api/treatment-centers (จัดการผ่านหน้า admin)
 // -------------------------------------------------------------
-interface MedicalDoctor {
+interface UIDoctor {
   id: string;
   name: string;
   title: string;
@@ -42,8 +43,8 @@ interface MedicalDoctor {
   image: string;
 }
 
-interface CenterDetail {
-  id: string;
+interface UICenter {
+  id: string; // slug
   titleTh: string;
   titleEn: string;
   icon: React.ElementType;
@@ -51,504 +52,70 @@ interface CenterDetail {
   highlightText: string;
   banners: string[];
   services: string[];
-  serviceHours: {
-    regular: string;
-    afterHours?: string;
-    emergency?: string;
-  };
-  contactExt: string;
-  doctors: MedicalDoctor[];
   facilities: string[];
+  serviceHours: { regular: string; afterHours?: string; emergency?: string };
+  contactExt: string;
+  doctorDepartment: string;
 }
 
-const centersData: CenterDetail[] = [
-  {
-    id: "emergency",
-    titleTh: "ศูนย์อุบัติเหตุและฉุกเฉิน",
-    titleEn: "Emergency & Trauma Center",
-    icon: ShieldAlert,
-    description:
-      "ให้บริการดูแลรักษาผู้ป่วยภาวะฉุกเฉินวิกฤตและอุบัติเหตุตลอด 24 ชั่วโมง โดยทีมแพทย์เฉพาะทางด้านเวชศาสตร์ฉุกเฉินและพยาบาลวิชาชีพผู้เชี่ยวชาญ พร้อมด้วยรถพยาบาลฉุกเฉินระดับสูง (Advanced Life Support)",
-    highlightText: "พร้อมดูแลคุณทุกวินาทีชีวิต ด้วยระบบการช่วยชีวิตขั้นสูง 24 ชั่วโมง",
-    banners: [
-      "/img/indexbanner/herobannertest01.png",
-      "/img/indexbanner/herobannertest02.png",
-    ],
-    services: [
-      "บริการรับแจ้งเหตุและช่วยชีวิตผู้ป่วยฉุกเฉิน 24 ชั่วโมง",
-      "ศูนย์รับผู้ป่วยอุบัติเหตุรุนแรงและผ่าตัดฉุกเฉิน (Trauma Center)",
-      "รถพยาบาลฉุกเฉินพร้อมอุปกรณ์กู้ชีพขั้นสูง (ALS Ambulance)",
-      "ห้องกู้ชีพ (Resuscitation Room) พร้อมเครื่องกระตุกหัวใจและเครื่องช่วยหายใจ",
-      "การคัดแยกประเภทผู้ป่วย (Triage System) ตามความรุนแรงของโรค",
-    ],
+const ICON_MAP: Record<string, React.ElementType> = {
+  "shield-alert": ShieldAlert,
+  "heart-pulse": HeartPulse,
+  stethoscope: Stethoscope,
+  scissors: Scissors,
+  smile: Smile,
+  baby: Baby,
+  bone: Bone,
+  activity: Activity,
+  heart: Heart,
+  "file-text": FileText,
+  eye: Eye,
+  sparkles: Sparkles,
+};
+
+const FALLBACK_BANNER = "/img/indexbanner/herobannertest01.png";
+
+function toUICenter(c: TreatmentCenter): UICenter {
+  return {
+    id: c.slug,
+    titleTh: c.title_th,
+    titleEn: c.title_en,
+    icon: ICON_MAP[c.icon_type] || Stethoscope,
+    description: c.description,
+    highlightText: c.highlight_text,
+    banners: c.banners.length ? c.banners : [FALLBACK_BANNER],
+    services: c.services,
+    facilities: c.facilities,
     serviceHours: {
-      regular: "เปิดบริการตลอด 24 ชั่วโมง (ทุกวัน)",
-      emergency: "สายด่วนฉุกเฉิน โทร 1669 หรือ 044-311856 ต่อ 101-102",
+      regular: c.hours_regular,
+      afterHours: c.hours_after || undefined,
+      emergency: c.hours_emergency || undefined,
     },
-    contactExt: "101, 102, 103",
-    doctors: [
-      {
-        id: "d1",
-        name: "นพ. สมชาย สายชล",
-        title: "แพทย์เฉพาะทางเวชศาสตร์ฉุกเฉิน",
-        specialty: "เวชศาสตร์ฉุกเฉินและการกู้ชีวิตขั้นสูง (EM)",
-        schedule: "ประจำการ 24 ชั่วโมง (ตามตารางเวร)",
-        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=500&auto=format&fit=crop&q=80",
-      },
-      {
-        id: "d2",
-        name: "พญ. นภาพร มงคลจิต",
-        title: "แพทย์เฉพาะทางเวชศาสตร์ฉุกเฉิน",
-        specialty: "การดูแลผู้ป่วยอุบัติเหตุรุนแรง (Trauma Specialist)",
-        schedule: "ประจำการ 24 ชั่วโมง (ตามตารางเวร)",
-        image: "https://images.unsplash.com/photo-1594824813566-88855ce7896c?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "ห้องกู้ชีพและผ่าตัดเล็กฉุกเฉิน",
-      "เครื่องกระตุกไฟฟ้าหัวใจ (Defibrillator)",
-      "เครื่องช่วยหายใจชนิดเคลื่อนย้ายได้",
-      "จุดจอดรถพยาบาลกู้ชีพฉุกเฉิน (Ambulance Bay)",
-    ],
-  },
-  {
-    id: "obgyn",
-    titleTh: "ศูนย์สูตินรีเวชกรรม",
-    titleEn: "Obstetrics & Gynecology Center",
-    icon: HeartPulse,
-    description:
-      "ให้บริการตรวจวินิจฉัยและรักษาโรคสตรี ให้บริการฝากครรภ์ คลอดบุตร และการผ่าตัดทางสูตินรีเวช โดยทีมสูตินรีแพทย์ผู้เชี่ยวชาญ พร้อมห้องคลอดและห้องพักฟื้นที่ได้มาตรฐานความปลอดภัยสูง",
-    highlightText: "ดูแลสุขภาพสตรีทุกช่วงวัย และเคียงข้างคุณแม่อย่างอบอุ่นตลอดการตั้งครรภ์",
-    banners: [
-      "/img/indexbanner/herobannertest02.png",
-      "/img/indexbanner/herobannertest01.png",
-    ],
-    services: [
-      "บริการฝากครรภ์คุณภาพ และการตรวจคัดกรองความผิดปกติของทารกในครรภ์",
-      "บริการทำคลอดธรรมชาติ และผ่าตัดทำคลอด (Cesarean Section)",
-      "ตรวจอัลตราซาวด์ 4 มิติ ดูพัฒนาการทารกในครรภ์",
-      "ตรวจคัดกรองมะเร็งปากมดลูก (Pap Smear / HPV DNA Test)",
-      "รักษาโรคสตรี เช่น เนื้องอกมดลูก ถุงน้ำรังไข่ และผ่าตัดผ่านกล้องทางนรีเวช",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.00 - 16.00 น.",
-      afterHours: "คลินิกพิเศษนอกเวลา : จันทร์ - ศุกร์ 16.30 - 20.00 น. / เสาร์ - อาทิตย์ 08.30 - 12.00 น.",
-    },
-    contactExt: "201, 202",
-    doctors: [
-      {
-        id: "d3",
-        name: "พญ. ศิริพร วิเศษโสภา",
-        title: "สูตินรีแพทย์เฉพาะทาง",
-        specialty: "เวชศาสตร์มารดาและทารกในครรภ์ (MFM)",
-        schedule: "จันทร์ - ศุกร์ (08.30 - 15.30 น.)",
-        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&auto=format&fit=crop&q=80",
-      },
-      {
-        id: "d4",
-        name: "นพ. กิตติศักดิ์ พรหมมณี",
-        title: "สูตินรีแพทย์เฉพาะทาง",
-        specialty: "มะเร็งวิทยานรีเวชและการผ่าตัดผ่านกล้อง",
-        schedule: "อังคาร, พฤหัสบดี, ศุกร์ (09.00 - 16.00 น.)",
-        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "ห้องคลอดส่วนตัวมาตรฐานความปลอดภัย",
-      "เครื่องอัลตราซาวด์ 4D ทันสมัย",
-      "ห้องผ่าตัดผ่านกล้องทางนรีเวช",
-      "ห้องพักฟื้นคุณแม่หลังคลอดพร้อมทารก",
-    ],
-  },
-  {
-    id: "internal",
-    titleTh: "ศูนย์อายุรกรรม",
-    titleEn: "Internal Medicine Center",
-    icon: Stethoscope,
-    description:
-      "ให้บริการตรวจวินิจฉัยและรักษาโรคทางอายุรกรรมทั่วไปและโรคเรื้อรัง เช่น โรคหัวใจ ความดันโลหิตสูง เบาหวาน โรคไต โรคระบบทางเดินอาหาร และโรคระบบหายใจ",
-    highlightText: "ดูแลรักษาโรคเฉพาะทางโดยทีมอายุรแพทย์ผู้เชี่ยวชาญ เพื่อคุณภาพชีวิตที่ดีอย่างยั่งยืน",
-    banners: [
-      "/img/indexbanner/herobannertest01.png",
-      "/img/indexbanner/herobannertest02.png",
-    ],
-    services: [
-      "ตรวจรักษาโรคทั่วไป และโรคเรื้อรัง (เบาหวาน, ความดัน, ไขมันในเลือดสูง)",
-      "คลินิกโรคหัวใจและหลอดเลือด (Cardiology Clinic)",
-      "คลินิกโรคไตและฟอกเลือดด้วยเครื่องไตเทียม (Hemodialysis Center)",
-      "คลินิกโรคระบบทางเดินอาหารและตับ (Gastroenterology)",
-      "คลินิกโรคระบบหายใจและปอด (Pulmonology)",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.00 - 16.00 น.",
-      afterHours: "คลินิกนอกเวลา : จันทร์ - ศุกร์ 16.30 - 20.00 น.",
-    },
-    contactExt: "301, 302, 305",
-    doctors: [
-      {
-        id: "d5",
-        name: "นพ. วิศรุต วงศ์ไทย",
-        title: "อายุรแพทย์เฉพาะทางโรคหัวใจ",
-        specialty: "อายุรศาสตร์โรคหัวใจและหลอดเลือด",
-        schedule: "จันทร์, พุธ, ศุกร์ (08.30 - 16.00 น.)",
-        image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=500&auto=format&fit=crop&q=80",
-      },
-      {
-        id: "d6",
-        name: "พญ. วรรณภา อรุณสวัสดิ์",
-        title: "อายุรแพทย์เฉพาะทางโรคไต",
-        specialty: "อายุรศาสตร์โรคไตและการฟอกเลือด",
-        schedule: "อังคาร, พฤหัสบดี (08.30 - 16.00 น.)",
-        image: "https://images.unsplash.com/photo-1594824813566-88855ce7896c?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "เครื่องตรวจคลื่นไฟฟ้าหัวใจ EKG & Echo",
-      "ศูนย์ฟอกเลือดด้วยเครื่องไตเทียมทันสมัย",
-      "ห้องส่องกล้องระบบทางเดินอาหาร",
-    ],
-  },
-  {
-    id: "surgery",
-    titleTh: "ศูนย์ศัลยกรรม",
-    titleEn: "Surgical Center",
-    icon: Scissors,
-    description:
-      "ให้บริการผ่าตัดและวินิจฉัยโรคทางศัลยกรรมทั่วไป ศัลยกรรมผ่านกล้องแผลเล็ก (Laparoscopic Surgery) และศัลยกรรมทางระบบปัสสาวะ โดยทีมศัลยแพทย์ผู้เชี่ยวชาญ",
-    highlightText: "ผ่าตัดแผลเล็ก ฟื้นตัวไว มั่นใจด้วยมาตรฐานความปลอดภัยระดับสากล",
-    banners: [
-      "/img/indexbanner/herobannertest02.png",
-      "/img/indexbanner/herobannertest01.png",
-    ],
-    services: [
-      "ศัลยกรรมทั่วไป (ผ่าตัดไส้ติ่ง, นิ่วในถุงน้ำดี, ไส้เลื่อน, ก้อนเนื้อ)",
-      "ศัลยกรรมผ่าตัดผ่านกล้องแผลเล็ก (MIS / Laparoscopic Surgery)",
-      "ศัลยกรรมระบบทางเดินปัสสาวะ (ผ่าตัดโรคนิ่ว, ต่อมลูกหมากโต)",
-      "ศัลยกรรมตกแต่งบาดแผลและศัลยกรรมหลอดเลือด",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.00 - 16.00 น.",
-      emergency: "เคสผ่าตัดฉุกเฉินพร้อมให้บริการตลอด 24 ชั่วโมง",
-    },
-    contactExt: "401, 402",
-    doctors: [
-      {
-        id: "d7",
-        name: "นพ. ภานุเดช ศิริวัฒน์",
-        title: "ศัลยแพทย์เฉพาะทางผ่าตัดผ่านกล้อง",
-        specialty: "ศัลยกรรมทั่วไปและการผ่าตัดผ่านกล้องแผลเล็ก",
-        schedule: "จันทร์ - ศุกร์ (09.00 - 16.00 น.)",
-        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "ห้องผ่าตัดแรงดันบวก (Positive Pressure OR)",
-      "กล้องส่องผ่าตัดความคมชัดสูง 4K",
-      "ห้องพักฟื้นผู้ป่วยหลังผ่าตัด (PACU)",
-    ],
-  },
-  {
-    id: "dental",
-    titleTh: "ศูนย์ทันตกรรม",
-    titleEn: "Dental Center",
-    icon: Smile,
-    description:
-      "ให้บริการดูแลสุขภาพช่องปากและฟันครบวงจร ทั้งทันตกรรมทั่วไป ทันตกรรมประดิษฐ์ จัดฟัน ผ่าฟันครุฑ และทันตกรรมศัลยกรรมริมฝีปากเพดานแหว่ง",
-    highlightText: "รอยยิ้มสดใส สุขภาพฟันแข็งแรง ด้วยเครื่องมือสะอาดปราศจากเชื้อ 100%",
-    banners: [
-      "/img/indexbanner/herobannertest01.png",
-      "/img/indexbanner/herobannertest02.png",
-    ],
-    services: [
-      "ตรวจสุขภาพช่องปาก ขูดหินปูน อุดฟัน ถอนฟัน",
-      "ผ่าฟันครุฑ ศัลยกรรมช่องปากและใบหน้า",
-      "รักษารากฟัน (Endodontics) และรักษาโรคเหงือก",
-      "ใส่ฟันปลอม ทำครอบฟัน สะพานฟัน และรากฟันเทียม",
-      "ทันตกรรมจัดฟัน และทันตกรรมสำหรับเด็ก",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.30 - 16.00 น.",
-      afterHours: "คลินิกนอกเวลา : จันทร์ - พฤหัสบดี 16.30 - 20.00 น.",
-    },
-    contactExt: "501, 502",
-    doctors: [
-      {
-        id: "d8",
-        name: "ทพญ. ชลทิชา สุวรรณเวช",
-        title: "ทันตแพทย์เฉพาะทางรักษารากฟัน",
-        specialty: "ทันตกรรมรักษารากฟันและทันตกรรมบูรณะ",
-        schedule: "จันทร์ - ศุกร์ (08.30 - 15.30 น.)",
-        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "ยูนิตทันตกรรมทันสมัยปลอดเชื้อ",
-      "เครื่องเอกซเรย์ฟันระบบดิจิทัล 3D / OPG",
-      "ระบบอบฆ่าเชื้อเครื่องมือมาตรฐานสากล Autoclave",
-    ],
-  },
-  {
-    id: "pediatrics",
-    titleTh: "ศูนย์กุมารเวชกรรม",
-    titleEn: "Pediatric Center",
-    icon: Baby,
-    description:
-      "ให้บริการตรวจรักษาโรคในเด็ก ตั้งแต่วัยทารกแรกเกิดจนถึงวัยรุ่น ให้บริการฉีดวัคซีนตามวัย และส่งเสริมพัฒนาการเด็กอย่างสมบูรณ์",
-    highlightText: "ดูแลเอาใจใส่เจ้าตัวเล็กด้วยความรัก และความเชี่ยวชาญจากกุมารแพทย์",
-    banners: [
-      "/img/indexbanner/herobannertest02.png",
-      "/img/indexbanner/herobannertest01.png",
-    ],
-    services: [
-      "ตรวจรักษาโรคทั่วไปในเด็ก และโรคติดเชื้อในเด็ก",
-      "คลินิกวัคซีนเด็ก และประเมินพัฒนาการตามวัย",
-      "หอผู้ป่วยวิกฤตทารกแรกเกิด (NICU)",
-      "ให้คำปรึกษาการเลี้ยงลูกด้วยนมแม่และโภชนาการเด็ก",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.00 - 16.00 น.",
-      afterHours: "คลินิกนอกเวลา : เสาร์ - อาทิตย์ 08.30 - 12.00 น.",
-    },
-    contactExt: "601, 602",
-    doctors: [
-      {
-        id: "d9",
-        name: "พญ. ปรียานุช รัตนศิลป์",
-        title: "กุมารแพทย์ผู้เชี่ยวชาญ",
-        specialty: "กุมารศาสตร์ทั่วไปและพัฒนาการเด็ก",
-        schedule: "จันทร์ - ศุกร์ (08.30 - 16.00 น.)",
-        image: "https://images.unsplash.com/photo-1594824813566-88855ce7896c?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "มุมของเล่นเสริมพัฒนาการเด็กแยกโซนปลอดเชื้อ",
-      "ตู้บ่มทารกและเครื่องส่องไฟรักษาภาวะตัวเหลือง",
-    ],
-  },
-  {
-    id: "orthopedics",
-    titleTh: "ศูนย์กระดูกและข้อ",
-    titleEn: "Orthopedic Center",
-    icon: Bone,
-    description:
-      "ให้บริการตรวจรักษา ผ่าตัด และฟื้นฟูผู้ป่วยโรคกระดูก ข้อต่อ เส้นเอ็น และกล้ามเนื้อ รวมถึงการผ่าตัดเปลี่ยนข้อเข่า-ข้อสะโพกเทียม",
-    highlightText: "คืนความเคลื่อนไหวที่คล่องตัว เพื่อการดำเนินชีวิตอย่างไร้ขีดจำกัด",
-    banners: [
-      "/img/indexbanner/herobannertest01.png",
-      "/img/indexbanner/herobannertest02.png",
-    ],
-    services: [
-      "รักษาอุบัติเหตุกระดูกหัก ข้อเคล็ด และข้อหลุด",
-      "ผ่าตัดเปลี่ยนข้อเข่าเทียม และข้อสะโพกเทียม (Joint Replacement)",
-      "ผ่าตัดผ่านกล้องส่องข้อ (Arthroscopic Surgery)",
-      "รักษาอาการปวดหลัง หมอนรองกระดูกทับเส้นประสาท",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.00 - 16.00 น.",
-    },
-    contactExt: "701, 702",
-    doctors: [
-      {
-        id: "d10",
-        name: "นพ. ณัฐวุฒิ สุขสวัสดิ์",
-        title: "ศัลยแพทย์กระดูกและข้อ",
-        specialty: "ผ่าตัดเปลี่ยนข้อเข่าและข้อสะโพกเทียม",
-        schedule: "อังคาร, พุธ, ศุกร์ (09.00 - 15.30 น.)",
-        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "เครื่องเอกซเรย์คอมพิวเตอร์ดิจิทัล C-Arm ในห้องผ่าตัด",
-      "อุปกรณ์กายภาพบำบัดฟื้นฟูข้อต่อเฉพาะทาง",
-    ],
-  },
-  {
-    id: "physical-therapy",
-    titleTh: "ศูนย์กายภาพบำบัด",
-    titleEn: "Physical Therapy Center",
-    icon: Activity,
-    description:
-      "ให้บริการฟื้นฟูสมรรถภาพร่างกาย รักษาอาการปวดออฟฟิศซินโดรม ผู้ป่วยอัมพฤกษ์ อัมพาต ผู้ป่วยหลังผ่าตัด และผู้บาดเจ็บจากการเล่นกีฬา",
-    highlightText: "ฟื้นฟูร่างกายอย่างตรงจุด คลายปวด ปรับโครงสร้างร่างกายให้แข็งแรง",
-    banners: [
-      "/img/indexbanner/herobannertest02.png",
-      "/img/indexbanner/herobannertest01.png",
-    ],
-    services: [
-      "กายภาพบำบัดลดปวด ออฟฟิศซินโดรม ปวดคอ บ่า หลัง",
-      "ฟื้นฟูผู้ป่วยโรคหลอดเลือดสมอง (Stroke Rehabilitation)",
-      "กายภาพบำบัดผู้ป่วยหลังผ่าตัดกระดูกและข้อ",
-      "การรักษาด้วยคลื่นอัลตราซาวด์ แสงเลเซอร์บำบัด และการดึงคอ-ดึงหลัง",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.00 - 16.00 น.",
-    },
-    contactExt: "801, 802",
-    doctors: [
-      {
-        id: "d11",
-        name: "กภ. เมทินี สุจริต",
-        title: "นักกายภาพบำบัดวิชาชีพ",
-        specialty: "กายภาพบำบัดระบบกระดูกและกล้ามเนื้อ",
-        schedule: "จันทร์ - ศุกร์ (08.30 - 16.00 น.)",
-        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "เครื่องบำบัดด้วยคลื่นกระแทก High-Intensity Laser / Shockwave",
-      "เตียงดึงคอและหลังไฟฟ้าอัตโนมัติ",
-      "ห้องฝึกกายภาพบำบัดกว้างขวาง",
-    ],
-  },
-  {
-    id: "rehab",
-    titleTh: "ศูนย์เวชศาสตร์ฟื้นฟู",
-    titleEn: "Rehabilitation Center",
-    icon: Heart,
-    description:
-      "ให้บริการประเมินและวางแผนฟื้นฟูสมรรถภาพร่างกาย กิจกรรมบำบัด และฝึกพูด สำหรับผู้ป่วยบาดเจ็บทางสมอง ไขสันหลัง และผู้สูงอายุ",
-    highlightText: "ช่วยให้ผู้ป่วยกลับมาพึ่งพาตนเองได้ และมีคุณภาพชีวิตที่ดีขึ้น",
-    banners: [
-      "/img/indexbanner/herobannertest01.png",
-      "/img/indexbanner/herobannertest02.png",
-    ],
-    services: [
-      "กิจกรรมบำบัด (Occupational Therapy) ฝึกการกลืนและการขับถ่าย",
-      "อรรถบำบัด (Speech Therapy) ฝึกการพูดและสื่อสาร",
-      "การจัดทำอุปกรณ์ประคองและกายอุปกรณ์เสริม",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.30 - 16.00 น.",
-    },
-    contactExt: "805",
-    doctors: [
-      {
-        id: "d12",
-        name: "พญ. อรทัย ทรัพย์มณี",
-        title: "แพทย์เฉพาะทางเวชศาสตร์ฟื้นฟู",
-        specialty: "เวชศาสตร์ฟื้นฟูผู้ป่วยฟื้นตัวจาก stroke",
-        schedule: "จันทร์, พุธ, ศุกร์ (09.00 - 15.00 น.)",
-        image: "https://images.unsplash.com/photo-1594824813566-88855ce7896c?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "ห้องฝึกกิจกรรมบำบัดเสมือนบ้านจริง",
-      "อุปกรณ์ฝึกเดินและฝึกทรงตัว",
-    ],
-  },
-  {
-    id: "ent",
-    titleTh: "ศูนย์หู คอ จมูก",
-    titleEn: "ENT Center",
-    icon: FileText,
-    description:
-      "ให้บริการตรวจวินิจฉัยและรักษาโรคของหู คอ จมูก โรคภูมิแพ้ โรคไซนัสอักเสบ เสียงแหบ ก้อนที่คอ และอาการตรวจการได้ยิน",
-    highlightText: "ดูแลระบบทางการหายใจส่วนบนและการได้ยินอย่างเชี่ยวชาญ",
-    banners: [
-      "/img/indexbanner/herobannertest02.png",
-      "/img/indexbanner/herobannertest01.png",
-    ],
-    services: [
-      "ตรวจส่องกล้องไซนัส และผ่าตัดส่องกล้องกล่องเสียง",
-      "ตรวจการได้ยิน (Audiogram) และใส่เครื่องช่วยฟัง",
-      "รักษาโรคภูมิแพ้ทางจมูก ไซนัสอักเสบ และนอนกรน",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.00 - 16.00 น.",
-    },
-    contactExt: "901",
-    doctors: [
-      {
-        id: "d13",
-        name: "นพ. อนุชา ไชยสงคราม",
-        title: "แพทย์เฉพาะทาง หู คอ จมูก",
-        specialty: "โสต ศอ นาสิกวิทยา และการส่องกล้อง",
-        schedule: "จันทร์ - ศุกร์ (08.30 - 15.30 น.)",
-        image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "ห้องตรวจส่องกล้องไร้เสียง (Audiometric Soundproof Booth)",
-      "ชุดส่องกล้องตรวจไซนัสและกล่องเสียงความละเอียดสูง",
-    ],
-  },
-  {
-    id: "eye",
-    titleTh: "ศูนย์จักษุ (ตา)",
-    titleEn: "Eye / Ophthalmology Center",
-    icon: Eye,
-    description:
-      "ให้บริการตรวจวัดสายตา ตรวจคัดกรองต้อกระจก ต้อหิน ต้อเนื้อ มะเร็งตา และผ่าตัดต้อกระจกสลายต้อด้วยคลื่นความถี่สูง (Phacoemulsification)",
-    highlightText: "ถนอมดวงตาคู่สดใส เพื่อการมองเห็นที่คมชัดยาวนาน",
-    banners: [
-      "/img/indexbanner/herobannertest01.png",
-      "/img/indexbanner/herobannertest02.png",
-    ],
-    services: [
-      "ตรวจวัดสายตาและตรวจสุขภาพดวงตาประจำปี",
-      "ผ่าตัดสลายต้อกระจกใส่เลนส์แก้วตาเทียม (Phacoemulsification)",
-      "รักษาต้อหิน ต้อเนื้อ และจอตาเสื่อมจากเบาหวาน",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.00 - 16.00 น.",
-    },
-    contactExt: "951",
-    doctors: [
-      {
-        id: "d14",
-        name: "พญ. ธิดารัตน์ ประเสริฐสุข",
-        title: "จักษุแพทย์เฉพาะทาง",
-        specialty: "จักษุวิทยาและการผ่าตัดสลายต้อกระจก",
-        schedule: "จันทร์, อังคาร, พฤหัสบดี (08.30 - 16.00 น.)",
-        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "เครื่องสลายต้อกระจกด้วยคลื่นเสียงความถี่สูง Phacoemulsifier",
-      "กล้องถ่ายภาพจอประสาทตาชนิดไม่ต้องขยายม่านตา",
-    ],
-  },
-  {
-    id: "thai",
-    titleTh: "ศูนย์แพทย์แผนไทยและการแพทย์ทางเลือก",
-    titleEn: "Thai Traditional & Alternative Medicine Center",
-    icon: Sparkles,
-    description:
-      "ให้บริการนวดรักษาโรค นวดประคบสมุนไพร ทับหม้อเกลือหลังคลอด ฝังเข็มรักษาโรค และจ่ายยาสมุนไพรไทยโดยแพทย์แผนไทยและแพทย์แผนจีนวิชาชีพ",
-    highlightText: "บำบัดรักษาด้วยภูมิปัญญาไทยและศาสตร์การแพทย์ทางเลือกที่ได้มาตรฐาน",
-    banners: [
-      "/img/indexbanner/herobannertest02.png",
-      "/img/indexbanner/herobannertest01.png",
-    ],
-    services: [
-      "นวดราชสำนักรักษาอาการปวดสะบัก ปวดคอ หลัง ขา",
-      "การประคบสมุนไพรสด และการอบสมุนไพรบำบัด",
-      "บริการทับหม้อเกลือและดูแลฟื้นฟูคุณแม่หลังคลอด",
-      "บริการฝังเข็ม ครอบแก้ว บำบัดอาการปวดตามจุด (Acupuncture)",
-      "ตรวจรักษาและจ่ายยาสมุนไพรไทยตำรับมาตรฐาน",
-    ],
-    serviceHours: {
-      regular: "จันทร์ - ศุกร์ : 08.30 - 16.30 น.",
-      afterHours: "เสาร์ - อาทิตย์ : 08.30 - 15.30 น. (เปิดให้บริการนวดและฝังเข็ม)",
-    },
-    contactExt: "980, 981",
-    doctors: [
-      {
-        id: "d15",
-        name: "พท.ป. ชาญชัย มั่นคง",
-        title: "แพทย์แผนไทยประยุกต์",
-        specialty: "เวชกรรมไทยและการนวดรักษาโรค",
-        schedule: "จันทร์ - เสาร์ (08.30 - 16.00 น.)",
-        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=500&auto=format&fit=crop&q=80",
-      },
-    ],
-    facilities: [
-      "ห้องนวดบำบัดรักษาเป็นส่วนตัวเงียบสงบ",
-      "ตู้อบสมุนไพรไทยแยกชาย-หญิง",
-      "ห้องฝังเข็มสะอาดพร้อมอุปกรณ์ใช้ครั้งเดียวทิ้ง",
-    ],
-  },
-];
+    contactExt: c.contact_ext,
+    doctorDepartment: c.doctor_department,
+  };
+}
+
+interface ApiDoctor {
+  id: number;
+  name: string;
+  position: string;
+  department: string;
+  specialties: string[];
+  schedules: string[];
+  image: string;
+}
+
+function toUIDoctor(d: ApiDoctor): UIDoctor {
+  return {
+    id: String(d.id),
+    name: d.name,
+    title: d.position || "แพทย์ประจำศูนย์",
+    specialty: d.specialties?.[0] || d.department || "-",
+    schedule: d.schedules?.[0] || "ตามตารางออกตรวจ",
+    image: d.image || "/img/doctors/male_doctor.jpg",
+  };
+}
 
 // Component หลักแบบ Inner (สำหรับใช้งานร่วมกับ useSearchParams)
 function PatientServicesContent() {
@@ -558,24 +125,68 @@ function PatientServicesContent() {
   const [selectedCenterId, setSelectedCenterId] = useState<string>(initialDept);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [centers, setCenters] = useState<UICenter[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [centerDoctors, setCenterDoctors] = useState<UIDoctor[]>([]);
+
+  // ดึงข้อมูลศูนย์ทั้งหมดจาก API
+  useEffect(() => {
+    fetch("/api/treatment-centers")
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.ok && Array.isArray(json.data)) setCenters(json.data.map(toUICenter));
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
   // อัปเดตศูนย์ที่เลือกถ้า query string เปลี่ยน
   useEffect(() => {
     const dept = searchParams?.get("dept");
-    if (dept && centersData.some((c) => c.id === dept)) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedCenterId(dept);
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (dept) setSelectedCenterId(dept);
   }, [searchParams]);
 
   const currentCenter =
-    centersData.find((c) => c.id === selectedCenterId) || centersData[0];
+    centers.find((c) => c.id === selectedCenterId) || centers[0];
 
   // อัปเดต slide index เมื่อเปลี่ยนศูนย์
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentSlideIndex(0);
   }, [selectedCenterId]);
+
+  // ดึงรายชื่อแพทย์ตามแผนกของศูนย์ที่เลือก
+  const activeDoctorDept = currentCenter?.doctorDepartment;
+  useEffect(() => {
+    if (!activeDoctorDept) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCenterDoctors([]);
+      return;
+    }
+    let cancelled = false;
+    fetch(`/api/doctors?department=${encodeURIComponent(activeDoctorDept)}`)
+      .then((r) => r.json())
+      .then((json) => {
+        if (!cancelled) {
+          setCenterDoctors(json.ok && Array.isArray(json.data) ? json.data.map(toUIDoctor) : []);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setCenterDoctors([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [activeDoctorDept]);
+
+  if (loading || !currentCenter) {
+    return (
+      <div className="w-full bg-slate-50 min-h-screen p-16 text-center text-gray-500">
+        กำลังโหลดข้อมูลศูนย์รักษาเฉพาะทาง...
+      </div>
+    );
+  }
 
   const nextSlide = () => {
     setCurrentSlideIndex((prev) => (prev + 1) % currentCenter.banners.length);
@@ -592,7 +203,7 @@ function PatientServicesContent() {
       {/* ------------------------------------------------------------- */}
       {/* 1. TOP HEADER BREADCRUMB BANNER WITH GEOMETRIC PATTERN        */}
       {/* ------------------------------------------------------------- */}
-      <section className="relative bg-gradient-to-r from-teal-900 via-teal-800 to-emerald-900 text-white pt-10 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden shadow-md">
+      <section className="relative bg-linear-to-r from-teal-900 via-teal-800 to-emerald-900 text-white pt-10 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden shadow-md">
         {/* Geometric Hexagon / Light Grid Pattern Overlay */}
         <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#00bba7_1px,transparent_1px)] [background-size:16px_16px]" />
         
@@ -634,14 +245,14 @@ function PatientServicesContent() {
           {/* LEFT SIDEBAR: รายชื่อ 12 ศูนย์เฉพาะทาง (Orange Buttons)  */}
           {/* ========================================================= */}
           <aside className="lg:col-span-4 xl:col-span-3 bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden sticky top-6">
-            <div className="bg-gradient-to-r from-[#ea580c] to-[#f97316] p-4 text-white font-bold text-lg flex items-center gap-2">
+            <div className="bg-linear-to-r from-[#ea580c] to-[#f97316] p-4 text-white font-bold text-lg flex items-center gap-2">
               <Building className="w-5 h-5 text-white" />
               <span>ศูนย์รักษาเฉพาะทาง</span>
             </div>
 
             {/* List of Center Buttons */}
             <div className="p-2 divide-y divide-gray-100">
-              {centersData.map((item) => {
+              {centers.map((item) => {
                 const IconComponent = item.icon;
                 const isSelected = item.id === selectedCenterId;
 
@@ -725,7 +336,7 @@ function PatientServicesContent() {
                     />
 
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />
 
                     {/* Prev & Next Slide Buttons */}
                     {currentCenter.banners.length > 1 && (
@@ -849,38 +460,48 @@ function PatientServicesContent() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {currentCenter.doctors.map((doc) => (
-                      <div
-                        key={doc.id}
-                        className="flex gap-4 p-4 rounded-2xl border border-gray-100 bg-slate-50 hover:shadow-md transition-shadow"
-                      >
-                        <div className="relative w-20 h-24 rounded-xl overflow-hidden shrink-0 bg-gray-200">
-                          <Image
-                            src={doc.image}
-                            alt={doc.name}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="space-y-1.5 flex-1">
-                          <h4 className="font-bold text-gray-900 text-base leading-snug">
-                            {doc.name}
-                          </h4>
-                          <span className="inline-block px-2.5 py-0.5 bg-teal-100 text-teal-800 text-xs font-semibold rounded-md">
-                            {doc.title}
-                          </span>
-                          <p className="text-xs text-gray-600 font-medium">
-                            <span className="text-gray-400">เชี่ยวชาญ:</span> {doc.specialty}
-                          </p>
-                          <div className="flex items-center gap-1.5 text-xs text-gray-500 pt-1">
-                            <Calendar className="w-3.5 h-3.5 text-[#ea580c]" />
-                            <span>{doc.schedule}</span>
+                  {centerDoctors.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {centerDoctors.map((doc) => (
+                        <Link
+                          key={doc.id}
+                          href={`/doctors/${doc.id}`}
+                          className="flex gap-4 p-4 rounded-2xl border border-gray-100 bg-slate-50 hover:shadow-md hover:border-orange-200 transition-all"
+                        >
+                          <div className="relative w-20 h-24 rounded-xl overflow-hidden shrink-0 bg-gray-200">
+                            <Image
+                              src={doc.image}
+                              alt={doc.name}
+                              fill
+                              className="object-cover object-top"
+                            />
                           </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                          <div className="space-y-1.5 flex-1">
+                            <h4 className="font-bold text-gray-900 text-base leading-snug">
+                              {doc.name}
+                            </h4>
+                            <span className="inline-block px-2.5 py-0.5 bg-teal-100 text-teal-800 text-xs font-semibold rounded-md">
+                              {doc.title}
+                            </span>
+                            <p className="text-xs text-gray-600 font-medium">
+                              <span className="text-gray-400">เชี่ยวชาญ:</span> {doc.specialty}
+                            </p>
+                            <div className="flex items-center gap-1.5 text-xs text-gray-500 pt-1">
+                              <Calendar className="w-3.5 h-3.5 text-[#ea580c]" />
+                              <span>{doc.schedule}</span>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-sm text-gray-400">
+                      ดูรายชื่อแพทย์ทั้งหมดได้ที่{" "}
+                      <Link href="/doctors" className="text-[#ea580c] font-medium hover:underline">
+                        หน้าบุคลากรแพทย์
+                      </Link>
+                    </div>
+                  )}
                 </div>
 
                 {/* 4. FACILITIES & EQUIPMENT */}
@@ -911,7 +532,7 @@ function PatientServicesContent() {
                 </div>
 
                 {/* 5. CALL TO ACTION / APPOINTMENT BANNER */}
-                <div className="bg-gradient-to-r from-[#ea580c] to-[#c2410c] rounded-2xl p-6 sm:p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-lg">
+                <div className="bg-linear-to-r from-[#ea580c] to-[#c2410c] rounded-2xl p-6 sm:p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-lg">
                   <div className="space-y-2 text-center sm:text-left">
                     <h3 className="text-xl sm:text-2xl font-bold">
                       ต้องการทำนัดหมายหรือสอบถามข้อมูลเพิ่มเติม?
@@ -950,7 +571,7 @@ function PatientServicesContent() {
       {/* 3. MODAL นัดหมายแพทย์ออนไลน์ (Appointment Modal)              */}
       {/* ------------------------------------------------------------- */}
       {isAppointmentModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs duration-200">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative space-y-5 border border-gray-100">
             <button
               onClick={() => setIsAppointmentModalOpen(false)}
@@ -987,7 +608,7 @@ function PatientServicesContent() {
                   type="text"
                   required
                   placeholder="เช่น นายสมชาย ใจดี"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#ea580c] focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#ea580c] focus:outline-none"
                 />
               </div>
 
@@ -1000,7 +621,7 @@ function PatientServicesContent() {
                     type="tel"
                     required
                     placeholder="08X-XXX-XXXX"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#ea580c] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#ea580c] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1010,7 +631,7 @@ function PatientServicesContent() {
                   <input
                     type="date"
                     required
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#ea580c] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#ea580c] focus:outline-none"
                   />
                 </div>
               </div>
@@ -1022,7 +643,7 @@ function PatientServicesContent() {
                 <textarea
                   rows={3}
                   placeholder="ระบุอาการเบื้องต้น..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#ea580c] focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-[#ea580c] focus:outline-none"
                 />
               </div>
 

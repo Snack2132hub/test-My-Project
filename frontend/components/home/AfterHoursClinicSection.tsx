@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
@@ -22,10 +22,10 @@ export default function AfterHoursClinicSection() {
           src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=1200"
           alt="Hospital Background"
           fill
-          className="object-cover opacity-[0.06] filter blur-xs"
+          className="object-cover opacity-[0.06] blur-xs"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-transparent to-white/90" />
+        <div className="absolute inset-0 bg-linear-to-b from-white/70 via-transparent to-white/90" />
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
@@ -70,7 +70,7 @@ export default function AfterHoursClinicSection() {
                 onClick={() => setSelectedClinicMonth("thisMonth")}
                 className={`px-6 py-2.5 rounded-full font-medium text-sm sm:text-base transition-all duration-300 cursor-pointer shadow-xs ${
                   selectedClinicMonth === "thisMonth"
-                    ? "bg-gradient-to-r from-[#ffa154] to-[#f97316] text-white shadow-orange-200/60 shadow-md"
+                    ? "bg-linear-to-r from-[#ffa154] to-[#f97316] text-white shadow-orange-200/60 shadow-md"
                     : "bg-white text-gray-700 hover:bg-orange-50 border border-gray-200"
                 }`}
               >
@@ -81,11 +81,11 @@ export default function AfterHoursClinicSection() {
                 onClick={() => setSelectedClinicMonth("nextMonth")}
                 className={`px-6 py-2.5 rounded-full font-medium text-sm sm:text-base transition-all duration-300 cursor-pointer flex items-center gap-1 ${
                   selectedClinicMonth === "nextMonth"
-                    ? "bg-gradient-to-r from-[#ffa154] to-[#f97316] text-white shadow-orange-200/60 shadow-md"
+                    ? "bg-linear-to-r from-[#ffa154] to-[#f97316] text-white shadow-orange-200/60 shadow-md"
                     : "bg-white text-[#f97316] hover:bg-orange-50 border border-[#f97316]/60 shadow-xs"
                 }`}
               >
-                เดือนหน้า <ChevronRight className="w-4 h-4 inline stroke-[2.5]" />
+                เดือนหน้า <ChevronRight className="w-4 h-4 inline" strokeWidth={2.5} />
               </button>
             </div>
 
@@ -93,7 +93,7 @@ export default function AfterHoursClinicSection() {
             <div className="flex flex-col gap-4 mt-1">
               {/* รายการที่ 1 */}
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300 cursor-pointer group">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#ffa154] to-[#f97316] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#ffa154] to-[#f97316] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs group-hover:scale-105 transition-transform">
                   LG
                 </div>
                 <span className="text-gray-800 font-bold text-sm sm:text-base leading-snug group-hover:text-[#f97316] transition-colors">
@@ -103,7 +103,7 @@ export default function AfterHoursClinicSection() {
 
               {/* รายการที่ 2 */}
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300 cursor-pointer group">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#ffa154] to-[#f97316] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#ffa154] to-[#f97316] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs group-hover:scale-105 transition-transform">
                   LG
                 </div>
                 <span className="text-gray-800 font-bold text-sm sm:text-base leading-snug group-hover:text-[#f97316] transition-colors">
@@ -113,7 +113,7 @@ export default function AfterHoursClinicSection() {
 
               {/* รายการที่ 3 */}
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300 cursor-pointer group">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#ffa154] to-[#f97316] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#ffa154] to-[#f97316] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs group-hover:scale-105 transition-transform">
                   LG
                 </div>
                 <span className="text-gray-800 font-bold text-sm sm:text-base leading-snug group-hover:text-[#f97316] transition-colors">

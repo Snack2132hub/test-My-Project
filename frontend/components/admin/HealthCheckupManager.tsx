@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Plus,
   Trash2,
   Edit3,
-  Sparkles,
   RefreshCw,
   HeartPulse,
   Syringe,
   Megaphone,
+  Upload,
+  X,
 } from "lucide-react";
 
 interface Item {
@@ -23,13 +24,15 @@ interface Item {
   pinned?: boolean;
 }
 
-export default function HealthCheckupManager() {
-  const [activeTab, setActiveTab] = useState<"announcements" | "checkup" | "vaccines">("announcements");
+export default function HealthCheckupManager({ initialTab = "announcements" }: { initialTab?: "announcements" | "checkup" | "vaccines" }) {
+  const activeTab = initialTab;
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -40,6 +43,10 @@ export default function HealthCheckupManager() {
     image: "",
     description: "",
   });
+
+  useEffect(() => {
+    fetchData();
+  }, [activeTab]);
 
   const getApiEndpoint = () => {
     if (activeTab === "checkup") return "/api/health-checkup/checkup-programs";
@@ -62,21 +69,14 @@ export default function HealthCheckupManager() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [activeTab]);
-
   const handleOpenAddModal = () => {
     setEditingItem(null);
     setFormData({
       title: "",
-      date: new Date().toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric" }),
+      date: "",
       category: activeTab === "vaccines" ? "วัคซีนทั่วไป" : "ข่าวสาร",
       price: "",
-      image:
-        activeTab === "checkup"
-          ? "/img/Health_check_up/h1.png"
-          : "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=600",
+      image: "",
       description: "",
     });
     setShowModal(true);
@@ -112,16 +112,41 @@ export default function HealthCheckupManager() {
     }
   };
 
+  const handleFileUpload = async (file: File) => {
+    setIsUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const json = await res.json();
+      if (json.ok) {
+        setFormData((prev) => ({ ...prev, image: json.url }));
+      } else {
+        alert(json.message || "อัปโหลดไม่สำเร็จ");
+      }
+    } catch {
+      alert("เกิดข้อผิดพลาดในการอัปโหลด");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title.trim()) return;
 
     try {
       setIsSubmitting(true);
+      const payload = {
+        ...formData,
+        date: activeTab === "announcements"
+          ? new Date().toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric" })
+          : formData.date,
+      };
       const res = await fetch(getApiEndpoint(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
       const json = await res.json();
       if (json.ok) {
@@ -137,20 +162,23 @@ export default function HealthCheckupManager() {
     }
   };
 
+  const tabConfig = {
+    announcements: { label: "ข่าวสารและประกาศ", Icon: Megaphone },
+    checkup: { label: "โปรแกรมตรวจสุขภาพ", Icon: HeartPulse },
+    vaccines: { label: "โปรแกรมฉีดวัคซีน", Icon: Syringe },
+  };
+  const { label: tabLabel, Icon: TabIcon } = tabConfig[activeTab];
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-      {/* Tab Switcher Header */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-100">
-        <div>
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#f97316]" />
-            <h2 className="text-xl font-bold text-gray-900">
-              จัดการข้อมูลศูนย์ตรวจสุขภาพ
-            </h2>
+        <div className="flex items-center gap-2">
+          <TabIcon className="w-5 h-5 text-[#f97316]" />
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">จัดการ{tabLabel}</h2>
+            <p className="text-xs text-gray-500 mt-0.5">ทั้งหมด {items.length} รายการ</p>
           </div>
-          <p className="text-xs text-gray-500 mt-1">
-            เลือกหมวดหมู่ข้อมูลที่ต้องการจัดการเพื่ออัปเดตลงฐานข้อมูล
-          </p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -169,45 +197,6 @@ export default function HealthCheckupManager() {
             <span>เพิ่มข้อมูลใหม่</span>
           </button>
         </div>
-      </div>
-
-      {/* Navigation Sub-Tabs */}
-      <div className="flex flex-wrap gap-2 my-6 p-1 bg-gray-100/80 rounded-xl">
-        <button
-          onClick={() => setActiveTab("announcements")}
-          className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer ${
-            activeTab === "announcements"
-              ? "bg-white text-[#f97316] shadow-xs"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
-        >
-          <Megaphone className="w-4 h-4" />
-          <span>ข่าวสารและประกาศ</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab("checkup")}
-          className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer ${
-            activeTab === "checkup"
-              ? "bg-white text-[#f97316] shadow-xs"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
-        >
-          <HeartPulse className="w-4 h-4" />
-          <span>โปรแกรมตรวจสุขภาพ</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab("vaccines")}
-          className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer ${
-            activeTab === "vaccines"
-              ? "bg-white text-[#f97316] shadow-xs"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
-        >
-          <Syringe className="w-4 h-4" />
-          <span>โปรแกรมฉีดวัคซีน</span>
-        </button>
       </div>
 
       {/* Items List Table */}
@@ -302,7 +291,7 @@ export default function HealthCheckupManager() {
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
             <h3 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-[#f97316]" />
+              <TabIcon className="w-5 h-5 text-[#f97316]" />
               {editingItem ? "แก้ไขรายการ" : "เพิ่มรายการใหม่"}
             </h3>
 
@@ -317,7 +306,7 @@ export default function HealthCheckupManager() {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="เช่น โปรแกรมตรวจสุขภาพ เพศชาย อายุ 35 ปีขึ้นไป"
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 
@@ -331,52 +320,78 @@ export default function HealthCheckupManager() {
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     placeholder="เช่น ราคา 1,150 บาท"
-                    className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   />
                 </div>
               )}
 
               {activeTab === "vaccines" && (
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">
-                    หมวดหมู่
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    placeholder="เช่น ไข้หวัดใหญ่, ไข้เลือดออก, วัคซีน HPV"
-                    className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">หมวดหมู่</label>
+                  <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}
+                    className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
+                    {["วัคซีนทั่วไป","วัคซีนไข้หวัดใหญ่","วัคซีน HPV","วัคซีนไข้เลือดออก","วัคซีนตับอักเสบ A","วัคซีนตับอักเสบ B","วัคซีนนิวโมคอคคัส","วัคซีนโรคพิษสุนัขบ้า","วัคซีนเด็ก","วัคซีนผู้ใหญ่","อื่นๆ"].map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
                 </div>
               )}
 
-              {activeTab === "announcements" && (
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">
-                    วันที่แสดง
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    placeholder="เช่น 20 กรกฎาคม 2565"
-                    className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                </div>
-              )}
 
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  รูปภาพ (URL หรือ พาธรูปในโปรเจกต์)
+                  รูปภาพ
                 </label>
-                <input
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="/img/Health_check_up/h1.png หรือ https://..."
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
+
+                {/* Preview */}
+                {formData.image && (
+                  <div className="relative mb-2 w-full h-36 rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={formData.image}
+                      alt="preview"
+                      className="w-full h-full object-contain"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, image: "" })}
+                      className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
+
+                {/* Upload zone */}
+                <div
+                  className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-orange-400 hover:bg-orange-50/30 transition-colors cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const file = e.dataTransfer.files[0];
+                    if (file) handleFileUpload(file);
+                  }}
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload(file);
+                    }}
+                  />
+                  {isUploading ? (
+                    <p className="text-sm text-orange-500 font-medium">กำลังอัปโหลด...</p>
+                  ) : (
+                    <>
+                      <Upload className="w-6 h-6 text-gray-400 mx-auto mb-1" />
+                      <p className="text-xs text-gray-500">คลิกหรือลากไฟล์ภาพมาวางที่นี่</p>
+                      <p className="text-xs text-gray-400 mt-0.5">JPG, PNG, WEBP, GIF</p>
+                    </>
+                  )}
+                </div>
+
               </div>
 
               <div>
@@ -388,7 +403,7 @@ export default function HealthCheckupManager() {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="คำอธิบายรายละเอียดโปรแกรม..."
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 

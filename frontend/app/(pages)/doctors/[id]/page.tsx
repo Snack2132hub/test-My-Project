@@ -1,21 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { RowDataPacket } from "mysql2";
 import { ArrowLeft, Calendar, Award, GraduationCap, BookOpen, Briefcase } from "lucide-react";
 import { Kanit } from "next/font/google";
-import { DOCTORS_DATA, getDoctorById } from "@/lib/doctorsData";
+import getPool from "@/lib/db";
+import { getDoctorById, type Doctor } from "@/lib/doctorsData";
+import { mapDoctorRow } from "@/lib/doctorsMap";
+
+export const dynamic = "force-dynamic";
 
 const kanit = Kanit({
   subsets: ["thai", "latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
-
-// Generate static params for all doctors
-export function generateStaticParams() {
-  return DOCTORS_DATA.map((doctor) => ({
-    id: doctor.id.toString(),
-  }));
-}
 
 interface DoctorDetailPageProps {
   params: Promise<{
@@ -23,9 +21,28 @@ interface DoctorDetailPageProps {
   }>;
 }
 
+async function loadDoctor(id: string): Promise<Doctor | undefined> {
+  const numericId = Number(id);
+  if (!Number.isNaN(numericId)) {
+    try {
+      const pool = getPool();
+      const [rows] = await pool.query<RowDataPacket[]>(
+        "SELECT * FROM doctor_detail WHERE dr_id = ?",
+        [numericId]
+      );
+      if (Array.isArray(rows) && rows.length > 0) {
+        return mapDoctorRow(rows[0] as never);
+      }
+    } catch {
+      // DB unavailable — fall back to bundled data
+    }
+  }
+  return getDoctorById(id);
+}
+
 export default async function DoctorDetailPage({ params }: DoctorDetailPageProps) {
   const { id } = await params;
-  const doctor = getDoctorById(id);
+  const doctor = await loadDoctor(id);
 
   if (!doctor) {
     notFound();

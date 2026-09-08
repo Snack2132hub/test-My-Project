@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
-import getPool from "@/lib/db";
 import {
   getMemoryCheckupPrograms,
   addMemoryCheckupProgram,
+  deleteMemoryCheckupProgram,
 } from "@/lib/checkupPrograms";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
+    const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
     const [rows] = await pool.query<any[]>(
       "SELECT id, title, price, location, time, contact, image, description FROM health_checkup_programs ORDER BY id ASC"
@@ -47,6 +48,7 @@ export async function POST(request: Request) {
     };
 
     try {
+      const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
       const [result]: any = await pool.query(
         "INSERT INTO health_checkup_programs (title, price, location, time, contact, image, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -71,5 +73,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, data: created, source: "memory" });
   } catch (error) {
     return NextResponse.json({ ok: false, message: "เกิดข้อผิดพลาดในการบันทึกข้อมูล" }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = Number(searchParams.get("id"));
+    if (!id) return NextResponse.json({ ok: false, message: "ระบุ ID ไม่ถูกต้อง" }, { status: 400 });
+    try {
+      const { default: getPool } = await import("@/lib/db");
+      const pool = getPool();
+      await pool.query("DELETE FROM health_checkup_programs WHERE id = ?", [id]);
+    } catch {}
+    deleteMemoryCheckupProgram(id);
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ ok: false, message: "เกิดข้อผิดพลาด" }, { status: 500 });
   }
 }
