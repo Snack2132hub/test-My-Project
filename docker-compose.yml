@@ -11,13 +11,10 @@ services:
     environment:
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
-      NEXT_PUBLIC_SHOW_DB_TEST: "true"
-      ENABLE_DB_DEBUG_ENDPOINT: "true"
       NEXT_PUBLIC_API_URL: "http://localhost:4000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
-      - /app/.next
     depends_on:
       db:
         condition: service_healthy

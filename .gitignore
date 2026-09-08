@@ -44,3 +44,5 @@ frontend/next-env.d.ts
 
 # Docker on Windows path artifacts (Turbopack creates these)
 /CUsers*
+node_modules
+node_modules

@@ -1,20 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DOCTORS_DATA } from "@/lib/doctorsData";
+import type { Doctor } from "@/lib/doctorsData";
 
 /**
  * คอมโพเนนต์ DoctorTeamSection (ส่วนทีมแพทย์เชี่ยวชาญ)
- * แสดงการ์ดรูปภาพแพทย์ พร้อมเชื่อมต่อไปยังหน้ารายละเอียดแพทย์ และปุ่มดูทั้งหมดไปยังหน้าบุคลากรแพทย์
+ * ดึงข้อมูลจาก /api/doctors (จัดการผ่านหน้า admin)
  */
 export default function DoctorTeamSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/doctors")
+      .then((r) => r.json())
+      .then((json) => {
+        if (!cancelled && json.ok && Array.isArray(json.data)) setDoctors(json.data);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // ดึงรายชื่อแพทย์ตัวอย่างมาแสดงในหน้าแรก
-  const featuredDoctors = DOCTORS_DATA.slice(0, 12);
+  const featuredDoctors = doctors.slice(0, 12);
   const itemsPerPage = 4;
   const maxIndex = Math.max(0, featuredDoctors.length - itemsPerPage);
 
@@ -27,6 +45,8 @@ export default function DoctorTeamSection() {
   };
 
   const visibleDoctors = featuredDoctors.slice(currentIndex, currentIndex + itemsPerPage);
+
+  if (!loading && doctors.length === 0) return null;
 
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 w-full bg-white border-t border-slate-100">
@@ -52,7 +72,15 @@ export default function DoctorTeamSection() {
 
           {/* กริดแสดงการ์ดแพทย์ */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full py-2">
-            {visibleDoctors.map((doctor) => (
+            {loading
+              ? Array.from({ length: itemsPerPage }).map((_, i) => (
+                  <div key={i} className="flex flex-col items-center">
+                    <div className="w-full aspect-[3/4] rounded-2xl bg-orange-50 border border-orange-100 animate-pulse mb-4" />
+                    <div className="h-4 w-2/3 bg-gray-100 rounded animate-pulse" />
+                    <div className="mt-2 h-3 w-1/2 bg-gray-100 rounded animate-pulse" />
+                  </div>
+                ))
+              : visibleDoctors.map((doctor) => (
               <Link
                 key={doctor.id}
                 href={`/doctors/${doctor.id}`}

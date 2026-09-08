@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   }
 
   const response = NextResponse.json({ ok: true, username });
-  response.cookies.set(ADMIN_SESSION_COOKIE, createSessionToken(username), {
+  response.cookies.set(ADMIN_SESSION_COOKIE, await createSessionToken(username), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",

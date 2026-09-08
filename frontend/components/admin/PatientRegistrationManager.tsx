@@ -124,13 +124,13 @@ export default function PatientRegistrationManager() {
                 <label className="block text-xs font-semibold text-gray-700 mb-1">หัวข้อขั้นตอน <span className="text-red-500">*</span></label>
                 <input required value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
                   placeholder="เช่น เตรียมเอกสารประจำตัว"
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">รายละเอียด</label>
                 <textarea rows={3} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })}
                   placeholder="รายละเอียดของขั้นตอนนี้..."
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">ลำดับ</label>

@@ -265,7 +265,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      href="#"
+                      href="/patient-registration"
                       className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ลงทะเบียนผู้ป่วยใหม่
@@ -302,7 +302,7 @@ export default function Navbar() {
                 <ul className="absolute left-0 top-full w-56 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   <li>
                     <Link
-                      href="#"
+                      href="/after-hours-clinic"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       คลินิกพิเศษนอกเวลา
@@ -310,7 +310,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      href="#"
+                      href="/jobs"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       สมัครงาน / รับสมัครบุคลากร
@@ -318,7 +318,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      href="#"
+                      href="/procurement"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ข่าวจัดซื้อจัดจ้าง
@@ -418,8 +418,33 @@ export default function Navbar() {
               onClick={() => toggleDropdown("mobile-services")}
               className="w-full flex justify-between items-center px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
             >
-              งานบริการ <ChevronDown className="w-4 h-4" />
+              งานบริการ <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === "mobile-services" ? "rotate-180" : ""}`} />
             </button>
+            {activeDropdown === "mobile-services" && (
+              <div className="pl-6 space-y-1 bg-gray-50 py-2 rounded-lg">
+                <Link
+                  href="/after-hours-clinic"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  คลินิกพิเศษนอกเวลา
+                </Link>
+                <Link
+                  href="/jobs"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  สมัครงาน / รับสมัครบุคลากร
+                </Link>
+                <Link
+                  href="/procurement"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  ข่าวจัดซื้อจัดจ้าง
+                </Link>
+              </div>
+            )}
             <Link
               href="/doctors"
               onClick={() => setIsMobileMenuOpen(false)}

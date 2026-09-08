@@ -7,7 +7,6 @@ import {
   HeartPulse,
   Stethoscope,
   ClipboardList,
-  PhoneCall,
   LogOut,
   Megaphone,
   ImageIcon,
@@ -22,9 +21,9 @@ import DoctorManager from '@/components/admin/DoctorManager'
 import NewsManager from '@/components/admin/NewsManager'
 import ProcurementManager from '@/components/admin/ProcurementManager'
 import CentersManager from '@/components/admin/CentersManager'
+import TreatmentCentersManager from '@/components/admin/TreatmentCentersManager'
 import AboutManager from '@/components/admin/AboutManager'
 import BannerManager from '@/components/admin/BannerManager'
-import DepartmentManager from '@/components/admin/DepartmentManager'
 import PatientRegistrationManager from '@/components/admin/PatientRegistrationManager'
 import AfterHoursManager from '@/components/admin/AfterHoursManager'
 
@@ -74,7 +73,6 @@ const navSections: NavSection[] = [
   {
     label: 'PAGES',
     items: [
-      { id: 'contact', icon: PhoneCall, label: 'ติดต่อเจ้าหน้าที่ IT' },
       { id: 'logout-nav', icon: LogOut, label: 'ออกจากระบบ', isLogout: true },
     ],
   },
@@ -102,7 +100,7 @@ function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, set
           )}
           {section.items.map((item) => {
             const Icon = item.icon
-            const patientNavIds = ['centers-specialized', 'hc-checkup', 'hc-vaccines', 'dept-emergency', 'dept-internal', 'dept-surgery', 'patient-reg']
+            const patientNavIds = ['centers-specialized', 'treatment-centers', 'hc-checkup', 'hc-vaccines', 'patient-reg']
             const servicesNavIds = ['news', 'procurement', 'centers-special', 'after-hours']
             const isActive =
               activeNav === item.id ||
@@ -184,11 +182,9 @@ function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, set
                       <>
                         {([
                           { label: 'ศูนย์รักษาเฉพาะทาง', nav: 'centers-specialized' },
+                          { label: 'เนื้อหาศูนย์รักษาเฉพาะทาง', nav: 'treatment-centers' },
                           { label: 'โปรแกรมตรวจสุขภาพ', nav: 'hc-checkup' },
                           { label: 'โปรแกรมฉีดวัคซีน', nav: 'hc-vaccines' },
-                          { label: 'ศูนย์อุบัติเหตุ-ฉุกเฉิน', nav: 'dept-emergency' },
-                          { label: 'ศูนย์อายุรกรรม', nav: 'dept-internal' },
-                          { label: 'ศูนย์ศัลยกรรม', nav: 'dept-surgery' },
                           { label: 'ลงทะเบียนผู้ป่วยใหม่', nav: 'patient-reg' },
                         ] as { label: string; nav: string }[]).map(({ label, nav }) => {
                           const childActive = nav !== '' && activeNav === nav
@@ -395,6 +391,10 @@ export default function Dashboard({ username, onLogout }: Props) {
             <div className="max-w-6xl mx-auto">
               <ProcurementManager />
             </div>
+          ) : activeNav === 'treatment-centers' ? (
+            <div className="max-w-6xl mx-auto">
+              <TreatmentCentersManager />
+            </div>
           ) : activeNav === 'centers-specialized' ? (
             <div className="max-w-6xl mx-auto">
               <CentersManager initialTab="specialized" />
@@ -402,18 +402,6 @@ export default function Dashboard({ username, onLogout }: Props) {
           ) : activeNav === 'centers-special' ? (
             <div className="max-w-6xl mx-auto">
               <CentersManager initialTab="special" />
-            </div>
-          ) : activeNav === 'dept-emergency' ? (
-            <div className="max-w-6xl mx-auto">
-              <DepartmentManager initialDept="emergency" />
-            </div>
-          ) : activeNav === 'dept-internal' ? (
-            <div className="max-w-6xl mx-auto">
-              <DepartmentManager initialDept="internal" />
-            </div>
-          ) : activeNav === 'dept-surgery' ? (
-            <div className="max-w-6xl mx-auto">
-              <DepartmentManager initialDept="surgery" />
             </div>
           ) : activeNav === 'patient-reg' ? (
             <div className="max-w-6xl mx-auto">

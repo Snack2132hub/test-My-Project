@@ -96,7 +96,7 @@ export default function AfterHoursManager() {
       <label className="block text-xs font-semibold text-gray-700 mb-1">{label}{required && <span className="text-red-500"> *</span>}</label>
       <input value={formData[key] as string} onChange={e => setFormData({ ...formData, [key]: e.target.value })}
         placeholder={placeholder} required={required}
-        className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+        className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
     </div>
   );
 

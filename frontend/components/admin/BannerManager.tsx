@@ -246,25 +246,25 @@ export default function BannerManager() {
                     <label className="block text-xs font-semibold text-gray-700 mb-1">ชื่อหลัก (Title)</label>
                     <input value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
                       placeholder="เช่น โรงพยาบาลปากช่องนานา"
-                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">ชื่อรอง (Subtitle)</label>
                     <input value={formData.subtitle} onChange={e => setFormData({ ...formData, subtitle: e.target.value })}
                       placeholder="เช่น Pakchongnana Hospital"
-                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">คำบรรยาย</label>
                     <textarea rows={2} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })}
                       placeholder="เช่น ร่วมใจ ใฝ่บริการ บริการดุจญาติมิตร"
-                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">ข้อความปุ่ม</label>
                     <input value={formData.button_text} onChange={e => setFormData({ ...formData, button_text: e.target.value })}
                       placeholder="เช่น เกี่ยวกับเรา"
-                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
                   </div>
                 </>
               )}

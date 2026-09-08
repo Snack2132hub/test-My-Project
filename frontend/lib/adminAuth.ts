@@ -1,5 +1,3 @@
-import crypto from "node:crypto";
-
 export const ADMIN_SESSION_COOKIE = "admin_session";
 export const ADMIN_SESSION_MAX_AGE_SECONDS = 60 * 60 * 8; // 8 hours
 
@@ -7,51 +5,68 @@ function getSecret(): string {
   return process.env.ADMIN_SESSION_SECRET || "pnnh_default_admin_session_secret_2026";
 }
 
-function sign(payload: string): string {
-  return crypto.createHmac("sha256", getSecret()).update(payload).digest("base64url");
+async function hmacSign(payload: string): Promise<string> {
+  const enc = new TextEncoder();
+  const key = await globalThis.crypto.subtle.importKey(
+    "raw",
+    enc.encode(getSecret()),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const sig = await globalThis.crypto.subtle.sign("HMAC", key, enc.encode(payload));
+  return btoa(String.fromCharCode(...new Uint8Array(sig)));
 }
 
-function timingSafeStringEqual(a: string, b: string): boolean {
-  const aBuf = Buffer.from(a);
-  const bBuf = Buffer.from(b);
-  if (aBuf.length !== bBuf.length) return false;
-  return crypto.timingSafeEqual(aBuf, bBuf);
+async function hmacVerify(payload: string, signature: string): Promise<boolean> {
+  try {
+    const expected = await hmacSign(payload);
+    if (expected.length !== signature.length) return false;
+    let diff = 0;
+    for (let i = 0; i < expected.length; i++) {
+      diff |= expected.charCodeAt(i) ^ signature.charCodeAt(i);
+    }
+    return diff === 0;
+  } catch {
+    return false;
+  }
 }
 
 export function verifyCredentials(username: string, password: string): boolean {
   const expectedUsername = process.env.ADMIN_USERNAME || "admin";
   const expectedPassword = process.env.ADMIN_PASSWORD || "admin123";
-  return (
-    timingSafeStringEqual(username, expectedUsername) &&
-    timingSafeStringEqual(password, expectedPassword)
-  );
+  return username === expectedUsername && password === expectedPassword;
 }
 
-export function createSessionToken(username: string): string {
+export async function createSessionToken(username: string): Promise<string> {
   const expiresAt = Date.now() + ADMIN_SESSION_MAX_AGE_SECONDS * 1000;
   const payload = `${expiresAt}:${username}`;
-  const encodedPayload = Buffer.from(payload, "utf8").toString("base64url");
-  const signature = sign(payload);
-  return `${encodedPayload}.${signature}`;
+  const encodedPayload = btoa(encodeURIComponent(payload));
+  const signature = await hmacSign(payload);
+  return `${encodedPayload}.${btoa(signature)}`;
 }
 
-export function verifySessionToken(token: string | undefined): { username: string } | null {
+export async function verifySessionToken(token: string | undefined): Promise<{ username: string } | null> {
   if (!token) return null;
-  const [encodedPayload, signature] = token.split(".");
-  if (!encodedPayload || !signature) return null;
+  const parts = token.split(".");
+  if (parts.length < 2) return null;
+  const encodedPayload = parts[0];
+  const signature = atob(parts.slice(1).join("."));
 
   let payload: string;
   try {
-    payload = Buffer.from(encodedPayload, "base64url").toString("utf8");
+    payload = decodeURIComponent(atob(encodedPayload));
   } catch {
     return null;
   }
 
-  if (!timingSafeStringEqual(sign(payload), signature)) return null;
+  const valid = await hmacVerify(payload, signature);
+  if (!valid) return null;
 
-  const [expiresAtRaw, ...usernameParts] = payload.split(":");
-  const username = usernameParts.join(":");
-  const expiresAt = Number(expiresAtRaw);
+  const colonIdx = payload.indexOf(":");
+  if (colonIdx === -1) return null;
+  const expiresAt = Number(payload.slice(0, colonIdx));
+  const username = payload.slice(colonIdx + 1);
   if (!Number.isFinite(expiresAt) || Date.now() > expiresAt || !username) return null;
 
   return { username };

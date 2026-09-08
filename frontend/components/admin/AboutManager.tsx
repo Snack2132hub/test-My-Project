@@ -327,7 +327,7 @@ export default function AboutManager({ initialTab = "executives" }: { initialTab
                 <label className="block text-xs font-semibold text-gray-700 mb-1">ชื่อ-นามสกุล</label>
                 <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
                   placeholder="เช่น นพ.สมชาย ใจดี"
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
 
               {/* ตำแหน่ง */}

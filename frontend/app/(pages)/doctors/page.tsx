@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, Suspense } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -8,7 +8,6 @@ import { ChevronDown, Search, X, Stethoscope } from "lucide-react";
 import { Kanit } from "next/font/google";
 import {
   Doctor,
-  DOCTORS_DATA,
   POSITION_LEVELS,
   MEDICAL_CENTERS,
 } from "@/lib/doctorsData";
@@ -26,10 +25,28 @@ function DoctorsDirectoryContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPosition, setSelectedPosition] = useState(initialPosition);
   const [selectedCenter, setSelectedCenter] = useState(initialDept);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/doctors")
+      .then((r) => r.json())
+      .then((json) => {
+        if (!cancelled && json.ok && Array.isArray(json.data)) setDoctors(json.data);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // กรองรายชื่อแพทย์ตามเงื่อนไขที่เลือก
   const filteredDoctors = useMemo(() => {
-    return DOCTORS_DATA.filter((doctor) => {
+    return doctors.filter((doctor) => {
       // ค้นหาตามข้อความ (ชื่อ, แผนก, ความเชี่ยวชาญ)
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();
@@ -64,7 +81,7 @@ function DoctorsDirectoryContent() {
 
       return true;
     });
-  }, [searchQuery, selectedPosition, selectedCenter]);
+  }, [doctors, searchQuery, selectedPosition, selectedCenter]);
 
   const handleResetFilters = () => {
     setSearchQuery("");
@@ -210,7 +227,17 @@ function DoctorsDirectoryContent() {
         </div>
 
         {/* ตารางแสดงการ์ดแพทย์ (4 คอลัมน์ตามรูปที่ 1) */}
-        {filteredDoctors.length > 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="flex flex-col items-center">
+                <div className="w-full aspect-[3/4] rounded-2xl bg-orange-50 border border-orange-100 animate-pulse" />
+                <div className="mt-3.5 h-4 w-2/3 bg-gray-100 rounded animate-pulse" />
+                <div className="mt-2 h-3 w-1/2 bg-gray-100 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+        ) : filteredDoctors.length > 0 ? (
           <div
             id="doctors-grid"
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8"

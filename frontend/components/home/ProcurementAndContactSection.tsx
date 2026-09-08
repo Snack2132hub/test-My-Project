@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   Briefcase,
@@ -17,73 +17,20 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
-/**
- * ข้อมูลข่าวจัดซื้อจัดจ้าง และ ข่าวสมัครงาน (3 หน้า หน้าละ 6 รายการ)
- */
-const procurementData = {
-  procurement: [
-    // หน้า 1
-    [
-      { id: 1, title: "ร่างประกาศ ประกวดราคาจัดซื้อน้ำยาตรวจวิเคราะห์ทางห้องปฏิบัติการทางการแพทย์ พร้อมเครื่องตรวจวิเคราะห์", date: "24 กรกฎาคม 2569" },
-      { id: 2, title: "ยกเลิกประกาศ ประกวดราคาการจัดซื้อก๊าซออกซิเจนเหลวทางการแพทย์ จำนวน ๒๑๒,๒๒๐ ลูกบาศก์เมตร ด้วยวิธีประกวดราคา...", date: "24 มิถุนายน 2569" },
-      { id: 3, title: "ประกาศผู้ชนะการเสนอราคา จัดซื้อวัสดุคอมพิวเตอร์และอุปกรณ์เครือข่ายสำหรับระบบสารสนเทศโรงพยาบาล", date: "23 มิถุนายน 2569" },
-      { id: 4, title: "ประกวดราคาซื้อเครื่องติดตามการทำงานของหัวใจและสัญญาณชีพ ระดับกลาง จำนวน ๕ เครื่อง ด้วยวิธีประกวดราคาอิเล็กทรอนิกส์", date: "20 มิถุนายน 2569" },
-      { id: 5, title: "ประกาศจัดซื้อจัดจ้างเวชภัณฑ์ยาและวัสดุการแพทย์ ประจำไตรมาสที่ ๔/๒๕๖๙ โรงพยาบาลปากช่องนานา", date: "18 มิถุนายน 2569" },
-      { id: 6, title: "เผยแพร่แผนการจัดซื้อจัดจ้าง เครื่องเอ็กซเรย์เคลื่อนที่ขนาดไม่น้อยกว่า ๓๐๐ mA ประจำปีงบประมาณ ๒๕๖๙", date: "15 มิถุนายน 2569" },
-      { id: 19, title: "ประกาศจัดซื้อจัดจ้างเวชภัณฑ์ยาและวัสดุการแพทย์ ประจำไตรมาสที่ ๔/๒๕๖๙ โรงพยาบาลปากช่องนานา", date: "18 มิถุนายน 2569" },
-      { id: 20, title: "เผยแพร่แผนการจัดซื้อจัดจ้าง เครื่องเอ็กซเรย์เคลื่อนที่ขนาดไม่น้อยกว่า ๓๐๐ mA ประจำปีงบประมาณ ๒๕๖๙", date: "15 มิถุนายน 2569" },
-    
-    ],
-    // หน้า 2
-    [
-      { id: 7, title: "ประกาศผู้ชนะการเสนอราคา ซื้อชุดเครื่องมือผ่าตัดผ่านกล้องข้อเข่าและข้อไหล่ ด้วยวิธีประกวดราคาอิเล็กทรอนิกส์", date: "12 มิถุนายน 2569" },
-      { id: 8, title: "ประกวดราคาจ้างเหมาบริการทำความสะอาดอาคารผู้ป่วยนอก อาคารอุบัติเหตุ และอาคารอำนวยการ", date: "10 มิถุนายน 2569" },
-      { id: 9, title: "ประกาศประกวดราคาซื้อครุภัณฑ์ยานพาหนะและขนส่ง รถพยาบาลฉุกเฉินระดับสูงพร้อมอุปกรณ์ประจำรถ", date: "08 มิถุนายน 2569" },
-      { id: 10, title: "ยกเลิกประกาศ ประกวดราคาจัดซื้อวัสดุวิทยาศาสตร์การแพทย์ สำหรับห้องปฏิบัติการชันสูตรโรค", date: "05 มิถุนายน 2569" },
-      { id: 11, title: "ประกาศผลการคัดเลือกผู้เสนอราคา งานจ้างปรับปรุงห้องผ่าตัดแรงดันลบ (Negative Pressure Room)", date: "02 มิถุนายน 2569" },
-      { id: 12, title: "ประกาศจัดซื้อเครื่องช่วยหายใจชนิดควบคุมด้วยปริมาตรและแรงดัน จำนวน ๓ เครื่อง", date: "30 พฤษภาคม 2569" },
-    ],
-    // หน้า 3
-    [
-      { id: 13, title: "เผยแพร่ร่างประกาศประกวดราคาซื้อระบบจัดเก็บและรับส่งข้อมูลภาพทางการแพทย์ (PACS System)", date: "28 พฤษภาคม 2569" },
-      { id: 14, title: "ประกาศผู้ชนะการเสนอราคา จัดซื้อชุดตรวจภูมิคุ้มกันวิทยาและเคมีคลินิกอัตโนมัติ", date: "25 พฤษภาคม 2569" },
-      { id: 15, title: "ประกาศประกวดราคาซื้อวัสดุทันตกรรมและอุปกรณ์จัดฟัน ประจำปีงบประมาณ ๒๕๖๙", date: "22 พฤษภาคม 2569" },
-      { id: 16, title: "ประกาศจ้างเหมาบำรุงรักษาและซ่อมแซมระบบบำบัดน้ำเสียโรงพยาบาลปากช่องนานา", date: "20 พฤษภาคม 2569" },
-      { id: 17, title: "ประกาศผู้ชนะการเสนอราคา ซื้อวัสดุสำนักงานและงานพิมพ์เอกสารทางการแพทย์", date: "18 พฤษภาคม 2569" },
-      { id: 18, title: "เผยแพร่แผนการจัดหาครุภัณฑ์การแพทย์และวิศวกรรมการแพทย์ ปีงบประมาณ ๒๕๗0", date: "15 พฤษภาคม 2569" },
-    ],
-  ],
-  jobs: [
-    // หน้า 1
-    [
-      { id: 1, title: "ประกาศรับสมัครบุคคลเพื่อเลือกสรรเป็นพนักงานกระทรวงสาธารณสุข ตำแหน่ง พยาบาลวิชาชีพ จำนวน ๑๕ อัตรา", date: "20 กรกฎาคม 2569" },
-      { id: 2, title: "ประกาศรับสมัครคัดเลือกบุคคลเข้าปฏิบัติงาน ตำแหน่ง นักรังสีการแพทย์ ปฏิบัติงานกลุ่มงานรังสีวิทยา จำนวน ๓ อัตรา", date: "18 กรกฎาคม 2569" },
-      { id: 3, title: "ประกาศรับสมัครลูกจ้างชั่วคราวเงินบำรุง ตำแหน่ง เภสัชกร กลุ่มงานเภสัชกรรม จำนวน ๒ อัตรา", date: "15 กรกฎาคม 2569" },
-      { id: 4, title: "ประกาศรายชื่อผู้มีสิทธิ์เข้ารับการประเมินความรู้ความสามารถ ตำแหน่ง นักจัดการงานทั่วไป", date: "12 กรกฎาคม 2569" },
-      { id: 5, title: "ประกาศผลการคัดเลือกบุคคลเพื่อบรรจุเป็นพนักงานพกส. ตำแหน่ง นักเทคนิคการแพทย์", date: "10 กรกฎาคม 2569" },
-      { id: 6, title: "ประกาศรับสมัครลูกจ้างชั่วคราว ตำแหน่ง พนักงานช่วยเหลือคนไข้ (NA) จำนวน ๑๐ อัตรา", date: "08 กรกฎาคม 2569" },
-    ],
-    // หน้า 2
-    [
-      { id: 7, title: "ประกาศรับสมัครคัดเลือกบุคคลเพื่อบรรจุเป็นลูกจ้างชั่วคราว ตำแหน่ง เจ้าพนักงานการเงินและบัญชี", date: "05 กรกฎาคม 2569" },
-      { id: 8, title: "ประกาศรายชื่อผู้ผ่านการคัดเลือกเป็นพนักงานกระทรวงสาธารณสุข ตำแหน่ง นักกายภาพบำบัด", date: "02 กรกฎาคม 2569" },
-      { id: 9, title: "ประกาศรับสมัครบุคคลเพื่อเลือกสรรเป็นลูกจ้าง ตำแหน่ง พนักงานขับรถยนต์ งานอุบัติเหตุ-ฉุกเฉิน ๒ อัตรา", date: "28 มิถุนายน 2569" },
-      { id: 10, title: "ประกาศขึ้นบัญชีผู้ผ่านการคัดเลือก ตำแหน่ง นักวิชาการสาธารณสุขปฏิบัติการ", date: "25 มิถุนายน 2569" },
-      { id: 11, title: "ประกาศรับสมัครลูกจ้างชั่วคราวเงินบำรุง ตำแหน่ง พนักงานประกอบอาหาร กลุ่มงานโภชนวิทยา", date: "22 มิถุนายน 2569" },
-      { id: 12, title: "ประกาศรายชื่อผู้มีสิทธิ์สอบสัมภาษณ์ ตำแหน่ง เจ้าพนักงานพัสดุ กลุ่มงานพัสดุ", date: "20 มิถุนายน 2569" },
-    ],
-    // หน้า 3
-    [
-      { id: 13, title: "ประกาศรับสมัครบุคคลเข้าทำงาน ตำแหน่ง นักวิชาการคอมพิวเตอร์ ศูนย์สารสนเทศ จำนวน ๑ อัตรา", date: "18 มิถุนายน 2569" },
-      { id: 14, title: "ประกาศผลการสอบคัดเลือกพนักงานตำแหน่ง เจ้าพนักงานเวชสถิติ งานเวชสถิติและคอมพิวเตอร์", date: "15 มิถุนายน 2569" },
-      { id: 15, title: "ประกาศรับสมัครคัดเลือกบุคคลเป็นลูกจ้างชั่วคราว ตำแหน่ง พนักงานซ่อมบำรุง งานซ่อมบำรุงและวิศวกรรม", date: "12 มิถุนายน 2569" },
-      { id: 16, title: "ประกาศรายชื่อผู้ผ่านการเลือกสรรเป็นพนักงานกระทรวงสาธารณสุข ตำแหน่ง เจ้าพนักงานธุรการ", date: "10 มิถุนายน 2569" },
-      { id: 17, title: "ประกาศรับสมัครสอบแข่งขันเพื่อบรรจุบุคคล ตำแหน่ง นักโภชนาการ ปฏิบัติงานกลุ่มงานโภชนาการ", date: "08 มิถุนายน 2569" },
-      { id: 18, title: "ประกาศขึ้นบัญชีและยกเลิกบัญชีผู้ผ่านการเลือกสรร ตำแหน่ง ผู้ช่วยพยาบาล", date: "05 มิถุนายน 2569" },
-    ],
-  ],
-};
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 const ITEMS_PER_PAGE = 8;
+
+interface ProcurementRow {
+  id: number;
+  title: string;
+  published_at: string;
+}
+
+function formatThaiDate(value: string): string {
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric" });
+}
 /**
  * คอมโพเนนต์ ProcurementAndContactSection
  * ประกอบด้วย:
@@ -95,17 +42,37 @@ export default function ProcurementAndContactSection() {
   const [procurementTab, setProcurementTab] = useState<"procurement" | "jobs">("procurement");
   const [procurementPage, setProcurementPage] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [cache, setCache] = useState<Partial<Record<"procurement" | "jobs", ProcurementRow[]>>>({});
   const router = useRouter();
-const currentNews = procurementData[procurementTab].flat();
 
-const totalPages = Math.ceil(
-  currentNews.length / ITEMS_PER_PAGE
-);
+  useEffect(() => {
+    if (cache[procurementTab]) return;
+    const apiType = procurementTab === "jobs" ? "job" : "procurement";
+    let cancelled = false;
+    fetch(`${API}/api/procurement?type=${apiType}&page=1&limit=60`)
+      .then((r) => r.json())
+      .then((json) => {
+        if (!cancelled) {
+          setCache((prev) => ({ ...prev, [procurementTab]: json.ok && Array.isArray(json.data) ? json.data : [] }));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setCache((prev) => ({ ...prev, [procurementTab]: [] }));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [procurementTab, cache]);
 
-const paginatedNews = currentNews.slice(
-  procurementPage * ITEMS_PER_PAGE,
-  (procurementPage + 1) * ITEMS_PER_PAGE
-);
+  const loading = cache[procurementTab] === undefined;
+  const currentNews = cache[procurementTab] ?? [];
+
+  const totalPages = Math.max(1, Math.ceil(currentNews.length / ITEMS_PER_PAGE));
+
+  const paginatedNews = currentNews.slice(
+    procurementPage * ITEMS_PER_PAGE,
+    (procurementPage + 1) * ITEMS_PER_PAGE
+  );
   return (
     <section
       className="relative py-20 px-4 sm:px-6 lg:px-8 w-full overflow-hidden bg-cover bg-center bg-no-repeat"
@@ -169,7 +136,18 @@ const paginatedNews = currentNews.slice(
                 transition={{ duration: 0.25 }}
                 className="divide-y divide-gray-100"
               >
-                {paginatedNews.map((item) => (
+                {loading ? (
+                  Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="py-3">
+                      <div className="h-4 bg-gray-100 rounded animate-pulse" />
+                    </div>
+                  ))
+                ) : paginatedNews.length === 0 ? (
+                  <div className="py-10 text-center text-sm text-gray-400">
+                    ยังไม่มีประกาศในหมวดนี้
+                  </div>
+                ) : (
+                  paginatedNews.map((item) => (
                     <div
                       key={item.id}
                       className="py-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1 group cursor-pointer hover:bg-orange-50/40 rounded-lg transition-colors"
@@ -179,10 +157,11 @@ const paginatedNews = currentNews.slice(
                       </h4>
 
                       <span className="text-[16px] text-gray-400 font-light shrink-0">
-                        {item.date}
+                        {formatThaiDate(item.published_at)}
                       </span>
                     </div>
-  ))}
+                  ))
+                )}
               </motion.div>
             </AnimatePresence>
             <div className="flex justify-end mt-4 pr-4">

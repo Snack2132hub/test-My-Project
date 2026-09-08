@@ -306,7 +306,7 @@ export default function HealthCheckupManager({ initialTab = "announcements" }: {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="เช่น โปรแกรมตรวจสุขภาพ เพศชาย อายุ 35 ปีขึ้นไป"
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 
@@ -320,7 +320,7 @@ export default function HealthCheckupManager({ initialTab = "announcements" }: {
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     placeholder="เช่น ราคา 1,150 บาท"
-                    className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   />
                 </div>
               )}
@@ -403,7 +403,7 @@ export default function HealthCheckupManager({ initialTab = "announcements" }: {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="คำอธิบายรายละเอียดโปรแกรม..."
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 

@@ -54,3 +54,7 @@ export function addMemoryCheckupProgram(item: Omit<CheckupProgram, "id">): Check
   globalCheckupPrograms = [newItem, ...globalCheckupPrograms];
   return newItem;
 }
+
+export function deleteMemoryCheckupProgram(id: number): void {
+  globalCheckupPrograms = globalCheckupPrograms.filter((a) => a.id !== id);
+}

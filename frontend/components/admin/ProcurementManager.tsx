@@ -225,7 +225,7 @@ export default function ProcurementManager() {
                 <label className="block text-xs font-semibold text-gray-700 mb-1">หัวข้อ <span className="text-red-500">*</span></label>
                 <input required value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
                   placeholder={formData.type === "job" ? "เช่น รับสมัครพยาบาลวิชาชีพ จำนวน 3 อัตรา" : "เช่น ประกาศจัดซื้อครุภัณฑ์การแพทย์"}
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
 
               {/* เอกสาร/ลิงก์ */}
@@ -233,7 +233,7 @@ export default function ProcurementManager() {
                 <label className="block text-xs font-semibold text-gray-700 mb-1">ลิงก์เอกสาร / URL (ถ้ามี)</label>
                 <input value={formData.document_url} onChange={e => setFormData({ ...formData, document_url: e.target.value })}
                   placeholder="https://... หรือ /uploads/file.pdf"
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
 
               {/* วันที่ */}

@@ -12,6 +12,13 @@ interface Center {
   display_order: number;
 }
 
+const ICON_OPTIONS = [
+  { value: "stethoscope", label: "หูฟังแพทย์ (ค่าเริ่มต้น)" },
+  { value: "house", label: "อาคาร / โรงพยาบาล" },
+  { value: "bed", label: "เตียงผู้ป่วย" },
+  { value: "user", label: "ผู้ป่วย / ตรวจสุขภาพ" },
+];
+
 export default function CentersManager({ initialTab = "specialized" }: { initialTab?: string }) {
   const activeTab = initialTab;
   const [items, setItems] = useState<Center[]>([]);
@@ -117,6 +124,7 @@ export default function CentersManager({ initialTab = "specialized" }: { initial
               <tr>
                 <th className="py-3 px-4 w-12">ลำดับ</th>
                 <th className="py-3 px-4">ชื่อศูนย์</th>
+                <th className="py-3 px-4">ไอคอน</th>
                 <th className="py-3 px-4">ลิงก์</th>
                 <th className="py-3 px-4 text-center">จัดการ</th>
               </tr>
@@ -126,6 +134,9 @@ export default function CentersManager({ initialTab = "specialized" }: { initial
                 <tr key={item.id} className="hover:bg-orange-50/30 transition-colors">
                   <td className="py-3 px-4 text-center text-gray-400 text-xs">{item.display_order}</td>
                   <td className="py-3 px-4 font-semibold text-gray-900">{item.title}</td>
+                  <td className="py-3 px-4 text-xs text-gray-500">
+                    {ICON_OPTIONS.find(o => o.value === (item.iconType || "stethoscope"))?.label || item.iconType}
+                  </td>
                   <td className="py-3 px-4 text-xs text-blue-600 max-w-[200px] truncate">{item.href || "-"}</td>
                   <td className="py-3 px-4 text-center">
                     <div className="flex items-center justify-center gap-2">
@@ -174,7 +185,18 @@ export default function CentersManager({ initialTab = "specialized" }: { initial
                 <label className="block text-xs font-semibold text-gray-700 mb-1">ชื่อศูนย์ <span className="text-red-500">*</span></label>
                 <input required value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
                   placeholder="เช่น ศูนย์สุขภาพสตรี, คลินิกเบาหวาน"
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+              </div>
+
+              {/* ไอคอน */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">ไอคอน</label>
+                <select value={formData.iconType} onChange={e => setFormData({ ...formData, iconType: e.target.value })}
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+                  {ICON_OPTIONS.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
               </div>
 
               {/* ลิงก์ */}
@@ -182,7 +204,7 @@ export default function CentersManager({ initialTab = "specialized" }: { initial
                 <label className="block text-xs font-semibold text-gray-700 mb-1">ลิงก์ (href)</label>
                 <input value={formData.href} onChange={e => setFormData({ ...formData, href: e.target.value })}
                   placeholder="เช่น /patient-services?dept=women"
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
 
               {/* ลำดับ */}

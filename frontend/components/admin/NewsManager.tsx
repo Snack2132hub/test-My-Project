@@ -3,8 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Plus, Trash2, Edit3, RefreshCw, Bell, Upload, X, ChevronLeft, ChevronRight } from "lucide-react";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-
 const CATEGORIES = [
   { value: "pr_news", label: "ข่าวประชาสัมพันธ์" },
   { value: "activity", label: "กิจกรรม" },
@@ -44,7 +42,7 @@ export default function NewsManager() {
     setLoading(true);
     try {
       const cat = activeCategory !== "all" ? `&category=${activeCategory}` : "";
-      const res = await fetch(`${API}/api/news?page=${page}&limit=${limit}${cat}`);
+      const res = await fetch(`/api/news?page=${page}&limit=${limit}${cat}`);
       const json = await res.json();
       if (json.ok) { setItems(json.data); setTotal(json.total); }
     } catch { }
@@ -65,7 +63,7 @@ export default function NewsManager() {
 
   const handleDelete = async (id: number) => {
     if (!confirm("ต้องการลบข่าวนี้ใช่หรือไม่?")) return;
-    await fetch(`${API}/api/news/${id}`, { method: "DELETE" });
+    await fetch(`/api/news/${id}`, { method: "DELETE" });
     fetchNews();
   };
 
@@ -86,7 +84,7 @@ export default function NewsManager() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const url = editingId ? `${API}/api/news/${editingId}` : `${API}/api/news`;
+      const url = editingId ? `/api/news/${editingId}` : `/api/news`;
       const res = await fetch(url, {
         method: editingId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
@@ -220,7 +218,7 @@ export default function NewsManager() {
                 <label className="block text-xs font-semibold text-gray-700 mb-1">หัวข้อข่าว <span className="text-red-500">*</span></label>
                 <input required value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
                   placeholder="เช่น โรงพยาบาลปากช่องนานาจัดกิจกรรม..."
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
 
               {/* หมวดหมู่ */}
@@ -237,7 +235,7 @@ export default function NewsManager() {
                 <label className="block text-xs font-semibold text-gray-700 mb-1">เนื้อหา (ถ้ามี)</label>
                 <textarea rows={3} value={formData.content} onChange={e => setFormData({ ...formData, content: e.target.value })}
                   placeholder="รายละเอียดข่าว..."
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
 
               {/* รูปภาพ */}
