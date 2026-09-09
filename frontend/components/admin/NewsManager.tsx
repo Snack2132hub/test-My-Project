@@ -3,7 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Plus, Trash2, Edit3, RefreshCw, Bell, Upload, X, ChevronLeft, ChevronRight } from "lucide-react";
 
-const CATEGORIES = [
+interface CategoryOption { value: string; label: string }
+
+const CATEGORIES: CategoryOption[] = [
   { value: "pr_news", label: "ข่าวประชาสัมพันธ์" },
   { value: "activity", label: "กิจกรรม" },
   { value: "after_hours", label: "คลินิกพิเศษนอกเวลา" },
@@ -21,11 +23,12 @@ interface NewsItem {
 
 const emptyForm = { title: "", category: "pr_news", image_url: "", content: "" };
 
-export default function NewsManager() {
+export default function NewsManager({ categories = CATEGORIES }: { categories?: CategoryOption[] } = {}) {
+  const locked = categories.length === 1;
   const [items, setItems] = useState<NewsItem[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState(locked ? categories[0].value : "all");
   const limit = 10;
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -122,16 +125,18 @@ export default function NewsManager() {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex flex-wrap gap-2 my-5 p-1 bg-gray-100/80 rounded-xl">
-        {[{ value: "all", label: "ทั้งหมด" }, ...CATEGORIES].map(cat => (
-          <button key={cat.value} onClick={() => setActiveCategory(cat.value)}
-            className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-              activeCategory === cat.value ? "bg-white text-[#f97316] shadow-xs" : "text-gray-600 hover:text-gray-900"
-            }`}>
-            {cat.label}
-          </button>
-        ))}
-      </div>
+      {!locked && (
+        <div className="flex flex-wrap gap-2 my-5 p-1 bg-gray-100/80 rounded-xl">
+          {[{ value: "all", label: "ทั้งหมด" }, ...categories].map(cat => (
+            <button key={cat.value} onClick={() => setActiveCategory(cat.value)}
+              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                activeCategory === cat.value ? "bg-white text-[#f97316] shadow-xs" : "text-gray-600 hover:text-gray-900"
+              }`}>
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Table */}
       <div className="overflow-x-auto">
@@ -225,8 +230,9 @@ export default function NewsManager() {
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1">หมวดหมู่ <span className="text-red-500">*</span></label>
                 <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
-                  {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                  disabled={locked}
+                  className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white disabled:bg-gray-100 disabled:text-gray-400">
+                  {categories.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                 </select>
               </div>
 

@@ -1,55 +1,118 @@
-export interface Center {
-  id: number;
-  title: string;
-  iconType: string;
-  href: string;
-  type: "specialized" | "special";
-  display_order: number;
+import type { TreatmentCenter } from "@/lib/treatmentCentersData";
+
+/** ศูนย์รักษาพิเศษ (คลินิกเฉพาะโรค) — โครงสร้างข้อมูลเดียวกับศูนย์รักษาเฉพาะทาง */
+export type SpecialCenter = TreatmentCenter;
+
+const B = ["/img/indexbanner/herobannertest01.png", "/img/indexbanner/herobannertest02.png"];
+
+let centers: SpecialCenter[] = [
+  {
+    id: 1,
+    slug: "diabetes",
+    title_th: "คลินิกเบาหวาน",
+    title_en: "Diabetes Clinic",
+    icon_type: "activity",
+    description:
+      "ให้บริการตรวจวินิจฉัย ติดตาม และดูแลผู้ป่วยเบาหวานแบบองค์รวม โดยทีมอายุรแพทย์ พยาบาลเวชปฏิบัติ นักโภชนาการ และเภสัชกร เพื่อควบคุมระดับน้ำตาลและป้องกันภาวะแทรกซ้อน",
+    highlight_text: "คุมน้ำตาลให้อยู่หมัด ลดความเสี่ยงภาวะแทรกซ้อนระยะยาว",
+    banners: B,
+    services: [
+      "ตรวจคัดกรองและวินิจฉัยโรคเบาหวาน (FBS, HbA1c)",
+      "ปรับยาและอินซูลินโดยแพทย์เฉพาะทาง",
+      "ให้คำปรึกษาด้านโภชนาการและการควบคุมอาหาร",
+      "ตรวจคัดกรองภาวะแทรกซ้อนที่ตา ไต และเท้า",
+      "คลินิกให้ความรู้การดูแลตนเองสำหรับผู้ป่วยเบาหวาน",
+    ],
+    facilities: [
+      "เครื่องตรวจน้ำตาลปลายนิ้วและ HbA1c ในคลินิก",
+      "ห้องให้คำปรึกษาโภชนาการเฉพาะบุคคล",
+      "อุปกรณ์ตรวจคัดกรองปลายประสาทเท้า",
+    ],
+    hours_regular: "จันทร์ - ศุกร์ : 08.00 - 12.00 น.",
+    hours_after: "",
+    hours_emergency: "",
+    contact_ext: "310",
+    doctor_department: "อายุรกรรม",
+    display_order: 1,
+  },
+  {
+    id: 2,
+    slug: "hypertension",
+    title_th: "คลินิกความดันโลหิตสูง",
+    title_en: "Hypertension Clinic",
+    icon_type: "heart-pulse",
+    description:
+      "ให้บริการตรวจ วินิจฉัย และควบคุมความดันโลหิตสูง พร้อมประเมินความเสี่ยงโรคหัวใจและหลอดเลือด โดยทีมอายุรแพทย์และพยาบาลเฉพาะทาง",
+    highlight_text: "ควบคุมความดันให้คงที่ ลดความเสี่ยงอัมพาตและโรคหัวใจ",
+    banners: B,
+    services: [
+      "วัดและติดตามความดันโลหิตอย่างเป็นระบบ",
+      "ปรับยาลดความดันตามแนวทางมาตรฐาน",
+      "ประเมินความเสี่ยงโรคหลอดเลือดสมองและหัวใจ",
+      "ให้คำแนะนำการปรับพฤติกรรมและควบคุมเกลือ/โซเดียม",
+    ],
+    facilities: [
+      "เครื่องวัดความดันอัตโนมัติและ ABPM (วัดต่อเนื่อง 24 ชม.)",
+      "เครื่องตรวจคลื่นไฟฟ้าหัวใจ (EKG)",
+    ],
+    hours_regular: "จันทร์ - ศุกร์ : 08.00 - 12.00 น.",
+    hours_after: "",
+    hours_emergency: "",
+    contact_ext: "311",
+    doctor_department: "อายุรกรรม",
+    display_order: 2,
+  },
+  {
+    id: 3,
+    slug: "cancer",
+    title_th: "คลินิกมะเร็ง",
+    title_en: "Cancer Clinic",
+    icon_type: "file-text",
+    description:
+      "ให้บริการตรวจคัดกรอง วินิจฉัย และดูแลผู้ป่วยโรคมะเร็งแบบประคับประคอง ประสานงานส่งต่อเพื่อรับเคมีบำบัดและรังสีรักษา พร้อมทีมดูแลแบบสหวิชาชีพ",
+    highlight_text: "ตรวจพบเร็ว ดูแลต่อเนื่อง เคียงข้างผู้ป่วยและครอบครัว",
+    banners: B,
+    services: [
+      "ตรวจคัดกรองมะเร็งที่พบบ่อย (เต้านม ปากมดลูก ลำไส้ใหญ่)",
+      "ประเมินและวินิจฉัยเบื้องต้น พร้อมส่งต่อผู้เชี่ยวชาญ",
+      "ติดตามอาการระหว่างและหลังการรักษา",
+      "การดูแลแบบประคับประคองและจัดการความปวด",
+      "ให้คำปรึกษาด้านจิตใจแก่ผู้ป่วยและครอบครัว",
+    ],
+    facilities: [
+      "ห้องตรวจและให้คำปรึกษาเป็นส่วนตัว",
+      "ระบบนัดหมายและส่งต่อผู้ป่วยกับศูนย์มะเร็งเครือข่าย",
+    ],
+    hours_regular: "จันทร์ - ศุกร์ : 08.00 - 12.00 น.",
+    hours_after: "",
+    hours_emergency: "",
+    contact_ext: "312",
+    doctor_department: "อายุรกรรม",
+    display_order: 3,
+  },
+];
+let nextId = 4;
+
+export function getMemoryCenters(slug?: string): SpecialCenter[] {
+  const list = slug ? centers.filter((c) => c.slug === slug) : centers;
+  return [...list].sort((a, b) => a.display_order - b.display_order);
 }
 
-const defaultSpecialized: Center[] = [
-  { id: 1, title: "ศูนย์สุขภาพสตรี", iconType: "house", href: "/patient-services?dept=women", type: "specialized", display_order: 1 },
-  { id: 2, title: "ศูนย์กุมารเวชกรรม", iconType: "bed", href: "/patient-services?dept=pediatrics", type: "specialized", display_order: 2 },
-  { id: 3, title: "ศูนย์อายุรกรรม", iconType: "bed", href: "/patient-services?dept=medicine", type: "specialized", display_order: 3 },
-  { id: 4, title: "ศูนย์ศัลยกรรม", iconType: "user", href: "/patient-services?dept=surgery", type: "specialized", display_order: 4 },
-  { id: 5, title: "ศูนย์กระดูกและข้อ", iconType: "user", href: "/patient-services?dept=ortho", type: "specialized", display_order: 5 },
-  { id: 6, title: "อุบัติเหตุฉุกเฉิน", iconType: "stethoscope", href: "/patient-services?dept=emergency", type: "specialized", display_order: 6 },
-  { id: 7, title: "หู คอ จมูก", iconType: "house", href: "/patient-services?dept=ent", type: "specialized", display_order: 7 },
-  { id: 8, title: "จักษุ", iconType: "stethoscope", href: "/patient-services?dept=eye", type: "specialized", display_order: 8 },
-  { id: 9, title: "นวดแผนไทย", iconType: "stethoscope", href: "/patient-services?dept=thaimassage", type: "specialized", display_order: 9 },
-  { id: 10, title: "กายภาพบำบัด", iconType: "house", href: "/patient-services?dept=physio", type: "specialized", display_order: 10 },
-  { id: 11, title: "เวชศาสตร์ฟื้นฟู", iconType: "stethoscope", href: "/patient-services?dept=rehab", type: "specialized", display_order: 11 },
-];
-
-const defaultSpecial: Center[] = [
-  { id: 101, title: "คลินิกเบาหวาน", iconType: "stethoscope", href: "/patient-services?dept=diabetes", type: "special", display_order: 1 },
-  { id: 102, title: "คลินิกความดันโลหิตสูง", iconType: "stethoscope", href: "/patient-services?dept=hypertension", type: "special", display_order: 2 },
-  { id: 103, title: "คลินิกมะเร็ง", iconType: "stethoscope", href: "/patient-services?dept=cancer", type: "special", display_order: 3 },
-];
-
-let memoryStore: Center[] = [...defaultSpecialized, ...defaultSpecial];
-let nextId = 200;
-
-export function getMemoryCenters(type?: string): Center[] {
-  if (type) return memoryStore.filter(c => c.type === type).sort((a, b) => a.display_order - b.display_order);
-  return [...memoryStore].sort((a, b) => a.display_order - b.display_order);
-}
-
-export function addMemoryCenter(data: Omit<Center, "id">): Center {
+export function addMemoryCenter(data: Omit<SpecialCenter, "id">): SpecialCenter {
   const item = { ...data, id: nextId++ };
-  memoryStore.push(item);
+  centers.push(item);
   return item;
 }
 
-export function updateMemoryCenter(id: number, data: Partial<Center>): boolean {
-  const idx = memoryStore.findIndex(c => c.id === id);
+export function updateMemoryCenter(id: number, data: Partial<Omit<SpecialCenter, "id">>): boolean {
+  const idx = centers.findIndex((c) => c.id === id);
   if (idx === -1) return false;
-  memoryStore[idx] = { ...memoryStore[idx], ...data };
+  centers[idx] = { ...centers[idx], ...data };
   return true;
 }
 
 export function deleteMemoryCenter(id: number): boolean {
-  const before = memoryStore.length;
-  memoryStore = memoryStore.filter(c => c.id !== id);
-  return memoryStore.length < before;
+  const before = centers.length;
+  centers = centers.filter((c) => c.id !== id);
+  return centers.length < before;
 }
