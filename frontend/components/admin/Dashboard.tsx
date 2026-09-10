@@ -348,7 +348,12 @@ export default function Dashboard({ username, onLogout }: Props) {
             </div>
           ) : activeNav === 'news' ? (
             <div className="max-w-6xl mx-auto">
-              <NewsManager categories={[{ value: 'pr_news', label: 'ข่าวประชาสัมพันธ์' }, { value: 'activity', label: 'กิจกรรม' }]} />
+              <NewsManager categories={[
+                { value: 'pr_news', label: 'ข่าวประชาสัมพันธ์' },
+                { value: 'activity', label: 'กิจกรรม' },
+                { value: 'job', label: 'การสมัครงาน / รับบุคลากร' },
+                { value: 'procurement', label: 'ข่าวจัดซื้อจัดจ้าง' },
+              ]} />
             </div>
           ) : activeNav === 'treatment-centers' ? (
             <div className="max-w-6xl mx-auto">

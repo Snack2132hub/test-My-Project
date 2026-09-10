@@ -8,6 +8,8 @@ interface CategoryOption { value: string; label: string }
 const CATEGORIES: CategoryOption[] = [
   { value: "pr_news", label: "ข่าวประชาสัมพันธ์" },
   { value: "activity", label: "กิจกรรม" },
+  { value: "job", label: "การสมัครงาน / รับบุคลากร" },
+  { value: "procurement", label: "ข่าวจัดซื้อจัดจ้าง" },
   { value: "after_hours", label: "คลินิกพิเศษนอกเวลา" },
 ];
 
