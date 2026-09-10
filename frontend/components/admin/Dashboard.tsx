@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, type Dispatch, type SetStateAction } from 'react'
 import {
   LayoutDashboard,
-  Hospital,
   HeartPulse,
   Stethoscope,
   ClipboardList,
@@ -19,13 +18,11 @@ import {
 import HealthCheckupManager from '@/components/admin/HealthCheckupManager'
 import DoctorManager from '@/components/admin/DoctorManager'
 import NewsManager from '@/components/admin/NewsManager'
-import ProcurementManager from '@/components/admin/ProcurementManager'
 import CentersManager from '@/components/admin/CentersManager'
 import TreatmentCentersManager from '@/components/admin/TreatmentCentersManager'
-import AboutManager from '@/components/admin/AboutManager'
 import BannerManager from '@/components/admin/BannerManager'
 import PatientRegistrationManager from '@/components/admin/PatientRegistrationManager'
-import AfterHoursManager from '@/components/admin/AfterHoursManager'
+import AfterHoursAdmin from '@/components/admin/AfterHoursAdmin'
 
 interface Props {
   username: string
@@ -63,7 +60,6 @@ const navSections: NavSection[] = [
     label: 'ลงข้อมูล',
     items: [
       { id: 'banner', icon: ImageIcon, label: 'แบนเนอร์หน้าแรก' },
-      { id: 'hospital', icon: Hospital, label: 'เกี่ยวกับ', hasChildren: true },
       { id: 'patient', icon: HeartPulse, label: 'ศูนย์บริการผู้ป่วย', hasChildren: true },
       { id: 'doctor', icon: Stethoscope, label: 'ค้นหาแพทย์' },
       { id: 'announcements', icon: Megaphone, label: 'ข่าวสารและประกาศ' },
@@ -100,11 +96,10 @@ function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, set
           )}
           {section.items.map((item) => {
             const Icon = item.icon
-            const patientNavIds = ['centers-specialized', 'treatment-centers', 'hc-checkup', 'hc-vaccines', 'patient-reg']
-            const servicesNavIds = ['news', 'procurement', 'centers-special', 'after-hours']
+            const patientNavIds = ['treatment-centers', 'centers-special', 'hc-checkup', 'hc-vaccines', 'patient-reg']
+            const servicesNavIds = ['news', 'after-hours']
             const isActive =
               activeNav === item.id ||
-              (item.id === 'hospital' && ['executives', 'org-chart'].includes(activeNav)) ||
               (item.id === 'patient' && patientNavIds.includes(activeNav)) ||
               (item.id === 'services' && servicesNavIds.includes(activeNav))
 
@@ -156,33 +151,11 @@ function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, set
 
                 {'hasChildren' in item && item.hasChildren && expandedMenus[item.id] && (
                   <div className="pl-12 py-1 flex flex-col gap-0.5">
-                    {item.id === 'hospital' && (
-                      <>
-                        {([
-                          { label: 'ผู้บริหารโรงพยาบาล', nav: 'executives' },
-                          { label: 'โครงสร้างองค์กร', nav: 'org-chart' },
-                        ] as { label: string; nav: string }[]).map(({ label, nav }) => {
-                          const childActive = nav !== '' && activeNav === nav;
-                          return (
-                            <button key={label}
-                              onClick={() => { if (nav) { setActiveNav(nav); setSidebarOpen(false); } }}
-                              className="text-left text-sm py-1.5 px-2 rounded-md transition-colors duration-150 flex items-center gap-2"
-                              style={{ color: childActive ? '#1a56db' : '#6b7a99', fontWeight: childActive ? 600 : 400 }}
-                              onMouseEnter={(e) => { if (!childActive) { e.currentTarget.style.background = '#f0f4fd'; e.currentTarget.style.color = '#1a56db' } }}
-                              onMouseLeave={(e) => { if (!childActive) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#6b7a99' } }}
-                            >
-                              <span className="w-1.5 h-1.5 rounded-full border border-current inline-block shrink-0" />
-                              {label}
-                            </button>
-                          );
-                        })}
-                      </>
-                    )}
                     {item.id === 'patient' && (
                       <>
                         {([
-                          { label: 'ศูนย์รักษาเฉพาะทาง', nav: 'centers-specialized' },
-                          { label: 'เนื้อหาศูนย์รักษาเฉพาะทาง', nav: 'treatment-centers' },
+                          { label: 'ศูนย์รักษาเฉพาะทาง', nav: 'treatment-centers' },
+                          { label: 'ศูนย์รักษาพิเศษ', nav: 'centers-special' },
                           { label: 'โปรแกรมตรวจสุขภาพ', nav: 'hc-checkup' },
                           { label: 'โปรแกรมฉีดวัคซีน', nav: 'hc-vaccines' },
                           { label: 'ลงทะเบียนผู้ป่วยใหม่', nav: 'patient-reg' },
@@ -209,9 +182,7 @@ function Sidebar({ expandedMenus, setExpandedMenus, activeNav, setActiveNav, set
                       <>
                         {([
                           { label: 'ข่าวสารและกิจกรรมภายใน', nav: 'news' },
-                          { label: 'งานจัดซื้อจัดจ้าง / สมัครงาน', nav: 'procurement' },
                           { label: 'คลินิกพิเศษนอกเวลา', nav: 'after-hours' },
-                          { label: 'ศูนย์รักษาพิเศษ', nav: 'centers-special' },
                         ] as { label: string; nav: string }[]).map(({ label, nav }) => {
                           const childActive = nav !== '' && activeNav === nav
                           const isPlaceholder = nav === ''
@@ -359,14 +330,6 @@ export default function Dashboard({ username, onLogout }: Props) {
             <div className="max-w-6xl mx-auto">
               <BannerManager />
             </div>
-          ) : activeNav === 'executives' ? (
-            <div className="max-w-6xl mx-auto">
-              <AboutManager initialTab="executives" />
-            </div>
-          ) : activeNav === 'org-chart' ? (
-            <div className="max-w-6xl mx-auto">
-              <AboutManager initialTab="org-chart" />
-            </div>
           ) : activeNav === 'announcements' ? (
             <div className="max-w-6xl mx-auto">
               <HealthCheckupManager initialTab="announcements" />
@@ -385,23 +348,20 @@ export default function Dashboard({ username, onLogout }: Props) {
             </div>
           ) : activeNav === 'news' ? (
             <div className="max-w-6xl mx-auto">
-              <NewsManager />
-            </div>
-          ) : activeNav === 'procurement' ? (
-            <div className="max-w-6xl mx-auto">
-              <ProcurementManager />
+              <NewsManager categories={[
+                { value: 'pr_news', label: 'ข่าวประชาสัมพันธ์' },
+                { value: 'activity', label: 'กิจกรรม' },
+                { value: 'job', label: 'การสมัครงาน / รับบุคลากร' },
+                { value: 'procurement', label: 'ข่าวจัดซื้อจัดจ้าง' },
+              ]} />
             </div>
           ) : activeNav === 'treatment-centers' ? (
             <div className="max-w-6xl mx-auto">
               <TreatmentCentersManager />
             </div>
-          ) : activeNav === 'centers-specialized' ? (
-            <div className="max-w-6xl mx-auto">
-              <CentersManager initialTab="specialized" />
-            </div>
           ) : activeNav === 'centers-special' ? (
             <div className="max-w-6xl mx-auto">
-              <CentersManager initialTab="special" />
+              <CentersManager />
             </div>
           ) : activeNav === 'patient-reg' ? (
             <div className="max-w-6xl mx-auto">
@@ -409,7 +369,7 @@ export default function Dashboard({ username, onLogout }: Props) {
             </div>
           ) : activeNav === 'after-hours' ? (
             <div className="max-w-6xl mx-auto">
-              <AfterHoursManager />
+              <AfterHoursAdmin />
             </div>
           ) : (
             <div className="max-w-6xl mx-auto">

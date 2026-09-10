@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ChevronDown, Search, X, Stethoscope } from "lucide-react";
+import { ChevronDown, Search, X, Stethoscope, User } from "lucide-react";
 import { Kanit } from "next/font/google";
 import {
   Doctor,
@@ -251,14 +251,20 @@ function DoctorsDirectoryContent() {
               >
                 {/* กรอบรูปภาพทรงสี่เหลี่ยมแนวตั้ง โทนส้มอุ่น (Peach Frame ตามแบบในภาพ 1) */}
                 <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 via-[#ffedd5]/80 to-[#fed7aa]/40 border border-orange-100/90 shadow-2xs group-hover:shadow-md group-hover:border-orange-300 transition-all duration-300">
-                  <Image
-                    src={doctor.image}
-                    alt={doctor.name}
-                    fill
-                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    priority={doctor.id === 401 || doctor.id === 101}
-                  />
+                  {doctor.image ? (
+                    <Image
+                      src={doctor.image}
+                      alt={doctor.name}
+                      fill
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      priority={doctor.id === 401 || doctor.id === 101}
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-orange-300">
+                      <User className="w-1/3 h-1/3" strokeWidth={1.5} />
+                    </div>
+                  )}
                 </div>
 
                 {/* ข้อมูลใต้รูป */}

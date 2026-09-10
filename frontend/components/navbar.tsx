@@ -169,22 +169,6 @@ export default function Navbar() {
                       วิสัยทัศน์ / พันธกิจ
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      href="/about/executives"
-                      className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      ผู้บริหารโรงพยาบาล
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/about/organization"
-                      className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      โครงสร้างองค์กร
-                    </Link>
-                  </li>
                 </ul>
               )}
             </li>
@@ -213,6 +197,14 @@ export default function Navbar() {
                       className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
                       ศูนย์รักษาเฉพาะทาง
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/special-centers"
+                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                    >
+                      ศูนย์รักษาพิเศษ
                     </Link>
                   </li>
                   <li>
@@ -397,20 +389,6 @@ export default function Navbar() {
                   className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
                 >
                   วิสัยทัศน์ / พันธกิจ
-                </Link>
-                <Link
-                  href="/about/executives"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
-                >
-                  ผู้บริหารโรงพยาบาล
-                </Link>
-                <Link
-                  href="/about/organization"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
-                >
-                  โครงสร้างองค์กร
                 </Link>
               </div>
             )}

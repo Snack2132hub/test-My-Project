@@ -18,7 +18,7 @@ function range(row: DoctorRow, prefix: string, from: number, to: number): string
 
 function normalizeImage(raw: unknown): string {
   const v = str(raw);
-  if (!v) return "/img/doctors/male_doctor.jpg";
+  if (!v) return ""; // no photo → components render a placeholder icon
   if (v.startsWith("/") || v.startsWith("http")) return v;
   return `/img/${v}`;
 }

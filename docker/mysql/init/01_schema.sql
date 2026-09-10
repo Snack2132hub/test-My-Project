@@ -24,57 +24,30 @@ CREATE TABLE IF NOT EXISTS `banners` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================
--- ผู้บริหารโรงพยาบาล
--- =============================================
-CREATE TABLE IF NOT EXISTS `hospital_executives` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `position` varchar(255) DEFAULT '',
-  `department` varchar(255) DEFAULT '',
-  `image_url` varchar(500) DEFAULT '',
-  `display_order` int DEFAULT 0,
-  `is_active` tinyint(1) DEFAULT 1,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- =============================================
--- โครงสร้างองค์กร (รูปภาพ)
--- =============================================
-CREATE TABLE IF NOT EXISTS `org_chart` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `image_url` varchar(500) NOT NULL,
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- =============================================
--- ศูนย์รักษา / ศูนย์พิเศษ
+-- ศูนย์รักษาพิเศษ (คลินิกเฉพาะโรค — โครงสร้างเดียวกับ treatment_centers)
+-- banners / services / facilities เก็บเป็น JSON array ในรูป TEXT
 -- =============================================
 CREATE TABLE IF NOT EXISTS `hospital_centers` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `icon_type` varchar(100) DEFAULT '',
-  `href` varchar(500) DEFAULT '',
-  `type` varchar(50) DEFAULT 'specialized',
-  `display_order` int DEFAULT 0,
+  `slug` varchar(60) NOT NULL,
+  `title_th` varchar(255) NOT NULL,
+  `title_en` varchar(255) DEFAULT '',
+  `icon_type` varchar(40) DEFAULT 'stethoscope',
+  `description` text,
+  `highlight_text` varchar(500) DEFAULT '',
+  `banners` text,
+  `services` text,
+  `facilities` text,
+  `hours_regular` varchar(255) DEFAULT '',
+  `hours_after` varchar(255) DEFAULT '',
+  `hours_emergency` varchar(255) DEFAULT '',
+  `contact_ext` varchar(100) DEFAULT '',
+  `doctor_department` varchar(255) DEFAULT '',
+  `display_order` int DEFAULT 99,
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- =============================================
--- แผนกต่างๆ (ศูนย์บริการผู้ป่วย)
--- =============================================
-CREATE TABLE IF NOT EXISTS `department_items` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `dept` varchar(100) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `description` text,
-  `image_url` varchar(500) DEFAULT '',
-  `display_order` int DEFAULT 0,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_hospital_centers_slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================
@@ -174,20 +147,6 @@ CREATE TABLE IF NOT EXISTS `news` (
   `content` text,
   `is_active` tinyint(1) DEFAULT 1,
   `published_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- =============================================
--- จัดซื้อจัดจ้าง / สมัครงาน
--- =============================================
-CREATE TABLE IF NOT EXISTS `procurement_items` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(500) NOT NULL,
-  `type` varchar(50) DEFAULT 'procurement',
-  `document_url` varchar(500) DEFAULT '',
-  `published_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `deadline_at` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

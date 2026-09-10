@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, User } from "lucide-react";
 import type { Doctor } from "@/lib/doctorsData";
 
 /**
@@ -87,13 +87,19 @@ export default function DoctorTeamSection() {
                 className="flex flex-col items-center text-center group cursor-pointer"
               >
                 <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 via-[#ffedd5]/80 to-[#fed7aa]/40 border border-orange-100 shadow-sm group-hover:shadow-md group-hover:border-orange-300 transition-all duration-300 mb-4">
-                  <Image
-                    src={doctor.image}
-                    alt={doctor.name}
-                    fill
-                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 25vw"
-                  />
+                  {doctor.image ? (
+                    <Image
+                      src={doctor.image}
+                      alt={doctor.name}
+                      fill
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, 25vw"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-orange-300">
+                      <User className="w-1/3 h-1/3" strokeWidth={1.5} />
+                    </div>
+                  )}
                 </div>
                 <h4 className="text-[17px] font-bold text-gray-800 group-hover:text-[#f97316] transition-colors leading-snug">
                   {doctor.name}

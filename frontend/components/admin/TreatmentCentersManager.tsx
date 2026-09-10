@@ -84,7 +84,13 @@ function StringListEditor({
   );
 }
 
-export default function TreatmentCentersManager() {
+export default function TreatmentCentersManager({
+  endpoint = "/api/treatment-centers",
+  heading = "จัดการศูนย์รักษาเฉพาะทาง",
+}: {
+  endpoint?: string;
+  heading?: string;
+} = {}) {
   const [items, setItems] = useState<TreatmentCenter[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -98,7 +104,7 @@ export default function TreatmentCentersManager() {
   const fetchItems = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/treatment-centers");
+      const res = await fetch(endpoint);
       const json = await res.json();
       if (json.ok) setItems(json.data);
     } catch {}
@@ -106,14 +112,14 @@ export default function TreatmentCentersManager() {
   };
 
   useEffect(() => {
-    fetch("/api/treatment-centers")
+    fetch(endpoint)
       .then((r) => r.json())
       .then((json) => {
         if (json.ok) setItems(json.data);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  }, [endpoint]);
 
   const openAdd = () => {
     setEditingId(null);
@@ -133,7 +139,7 @@ export default function TreatmentCentersManager() {
 
   const handleDelete = async (id: number) => {
     if (!confirm("ต้องการลบศูนย์นี้ใช่หรือไม่?")) return;
-    await fetch(`/api/treatment-centers/${id}`, { method: "DELETE" });
+    await fetch(`${endpoint}/${id}`, { method: "DELETE" });
     fetchItems();
   };
 
@@ -161,7 +167,7 @@ export default function TreatmentCentersManager() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const url = editingId ? `/api/treatment-centers/${editingId}` : "/api/treatment-centers";
+      const url = editingId ? `${endpoint}/${editingId}` : endpoint;
       const res = await fetch(url, {
         method: editingId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
@@ -189,7 +195,7 @@ export default function TreatmentCentersManager() {
         <div className="flex items-center gap-2">
           <Building2 className="w-5 h-5 text-[#f97316]" />
           <div>
-            <h2 className="text-xl font-bold text-gray-900">จัดการศูนย์รักษาเฉพาะทาง</h2>
+            <h2 className="text-xl font-bold text-gray-900">{heading}</h2>
             <p className="text-xs text-gray-500 mt-0.5">ทั้งหมด {items.length} ศูนย์ (หน้า /patient-services)</p>
           </div>
         </div>
