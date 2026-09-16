@@ -19,11 +19,22 @@ interface NewsItem {
   category: string;
   image_url: string;
   content: string;
+  document_url: string;
+  deadline_at: string | null;
   published_at: string;
   is_active: number;
 }
 
-const emptyForm = { title: "", category: "pr_news", image_url: "", content: "" };
+const DOC_CATEGORIES = ["job", "procurement"];
+
+const emptyForm = { title: "", category: "pr_news", image_url: "", content: "", document_url: "", deadline_at: "" };
+
+function toDateInputValue(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toISOString().slice(0, 10);
+}
 
 export default function NewsManager({ categories = CATEGORIES }: { categories?: CategoryOption[] } = {}) {
   const locked = categories.length === 1;
@@ -62,7 +73,14 @@ export default function NewsManager({ categories = CATEGORIES }: { categories?: 
 
   const openEdit = (item: NewsItem) => {
     setEditingId(item.id);
-    setFormData({ title: item.title, category: item.category, image_url: item.image_url || "", content: item.content || "" });
+    setFormData({
+      title: item.title,
+      category: item.category,
+      image_url: item.image_url || "",
+      content: item.content || "",
+      document_url: item.document_url || "",
+      deadline_at: toDateInputValue(item.deadline_at),
+    });
     setShowModal(true);
   };
 
@@ -181,6 +199,11 @@ export default function NewsManager({ categories = CATEGORIES }: { categories?: 
                   </td>
                   <td className="py-3 px-4 text-xs text-gray-500">
                     {item.published_at ? new Date(item.published_at).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "numeric" }) : "-"}
+                    {item.deadline_at && (
+                      <div className="text-red-500 mt-0.5">
+                        หมดเขต {new Date(item.deadline_at).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "numeric" })}
+                      </div>
+                    )}
                   </td>
                   <td className="py-3 px-4 text-center">
                     <div className="flex items-center justify-center gap-2">
@@ -245,6 +268,23 @@ export default function NewsManager({ categories = CATEGORIES }: { categories?: 
                   placeholder="รายละเอียดข่าว..."
                   className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
               </div>
+
+              {/* เอกสารแนบ + วันหมดเขต (เฉพาะหมวดสมัครงาน/จัดซื้อจัดจ้าง) */}
+              {DOC_CATEGORIES.includes(formData.category) && (
+                <>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">ลิงก์เอกสารแนบ (ถ้ามี)</label>
+                    <input value={formData.document_url} onChange={e => setFormData({ ...formData, document_url: e.target.value })}
+                      placeholder="https://... หรือ /uploads/file.pdf"
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">วันหมดเขต (ถ้ามี)</label>
+                    <input type="date" value={formData.deadline_at} onChange={e => setFormData({ ...formData, deadline_at: e.target.value })}
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                  </div>
+                </>
+              )}
 
               {/* รูปภาพ */}
               <div>

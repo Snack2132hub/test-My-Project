@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     const total = Number(countRows?.[0]?.total || 0);
     if (total > 0) {
       const [rows] = await pool.query<RowDataPacket[]>(
-        `SELECT id, title, category, image_url, content, published_at FROM news ${where} ORDER BY published_at DESC LIMIT ? OFFSET ?`,
+        `SELECT id, title, category, image_url, content, document_url, deadline_at, published_at FROM news ${where} ORDER BY published_at DESC LIMIT ? OFFSET ?`,
         [...params, limit, offset]
       );
       return NextResponse.json({ ok: true, source: "db", total, page, limit, data: rows });
@@ -43,15 +43,22 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, category = "pr_news", image_url = "", content = "" } = body;
+    const {
+      title,
+      category = "pr_news",
+      image_url = "",
+      content = "",
+      document_url = "",
+      deadline_at = null,
+    } = body;
     if (!title) return NextResponse.json({ ok: false, message: "กรุณาระบุหัวข้อข่าว" }, { status: 400 });
 
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
       const [result] = await pool.query<ResultSetHeader>(
-        "INSERT INTO news (title, category, image_url, content) VALUES (?, ?, ?, ?)",
-        [title, category, image_url, content]
+        "INSERT INTO news (title, category, image_url, content, document_url, deadline_at) VALUES (?, ?, ?, ?, ?, ?)",
+        [title, category, image_url, content, document_url, deadline_at || null]
       );
       if (result?.insertId) {
         return NextResponse.json({ ok: true, source: "db", data: { id: result.insertId, title } });
@@ -60,7 +67,7 @@ export async function POST(request: Request) {
       // fall back to memory
     }
 
-    const created = addMemoryNews({ title, category, image_url, content });
+    const created = addMemoryNews({ title, category, image_url, content, document_url, deadline_at: deadline_at || null });
     return NextResponse.json({ ok: true, source: "memory", data: created });
   } catch {
     return NextResponse.json({ ok: false, message: "เกิดข้อผิดพลาด" }, { status: 500 });

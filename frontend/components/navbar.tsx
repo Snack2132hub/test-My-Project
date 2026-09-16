@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import {
   Phone,
   ChevronDown,
+  ChevronRight,
   Menu,
   X,
 } from "lucide-react";
@@ -22,6 +23,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [showCheckupSub, setShowCheckupSub] = useState(false);
 
   const toggleDropdown = (name: string) => {
     setActiveDropdown((prev) => (prev === name ? null : name));
@@ -207,29 +209,38 @@ export default function Navbar() {
                       ศูนย์รักษาพิเศษ
                     </Link>
                   </li>
-                  <li>
+                  <li
+                    className="relative"
+                    onMouseEnter={() => setShowCheckupSub(true)}
+                    onMouseLeave={() => setShowCheckupSub(false)}
+                  >
                     <Link
                       href="/health-checkup"
-                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] font-medium transition-colors"
+                      className="flex items-center justify-between px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] font-medium transition-colors"
                     >
-                      ศูนย์ตรวจสุขภาพ (หน้าหลัก)
+                      <span>ศูนย์ตรวจสุขภาพ (หน้าหลัก)</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
                     </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/health-checkup/checkup-program"
-                      className="block pl-7 pr-4 py-2 text-xs text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      • โปรแกรมตรวจสุขภาพ
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/health-checkup/vaccine-program"
-                      className="block pl-7 pr-4 py-2 text-xs text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      • โปรแกรมฉีดวัคซีน
-                    </Link>
+                    {showCheckupSub && (
+                      <ul className="absolute left-full top-0 w-56 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-left-2 duration-200">
+                        <li>
+                          <Link
+                            href="/health-checkup/checkup-program"
+                            className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                          >
+                            โปรแกรมตรวจสุขภาพ
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/health-checkup/vaccine-program"
+                            className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                          >
+                            โปรแกรมฉีดวัคซีน
+                          </Link>
+                        </li>
+                      </ul>
+                    )}
                   </li>
                   <li>
                     <Link

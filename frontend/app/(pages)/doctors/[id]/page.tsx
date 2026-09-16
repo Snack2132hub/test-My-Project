@@ -1,12 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { RowDataPacket } from "mysql2";
-import { ArrowLeft, Calendar, Award, GraduationCap, BookOpen, Briefcase, User } from "lucide-react";
+import { ArrowLeft, Calendar, Award, GraduationCap, BookOpen, Briefcase } from "lucide-react";
 import { Kanit } from "next/font/google";
 import getPool from "@/lib/db";
 import { getDoctorById, type Doctor } from "@/lib/doctorsData";
 import { mapDoctorRow } from "@/lib/doctorsMap";
+import DoctorAvatar from "@/components/doctors/DoctorAvatar";
 
 export const dynamic = "force-dynamic";
 
@@ -97,20 +97,13 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
           <div className="md:col-span-4 lg:col-span-4 flex flex-col items-center md:items-start text-center md:text-left">
             {/* การ์ดกรอบรูปภาพโทนสีส้มอ่อน (Peach Frame) */}
             <div className="relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 via-[#ffedd5]/80 to-[#fed7aa]/40 border border-orange-100 shadow-sm">
-              {doctor.image ? (
-                <Image
-                  src={doctor.image}
-                  alt={doctor.name}
-                  fill
-                  priority
-                  className="object-cover object-top"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-orange-300">
-                  <User className="w-1/3 h-1/3" strokeWidth={1.5} />
-                </div>
-              )}
+              <DoctorAvatar
+                image={doctor.image}
+                name={doctor.name}
+                alt={doctor.name}
+                priority
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
             </div>
 
             {/* ข้อมูลใต้รูป */}

@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 const ITEMS_PER_PAGE = 8;
 
 interface ProcurementRow {
@@ -49,7 +48,7 @@ export default function ProcurementAndContactSection() {
     if (cache[procurementTab]) return;
     const apiType = procurementTab === "jobs" ? "job" : "procurement";
     let cancelled = false;
-    fetch(`${API}/api/procurement?type=${apiType}&page=1&limit=60`)
+    fetch(`/api/news?category=${apiType}&page=1&limit=60`)
       .then((r) => r.json())
       .then((json) => {
         if (!cancelled) {

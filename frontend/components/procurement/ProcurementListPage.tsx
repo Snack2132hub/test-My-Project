@@ -12,12 +12,9 @@ import {
   Briefcase,
 } from "lucide-react";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-
 interface ProcurementItem {
   id: number;
   title: string;
-  type: string;
   document_url: string;
   published_at: string;
   deadline_at: string | null;
@@ -59,7 +56,7 @@ export default function ProcurementListPage({ variant }: { variant: Variant }) {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`${API}/api/procurement?type=${variant}&page=${page}&limit=${LIMIT}`)
+    fetch(`/api/news?category=${variant}&page=${page}&limit=${LIMIT}`)
       .then((r) => r.json())
       .then((json) => {
         if (cancelled) return;

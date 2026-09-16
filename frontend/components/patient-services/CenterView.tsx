@@ -18,6 +18,7 @@ import {
   Info,
 } from "lucide-react";
 import { type UICenter, type UIDoctor, toUIDoctor } from "@/lib/centerView";
+import DoctorAvatar from "@/components/doctors/DoctorAvatar";
 
 interface CenterViewProps {
   centers: UICenter[];
@@ -326,12 +327,8 @@ export default function CenterView({
                           href={`/doctors/${doc.id}`}
                           className="flex gap-4 p-4 rounded-2xl border border-gray-100 bg-slate-50 hover:shadow-md hover:border-orange-200 transition-all"
                         >
-                          <div className="relative w-20 h-24 rounded-xl overflow-hidden shrink-0 bg-slate-100 flex items-center justify-center">
-                            {doc.image ? (
-                              <Image src={doc.image} alt={doc.name} fill className="object-cover object-top" />
-                            ) : (
-                              <UserCheck className="w-8 h-8 text-slate-300" strokeWidth={1.5} />
-                            )}
+                          <div className="relative w-20 h-24 rounded-xl overflow-hidden shrink-0 bg-slate-100">
+                            <DoctorAvatar image={doc.image} name={doc.name} alt={doc.name} sizes="80px" />
                           </div>
                           <div className="space-y-1.5 flex-1">
                             <h4 className="font-bold text-gray-900 text-base leading-snug">{doc.name}</h4>

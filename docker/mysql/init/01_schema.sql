@@ -145,6 +145,8 @@ CREATE TABLE IF NOT EXISTS `news` (
   `category` varchar(100) DEFAULT 'pr_news',
   `image_url` varchar(500) DEFAULT '',
   `content` text,
+  `document_url` varchar(500) DEFAULT '',
+  `deadline_at` datetime DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT 1,
   `published_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
