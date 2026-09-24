@@ -32,10 +32,16 @@ async function hmacVerify(payload: string, signature: string): Promise<boolean> 
   }
 }
 
+export function getAdminCredentials(): { username: string; password: string } {
+  return {
+    username: (process.env.ADMIN_USERNAME || "admin").trim(),
+    password: (process.env.ADMIN_PASSWORD || "changeme123").trim(),
+  };
+}
+
 export function verifyCredentials(username: string, password: string): boolean {
-  const expectedUsername = process.env.ADMIN_USERNAME || "admin";
-  const expectedPassword = process.env.ADMIN_PASSWORD || "admin123";
-  return username === expectedUsername && password === expectedPassword;
+  const { username: expectedUsername, password: expectedPassword } = getAdminCredentials();
+  return (username || "").trim() === expectedUsername && (password || "").trim() === expectedPassword;
 }
 
 export async function createSessionToken(username: string): Promise<string> {

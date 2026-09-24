@@ -3,11 +3,11 @@ services:
     build:
       context: ./frontend
       target: dev
-    container_name: pnnh-web
+    container_name: web
     ports:
       - "3000:3000"
     env_file:
-      - ./frontend/.env.docker
+      - ./.env.docker
     environment:
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
@@ -24,12 +24,12 @@ services:
   backend:
     build:
       context: ./backend
-    container_name: pnnh-backend
+    container_name: backend
     restart: unless-stopped
     ports:
       - "4000:4000"
     env_file:
-      - ./frontend/.env.docker
+      - ./.env.docker
     environment:
       PORT: "4000"
     volumes:
@@ -41,8 +41,10 @@ services:
 
   db:
     image: mysql:8.4
-    container_name: pnnh-db
+    container_name: db
     restart: unless-stopped
+    env_file:
+      - ./.env.docker
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
@@ -65,7 +67,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:latest
-    container_name: pnnh-phpmyadmin
+    container_name: phpmyadmin
     restart: unless-stopped
     ports:
       - "8081:80"
@@ -74,8 +76,6 @@ services:
       PMA_PORT: 3306
       PMA_ARBITRARY: 0
       UPLOAD_LIMIT: 256M
-    profiles:
-      - tools
     depends_on:
       db:
         condition: service_healthy
