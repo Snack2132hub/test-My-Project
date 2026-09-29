@@ -1,8 +1,8 @@
 "use client";
+import "@/app/(pages)/pages.css";
 
 import Image from "next/image";
 import Link from "next/link";
-import { Eye, Target, Compass } from "lucide-react";
 
 export default function VisionMissionPage() {
   return (
@@ -48,8 +48,10 @@ export default function VisionMissionPage() {
 
         {/* ค่านิยมหลัก */}
         <div className="text-center space-y-3 pt-2">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-700">
-            ค่านิยมหลัก
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+            <span className="inline-block border-b-2 border-[#f97316] pb-1">
+              ค่านิยมหลัก
+            </span>
           </h2>
           <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#f97316]">
             &quot; ร่วมใจ ใฝ่งาน บริการดุจญาติมิตร &quot;
@@ -60,11 +62,19 @@ export default function VisionMissionPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 text-center items-start pt-4">
           {/* Column 1: เข็มมุ่ง */}
           <div className="flex flex-col items-center space-y-3 px-2">
-            <div className="w-16 h-16 rounded-full bg-orange-50 border-2 border-orange-200 flex items-center justify-center text-[#f97316]">
-              <Compass className="w-8 h-8 stroke-[2]" />
+            <div className="w-[50px] h-[50px] relative flex items-center justify-center shrink-0">
+              <Image
+                src="/img/Rectangle 41213.png"
+                alt="เข็มมุ่ง"
+                width={50}
+                height={50}
+                className="w-[50px] h-[50px] object-contain rounded-xl drop-shadow-sm hover:scale-105 transition-transform duration-300"
+              />
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-gray-800">
-              เข็มมุ่ง
+              <span className="inline-block border-b-2 border-[#f97316] pb-1">
+                เข็มมุ่ง
+              </span>
             </h3>
             <ul className="text-sm sm:text-base text-gray-600 space-y-1 text-center font-normal">
               <li>• 3P safety</li>
@@ -74,11 +84,19 @@ export default function VisionMissionPage() {
 
           {/* Column 2: วิสัยทัศน์ */}
           <div className="flex flex-col items-center space-y-3 px-2">
-            <div className="w-16 h-16 rounded-full bg-orange-50 border-2 border-orange-200 flex items-center justify-center text-[#f97316]">
-              <Eye className="w-8 h-8 stroke-[2]" />
+            <div className="w-[50px] h-[50px] relative flex items-center justify-center shrink-0">
+              <Image
+                src="/img/R145.png"
+                alt="วิสัยทัศน์"
+                width={50}
+                height={50}
+                className="w-[50px] h-[50px] object-contain rounded-xl drop-shadow-sm hover:scale-105 transition-transform duration-300"
+              />
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-gray-800">
-              วิสัยทัศน์
+              <span className="inline-block border-b-2 border-[#f97316] pb-1">
+                วิสัยทัศน์
+              </span>
             </h3>
             <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-xs font-normal">
               &quot; ศูนย์การแพทย์และการสาธารณสุขชั้นเลิศ ในเขตการท่องเที่ยวระดับประเทศ &quot;
@@ -87,11 +105,19 @@ export default function VisionMissionPage() {
 
           {/* Column 3: เป้าหมาย */}
           <div className="flex flex-col items-center space-y-3 px-2">
-            <div className="w-16 h-16 rounded-full bg-orange-50 border-2 border-orange-200 flex items-center justify-center text-[#f97316]">
-              <Target className="w-8 h-8 stroke-[2]" />
+            <div className="w-[50px] h-[50px] relative flex items-center justify-center shrink-0">
+              <Image
+                src="/img/Rectangle 41215.png"
+                alt="เป้าหมาย"
+                width={50}
+                height={50}
+                className="w-[50px] h-[50px] object-contain rounded-xl drop-shadow-sm hover:scale-105 transition-transform duration-300"
+              />
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-gray-800">
-              เป้าหมาย
+              <span className="inline-block border-b-2 border-[#f97316] pb-1">
+                เป้าหมาย
+              </span>
             </h3>
             <ul className="text-sm sm:text-base text-gray-600 space-y-1 text-center font-normal">
               <li>• ประชาชนสุขภาพดี</li>
@@ -104,7 +130,9 @@ export default function VisionMissionPage() {
         {/* พันธกิจ (Mission) Section */}
         <div className="text-center pt-6 space-y-6 max-w-3xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-            พันธกิจ
+            <span className="inline-block border-b-2 border-[#f97316] pb-1">
+              พันธกิจ
+            </span>
           </h2>
           <ol className="text-sm sm:text-base md:text-lg text-gray-600 space-y-2 text-center font-normal leading-relaxed">
             <li>1. พัฒนาระบบการแพทย์เฉพาะทางขั้นสูงทุกสาขา</li>

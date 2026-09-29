@@ -1,4 +1,5 @@
 "use client";
+import "@/app/(pages)/pages.css";
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
@@ -10,7 +11,7 @@ function PatientServicesContent() {
   const searchParams = useSearchParams();
   const [centers, setCenters] = useState<UICenter[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSlug, setSelectedSlug] = useState(searchParams?.get("dept") || "emergency");
+  const [selectedSlug, setSelectedSlug] = useState(searchParams?.get("dept") || "obgyn");
 
   useEffect(() => {
     fetch("/api/treatment-centers")
@@ -25,20 +26,29 @@ function PatientServicesContent() {
 
   useEffect(() => {
     const dept = searchParams?.get("dept");
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (dept) setSelectedSlug(dept);
   }, [searchParams]);
+
+  const handleSelectCenter = (slug: string) => {
+    setSelectedSlug(slug);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("dept", slug);
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
 
   return (
     <CenterView
       centers={centers}
       selectedSlug={selectedSlug}
-      onSelectCenter={setSelectedSlug}
+      onSelectCenter={handleSelectCenter}
       loading={loading}
       sidebarHeading="ศูนย์รักษาเฉพาะทาง"
       pageHeading="ศูนย์บริการผู้ป่วย - ศูนย์รักษาเฉพาะทาง"
-      breadcrumbLabel="ศูนย์รักษาเฉพาะทาง"
+      breadcrumbLabel="ศูนย์การรักษาเฉพาะทาง"
       breadcrumbHref="/specialized-centers"
+      showSidebar={false}
     />
   );
 }

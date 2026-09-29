@@ -7,6 +7,41 @@ import { mapDoctorRow } from "@/lib/doctorsMap";
 
 export const dynamic = "force-dynamic";
 
+const DEPT_FOLDER_MAP: Record<string, string> = {
+  "สูตินรีเวช": "OB",
+  "สูติ-นรีเวชกรรม": "OB",
+  "ศัลยกรรมทั่วไป": "SURG",
+  "ศัลยกรรมยูโรวิทยา": "SURG",
+  "ศัลยกรรม": "SURG",
+  "ศัลยศาสตร์ออร์โธปิดิกส์": "ORTHO",
+  "อายุรกรรม": "MED",
+  "กุมารเวชกรรม": "PED",
+  "จักษุวิทยา": "OPH",
+  "รังสีวิทยาวินิจฉัย": "XRAY",
+  "วิสัญญี": "ANES",
+  "เวชศาสตร์ฟื้นฟู": "REH",
+  "จิตเวชศาสตร์": "PSY",
+  "โสต ศอ นาสิก": "ENT",
+  "เวชศาสตร์ฉุกเฉิน": "ER",
+  "เวชบำบัดวิกฤต": "MED",
+  "เวชศาสตร์ครอบครัว": "FM",
+};
+
+function resolveDoctorRealPhoto(d: (typeof DOCTORS_DATA)[0]) {
+  if (d.originalImg) {
+    const filename = d.originalImg.split("/").pop();
+    const folder = DEPT_FOLDER_MAP[d.departmentCategory] || DEPT_FOLDER_MAP[d.department];
+    if (folder && filename) {
+      const safeFilename = filename === "PanadV2.jpg" ? "PanadV1.jpg" : filename;
+      return {
+        ...d,
+        image: `/img/doc_img/${folder}/${safeFilename}`,
+      };
+    }
+  }
+  return d;
+}
+
 export async function GET(request: Request) {
   const url = new URL(request.url);
 
@@ -50,7 +85,7 @@ export async function GET(request: Request) {
   const fallback = department
     ? DOCTORS_DATA.filter(
         (d) => d.department.includes(department) || d.departmentCategory.includes(department)
-      )
-    : DOCTORS_DATA;
+      ).map(resolveDoctorRealPhoto)
+    : DOCTORS_DATA.map(resolveDoctorRealPhoto);
   return NextResponse.json({ ok: true, source: "static", data: fallback });
 }

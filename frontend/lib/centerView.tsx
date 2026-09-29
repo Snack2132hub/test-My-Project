@@ -33,6 +33,7 @@ export interface UICenter {
   highlightText: string;
   banners: string[];
   services: string[];
+  clinics: string[];
   facilities: string[];
   serviceHours: { regular: string; afterHours?: string; emergency?: string };
   contactExt: string;
@@ -66,6 +67,10 @@ export function toUICenter(c: TreatmentCenter): UICenter {
     highlightText: c.highlight_text,
     banners: c.banners.length ? c.banners : [FALLBACK_BANNER],
     services: c.services,
+    clinics:
+      c.clinics && c.clinics.length > 0
+        ? c.clinics
+        : c.services.map((s) => `คลินิก${s.replace(/^(บริการ|การตรวจ|การบริการ|การผ่าตัด|การรักษา|การ)/, "").trim()}`),
     facilities: c.facilities,
     serviceHours: {
       regular: c.hours_regular,

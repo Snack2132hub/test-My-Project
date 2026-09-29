@@ -8,8 +8,12 @@ const kanit = Kanit({
 });
 
 export const metadata: Metadata = {
-  title: "My Project ",
-  description: "Starter layout with header, navbar, main, and footer",
+  title: "Pak Chong Nana Hospital | โรงพยาบาลปากช่องนานา",
+  description: "โรงพยาบาลปากช่องนานา - เว็บไซต์บริการทางการแพทย์ บุคลากรแพทย์ ข้อมูลสุขภาพ และการติดต่อ",
+  openGraph: {
+    title: "Pak Chong Nana Hospital | โรงพยาบาลปากช่องนานา",
+    description: "โรงพยาบาลปากช่องนานา - เว็บไซต์บริการทางการแพทย์ บุคลากรแพทย์ ข้อมูลสุขภาพ และการติดต่อ",
+  },
 };
 
 export default function RootLayout({

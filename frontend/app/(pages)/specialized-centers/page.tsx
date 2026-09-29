@@ -1,43 +1,39 @@
 "use client";
+import "@/app/(pages)/pages.css";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
-import {
-  ShieldAlert,
-  HeartPulse,
-  Stethoscope,
-  Scissors,
-  Smile,
-  Baby,
-  Bone,
-  Activity,
-  Heart,
-  FileText,
-  Eye,
-  Sparkles,
-} from "lucide-react";
+import Image from "next/image";
 
 interface Center {
   slug: string;
   title_th: string;
-  icon_type: string;
+  icon_type?: string;
 }
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  "shield-alert": ShieldAlert,
-  "heart-pulse": HeartPulse,
-  stethoscope: Stethoscope,
-  scissors: Scissors,
-  smile: Smile,
-  baby: Baby,
-  bone: Bone,
-  activity: Activity,
-  heart: Heart,
-  "file-text": FileText,
-  eye: Eye,
-  sparkles: Sparkles,
+// =========================================================================
+// กำหนดรูปไอคอนสำหรับแต่ละศูนย์ตามต้องการ (สามารถเปลี่ยนชื่อ Frame01, Frame02... ได้ที่นี่)
+// =========================================================================
+export const CENTER_ICON_MAP: Record<string, string> = {
+  emergency: "/img/icon/Frame01.png",         // 1. ศูนย์อุบัติเหตุและฉุกเฉิน
+  obgyn: "/img/icon/Frame02.png",             // 2. ศูนย์สุขภาพสตรี
+  internal: "/img/icon/Frame02.png",          // 3. ศูนย์อายุรกรรม
+  surgery: "/img/icon/Frame03.png",           // 4. ศูนย์ศัลยกรรม
+  dental: "/img/icon/Frame03.png",            // 5. ศูนย์ทันตกรรม
+  pediatrics: "/img/icon/Frame04.png",        // 6. ศูนย์กุมารเวชกรรม
+  orthopedics: "/img/icon/Frame01.png",       // 7. ศูนย์กระดูกและข้อ
+  "physical-therapy": "/img/icon/Frame01.png", // 8. ศูนย์กายภาพบำบัด
+  rehab: "/img/icon/Frame04.png",             // 9. ศูนย์เวชศาสตร์ฟื้นฟู
+  ent: "/img/icon/Frame01.png",               // 10. ศูนย์หู คอ จมูก
+  eye: "/img/icon/Frame04.png",               // 11. ศูนย์จักษุ (ตา)
+  thai: "/img/icon/Frame04.png",              // 12. นวดแผนไทย
 };
+
+function getCenterIconSrc(slug: string, index: number): string {
+  if (CENTER_ICON_MAP[slug]) return CENTER_ICON_MAP[slug];
+  const pad = String(index + 1).padStart(2, "0");
+  return `/img/icon/Frame${pad}.png`;
+}
 
 export default function SpecializedCentersPage() {
   const [centers, setCenters] = useState<Center[]>([]);
@@ -82,26 +78,31 @@ export default function SpecializedCentersPage() {
         ) : centers.length === 0 ? (
           <div className="text-center py-16 text-gray-400">ยังไม่มีข้อมูลศูนย์รักษาเฉพาะทาง</div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-12 gap-x-6 sm:gap-x-8 md:gap-x-12 place-items-center">
-            {centers.map((center) => {
-              const Icon = ICON_MAP[center.icon_type] || Stethoscope;
-              return (
-                <Link
-                  key={center.slug}
-                  href={`/patient-services?dept=${center.slug}`}
-                  className="group flex flex-col items-center text-center cursor-pointer w-full"
-                >
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-[#ffa154] to-[#f97316] group-hover:from-[#f97316] group-hover:to-[#ea580c] flex items-center justify-center text-white shadow-md group-hover:shadow-xl group-hover:scale-105 transition-all duration-300 border-2 border-white/20 shrink-0">
-                    <Icon className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 stroke-[1.5]" />
-                  </div>
-                  <div className="mt-3 sm:mt-4 flex items-start justify-center w-full px-1">
-                    <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-800 group-hover:text-[#f97316] transition-colors leading-snug tracking-tight text-center">
-                      {center.title_th}
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-10 sm:gap-y-12 gap-x-6 sm:gap-x-8 md:gap-x-12 place-items-center">
+            {centers.map((center, index) => (
+              <Link
+                key={center.slug}
+                href={`/patient-services?dept=${center.slug}`}
+                className="flex flex-col items-center text-center cursor-pointer w-full"
+              >
+                {/* แสดงเฉพาะรูปไอคอน ไม่มีวงกลมพื้นหลัง CSS ซ้อนทับ */}
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 shrink-0 flex items-center justify-center">
+                  <Image
+                    src={getCenterIconSrc(center.slug, index)}
+                    alt={center.title_th}
+                    fill
+                    sizes="(max-width: 640px) 80px, (max-width: 768px) 96px, 112px"
+                    className="object-contain"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <div className="mt-3 sm:mt-4 flex items-start justify-center w-full px-1 min-h-[2.5rem]">
+                  <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-800 leading-snug tracking-tight text-center">
+                    {center.title_th}
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         )}
       </div>

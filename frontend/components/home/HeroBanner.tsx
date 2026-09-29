@@ -1,7 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -12,12 +13,13 @@ interface BannerData {
   subtitle: string;
   description: string;
   button_text: string;
+  button_link?: string;
   show_content: boolean;
   is_active: boolean;
 }
 
 const DEFAULT_BANNERS: BannerData[] = [
-  { id: 1, image_url: "/img/indexbanner/herobannertest01.png", title: "โรงพยาบาลปากช่องนานา", subtitle: "Pakchongnana Hospital", description: "ร่วมใจ ใฝ่บริการ บริการดุจญาติมิตร เพื่อสุขภาพที่ดีของท่าน", button_text: "เกี่ยวกับเรา", show_content: true, is_active: true },
+  { id: 1, image_url: "/img/indexbanner/herobannertest01.png", title: "โรงพยาบาลปากช่องนานา", subtitle: "Pakchongnana Hospital", description: "ร่วมใจ ใฝ่บริการ บริการดุจญาติมิตร เพื่อสุขภาพที่ดีของท่าน", button_text: "เกี่ยวกับเรา", button_link: "/about/vision-mission", show_content: true, is_active: true },
   { id: 2, image_url: "/img/indexbanner/herobannertest03.png", title: "", subtitle: "", description: "", button_text: "", show_content: false, is_active: true },
   { id: 3, image_url: "/img/indexbanner/herobannertest04.png", title: "", subtitle: "", description: "", button_text: "", show_content: false, is_active: true },
 ];
@@ -130,9 +132,12 @@ export default function HeroBanner() {
                       transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
                       className="pt-2 sm:pt-4"
                     >
-                      <button className="px-5 py-2 sm:px-6 sm:py-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white font-medium text-xs sm:text-sm rounded-full transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5">
+                      <Link
+                        href={banners[currentIndex].button_link || "/about/vision-mission"}
+                        className="inline-block px-5 py-2 sm:px-6 sm:py-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white font-medium text-xs sm:text-sm rounded-full transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5 text-center"
+                      >
                         {banners[currentIndex].button_text}
-                      </button>
+                      </Link>
                     </motion.div>
                   )}
                 </motion.div>

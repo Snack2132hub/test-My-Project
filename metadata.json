@@ -1,0 +1,7 @@
+{
+  "name": "Pak Chong Nana Hospital",
+  "description": "โรงพยาบาลปากช่องนานา - เว็บไซต์บริการทางการแพทย์ บุคลากรแพทย์ ข้อมูลสุขภาพ และการติดต่อ",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

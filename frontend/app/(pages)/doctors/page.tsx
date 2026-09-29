@@ -1,4 +1,5 @@
 "use client";
+import "@/app/(pages)/pages.css";
 
 import { useState, useMemo, useEffect, Suspense } from "react";
 import Image from "next/image";

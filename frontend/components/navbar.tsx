@@ -9,6 +9,7 @@ import {
   ChevronDown,
   Menu,
   X,
+  Globe,
 } from "lucide-react";
 
 import { Kanit } from "next/font/google";
@@ -135,7 +136,7 @@ export default function Navbar() {
               </Link>
             </li>
 
-            {/* เกี่ยวกับ ▾ */}
+            {/* เกี่ยวกับเรา ▾ */}
             <li
               className="relative group"
               onMouseEnter={() => setActiveDropdown("about")}
@@ -149,7 +150,7 @@ export default function Navbar() {
                     : "hover:text-[#f97316]"
                 }`}
               >
-                เกี่ยวกับ <ChevronDown className="w-4 h-4 stroke-[2]" />
+                เกี่ยวกับเรา <ChevronDown className="w-4 h-4 stroke-[2]" />
               </Link>
               {activeDropdown === "about" && (
                 <ul className="absolute left-0 top-full w-56 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
@@ -173,86 +174,58 @@ export default function Navbar() {
               )}
             </li>
 
-            {/* ศูนย์บริการผู้ป่วย ▾ (ไฮไลท์ส้มเมื่อเลือกหน้า patient-services) */}
+            {/* บริการทางการแพทย์ ▾ */}
             <li
               className="relative group"
               onMouseEnter={() => setActiveDropdown("patient")}
               onMouseLeave={() => setActiveDropdown(null)}
             >
               <Link
-                href="/patient-services"
+                href="/medical-services"
                 className={`flex items-center gap-1 px-3 py-2 rounded-md transition-all duration-200 ${
-                  pathname?.startsWith("/patient-services")
-                    ? "text-[#f97316] "
+                  pathname?.startsWith("/medical-services") ||
+                  pathname?.startsWith("/patient-services") ||
+                  pathname?.startsWith("/specialized-centers") ||
+                  pathname?.startsWith("/health-checkup") ||
+                  pathname?.startsWith("/patient-registration")
+                    ? "text-[#f97316] font-medium"
                     : "hover:text-[#f97316]"
                 }`}
               >
-                ศูนย์บริการผู้ป่วย <ChevronDown className="w-4 h-4 stroke-[2]" />
+                บริการทางการแพทย์ <ChevronDown className="w-4 h-4 stroke-[2]" />
               </Link>
               {activeDropdown === "patient" && (
-                <ul className="absolute left-0 top-full w-60 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <ul className="absolute left-0 top-full w-56 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <li>
+                    <Link
+                      href="/medical-services"
+                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                    >
+                      บริการทางการแพทย์ต่างๆ
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       href="/specialized-centers"
                       className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
-                      ศูนย์รักษาเฉพาะทาง
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/special-centers"
-                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      ศูนย์รักษาพิเศษ
+                      ศูนย์การรักษาเฉพาะทาง
                     </Link>
                   </li>
                   <li>
                     <Link
                       href="/health-checkup"
-                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] font-medium transition-colors"
-                    >
-                      ศูนย์ตรวจสุขภาพ (หน้าหลัก)
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/health-checkup/checkup-program"
-                      className="block pl-7 pr-4 py-2 text-xs text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      • โปรแกรมตรวจสุขภาพ
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/health-checkup/vaccine-program"
-                      className="block pl-7 pr-4 py-2 text-xs text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      • โปรแกรมฉีดวัคซีน
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/patient-services?dept=emergency"
                       className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
-                      ศูนย์อุบัติเหตุ-ฉุกเฉิน
+                      ศูนย์ตรวจสุขภาพ
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/patient-services?dept=internal"
+                      href="/patient-services?dept=specialroom"
                       className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
-                      ศูนย์อายุรกรรม
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/patient-services?dept=surgery"
-                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      ศูนย์ศัลยกรรม
+                      ห้องพิเศษ
                     </Link>
                   </li>
                   <li>
@@ -323,8 +296,12 @@ export default function Navbar() {
             {/* INTRANET */}
             <li>
               <Link
-                href="#"
-                className="px-3 py-2 hover:text-[#f97316] transition-colors block uppercase tracking-wide"
+                href="/intranet"
+                className={`px-3 py-2 rounded-md transition-all duration-200 block uppercase tracking-wide ${
+                  pathname === "/intranet"
+                    ? "text-[#f97316] font-medium"
+                    : "hover:text-[#f97316]"
+                }`}
               >
                 INTRANET
               </Link>
@@ -333,11 +310,28 @@ export default function Navbar() {
             {/* ติดต่อ */}
             <li>
               <Link
-                href="#"
-                className="px-3 py-2 hover:text-[#f97316] transition-colors block"
+                href="/contact"
+                className={`px-3 py-2 rounded-md transition-all duration-200 block ${
+                  pathname === "/contact"
+                    ? "text-[#f97316] font-medium"
+                    : "hover:text-[#f97316]"
+                }`}
               >
                 ติดต่อ
               </Link>
+            </li>
+
+            {/* Language Selector (🌐 | EN) */}
+            <li className="pl-1">
+              <button
+                type="button"
+                className="flex items-center gap-1.5 px-2.5 py-1 text-sm font-medium text-[#f97316] hover:bg-orange-50 rounded-lg transition-colors cursor-pointer"
+                aria-label="เปลี่ยนภาษา / Language"
+              >
+                <Globe className="w-4 h-4 text-[#f97316]" />
+                <span className="text-gray-300 font-light">|</span>
+                <span className="tracking-wide text-xs sm:text-sm">EN</span>
+              </button>
             </li>
           </ul>
 
@@ -361,18 +355,11 @@ export default function Navbar() {
             >
               หน้าหลัก
             </Link>
-            <Link
-              href="/patient-services"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-base font-normal text-[#f97316] bg-orange-50"
-            >
-              ศูนย์บริการผู้ป่วย (ศูนย์รักษาเฉพาะทาง)
-            </Link>
             <button
               onClick={() => toggleDropdown("mobile-about")}
               className="w-full flex justify-between items-center px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
             >
-              เกี่ยวกับ <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === "mobile-about" ? "rotate-180" : ""}`} />
+              เกี่ยวกับเรา <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === "mobile-about" ? "rotate-180" : ""}`} />
             </button>
             {activeDropdown === "mobile-about" && (
               <div className="pl-6 space-y-1 bg-gray-50 py-2 rounded-lg">
@@ -392,6 +379,62 @@ export default function Navbar() {
                 </Link>
               </div>
             )}
+            <button
+              onClick={() => toggleDropdown("mobile-patient")}
+              className="w-full flex justify-between items-center px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
+            >
+              บริการทางการแพทย์ <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === "mobile-patient" ? "rotate-180" : ""}`} />
+            </button>
+            {activeDropdown === "mobile-patient" && (
+              <div className="pl-6 space-y-1 bg-gray-50 py-2 rounded-lg">
+                <Link
+                  href="/medical-services"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  บริการทางการแพทย์ต่างๆ
+                </Link>
+                <Link
+                  href="/specialized-centers"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  ศูนย์การรักษาเฉพาะทาง
+                </Link>
+                <Link
+                  href="/health-checkup"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  ศูนย์ตรวจสุขภาพ
+                </Link>
+                <Link
+                  href="/patient-services?dept=specialroom"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  ห้องพิเศษ
+                </Link>
+                <Link
+                  href="/patient-registration"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  ลงทะเบียนผู้ป่วยใหม่
+                </Link>
+              </div>
+            )}
+            <Link
+              href="/doctors"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`block px-4 py-2.5 rounded-lg text-base font-normal ${
+                pathname?.startsWith("/doctors")
+                  ? "text-[#f97316] bg-orange-50 font-medium"
+                  : "text-gray-800 hover:bg-orange-50 hover:text-[#f97316]"
+              }`}
+            >
+              บุคลากรแพทย์
+            </Link>
             <button
               onClick={() => toggleDropdown("mobile-services")}
               className="w-full flex justify-between items-center px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
@@ -424,27 +467,24 @@ export default function Navbar() {
               </div>
             )}
             <Link
-              href="/doctors"
+              href="/intranet"
               onClick={() => setIsMobileMenuOpen(false)}
               className={`block px-4 py-2.5 rounded-lg text-base font-normal ${
-                pathname?.startsWith("/doctors")
+                pathname === "/intranet"
                   ? "text-[#f97316] bg-orange-50 font-medium"
                   : "text-gray-800 hover:bg-orange-50 hover:text-[#f97316]"
               }`}
             >
-              บุคลากรแพทย์ (ค้นหาแพทย์)
-            </Link>
-            <Link
-              href="#"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
-            >
               INTRANET
             </Link>
             <Link
-              href="#"
+              href="/contact"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
+              className={`block px-4 py-2.5 rounded-lg text-base font-normal ${
+                pathname === "/contact"
+                  ? "text-[#f97316] bg-orange-50 font-medium"
+                  : "text-gray-800 hover:bg-orange-50 hover:text-[#f97316]"
+              }`}
             >
               ติดต่อ
             </Link>

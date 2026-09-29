@@ -1,4 +1,5 @@
 "use client";
+import "@/app/(pages)/pages.css";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";

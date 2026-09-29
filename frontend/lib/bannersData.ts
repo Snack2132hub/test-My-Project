@@ -5,6 +5,7 @@ export interface Banner {
   subtitle: string;
   description: string;
   button_text: string;
+  button_link?: string;
   show_content: boolean;
   display_order: number;
   is_active: boolean;
@@ -18,6 +19,7 @@ let banners: Banner[] = [
     subtitle: "Pakchongnana Hospital",
     description: "ร่วมใจ ใฝ่บริการ บริการดุจญาติมิตร เพื่อสุขภาพที่ดีของท่าน",
     button_text: "เกี่ยวกับเรา",
+    button_link: "/about/vision-mission",
     show_content: true,
     display_order: 1,
     is_active: true,

@@ -1,3 +1,4 @@
+import "@/app/(pages)/pages.css";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -56,44 +57,44 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
   return (
     <div className={`${kanit.className} min-h-screen bg-white pb-24`}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
-        {/* 1. แถบ Breadcrumb Navigation */}
-        <nav
-          id="doctor-detail-breadcrumb"
-          className="text-xs sm:text-sm text-gray-500 mb-2 flex items-center gap-2"
-          aria-label="Breadcrumb"
-        >
-          <Link href="/" className="hover:text-[#f97316] transition-colors">
-            หน้าแรก
-          </Link>
-          <span>/</span>
-          <Link href="/doctors" className="hover:text-[#f97316] transition-colors">
-            บุคลากรแพทย์
-          </Link>
-        </nav>
-
-        {/* 2. ปุ่มย้อนกลับ "← กลับหน้าบุคลากรแพทย์" */}
-        <div className="mb-6">
-          <Link
-            href="/doctors"
-            id="back-to-doctors-btn"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-[#f97316] transition-colors group cursor-pointer"
+        {/* 1. ส่วนหัว: Breadcrumb, ปุ่มย้อนกลับ และหัวข้อศูนย์ */}
+        <div id="doctor-header-frame" className="mb-8 sm:mb-10">
+          <nav
+            id="doctor-detail-breadcrumb"
+            className="text-xs sm:text-sm text-gray-500 mb-2 flex items-center gap-2"
+            aria-label="Breadcrumb"
           >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span>กลับหน้าบุคลากรแพทย์</span>
-          </Link>
+            <Link href="/" className="hover:text-[#f97316] transition-colors">
+              หน้าแรก
+            </Link>
+            <span>/</span>
+            <Link href="/doctors" className="hover:text-[#f97316] transition-colors">
+              บุคลากรแพทย์
+            </Link>
+          </nav>
+
+          <div className="mb-4 sm:mb-6">
+            <Link
+              href="/doctors"
+              id="back-to-doctors-btn"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-[#f97316] transition-colors group cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <span>กลับหน้าบุคลากรแพทย์</span>
+            </Link>
+          </div>
+
+          <h1
+            id="doctor-center-heading"
+            className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#f97316] tracking-tight"
+          >
+            {centerTitle}
+          </h1>
         </div>
 
-        {/* 3. หัวข้อศูนย์การรักษา (แบบในรูปที่ 3 เช่น "ศูนย์ศัลยศาสตร์ออร์โธปิดิกส์") */}
-        <h1
-          id="doctor-center-heading"
-          className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#f97316] tracking-tight mb-7"
-        >
-          {centerTitle}
-        </h1>
-
-        {/* 4. เลย์เอาต์แบ่งเป็น 2 คอลัมน์ (ซ้าย: รูปแพทย์และข้อมูลตำแหน่ง, ขวา: รายละเอียดตารางออกตรวจและความเชี่ยวชาญ) */}
+        {/* 2. เลย์เอาต์แบ่งเป็น 2 คอลัมน์ (ซ้าย: ข้อมูลและรูปแพทย์, ขวา: รายละเอียดต่างๆ) */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* คอลัมน์ซ้าย: รูปภาพแพทย์และชื่อ (ตามรูปที่ 3) */}
+          {/* คอลัมน์ซ้าย: รูปภาพแพทย์และชื่อ */}
           <div className="md:col-span-4 lg:col-span-4 flex flex-col items-center md:items-start text-center md:text-left">
             {/* การ์ดกรอบรูปภาพโทนสีส้มอ่อน (Peach Frame) */}
             <div className="relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 via-[#ffedd5]/80 to-[#fed7aa]/40 border border-orange-100 shadow-sm">
@@ -138,9 +139,9 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
             </div>
           </div>
 
-          {/* คอลัมน์ขวา: รายละเอียดแพทย์ (ตามรูปที่ 3) */}
+          {/* คอลัมน์ขวา: รายละเอียดแพทย์ */}
           <div className="md:col-span-8 lg:col-span-8 space-y-7">
-            {/* 4.1 กล่อง "ตารางออกตรวจ" (พื้นหลังสีส้มอ่อน กรอบสีส้มตามรูปที่ 3) */}
+            {/* 2.1 กล่อง "ตารางออกตรวจ" */}
             {doctor.schedules && doctor.schedules.length > 0 && (
               <div
                 id="doctor-schedule-box"
@@ -161,7 +162,7 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
               </div>
             )}
 
-            {/* 4.2 ส่วน "ความเชี่ยวชาญ" (Specialties) */}
+            {/* 2.2 ส่วน "ความเชี่ยวชาญ" (Specialties) */}
             {doctor.specialties && doctor.specialties.length > 0 && (
               <div id="doctor-specialties-section" className="space-y-3">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -179,7 +180,7 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
               </div>
             )}
 
-            {/* 4.3 ส่วน "ประวัติการศึกษา (education)" */}
+            {/* 2.3 ส่วน "ประวัติการศึกษา (education)" */}
             {doctor.education && doctor.education.length > 0 && (
               <div id="doctor-education-section" className="space-y-3 pt-2">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -197,7 +198,7 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
               </div>
             )}
 
-            {/* 4.4 ส่วน "ตำแหน่งและบทบาทหน้าที่" (Positions) ถ้ามี */}
+            {/* 2.4 ส่วน "ตำแหน่งและบทบาทหน้าที่" (Positions) */}
             {doctor.positions && doctor.positions.length > 0 && (
               <div id="doctor-positions-section" className="space-y-3 pt-2">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -215,7 +216,7 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
               </div>
             )}
 
-            {/* 4.5 ส่วน "ผลงานทางวิชาการ (Publications)" ถ้ามี */}
+            {/* 2.5 ส่วน "ผลงานทางวิชาการ (Publications)" */}
             {doctor.contributions && doctor.contributions.length > 0 && (
               <div id="doctor-contributions-section" className="space-y-3 pt-2">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">

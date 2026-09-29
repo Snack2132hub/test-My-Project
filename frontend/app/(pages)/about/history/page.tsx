@@ -1,4 +1,5 @@
 "use client";
+import "@/app/(pages)/pages.css";
 
 import Image from "next/image";
 import Link from "next/link";

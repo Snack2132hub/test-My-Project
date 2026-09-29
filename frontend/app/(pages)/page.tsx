@@ -1,4 +1,5 @@
 "use client";
+import "@/app/(pages)/pages.css";
 
 
 import HeroBanner from "@/components/home/HeroBanner";
