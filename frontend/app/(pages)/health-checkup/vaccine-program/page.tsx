@@ -20,7 +20,8 @@ interface VaccineProgram {
   id: number;
   title: string;
   price?: string;
-  category?: string;
+  category?: string; // รหัสหมวด เช่น "flu" — ใช้กรอง
+  category_label?: string; // ชื่อหมวดภาษาไทย — ใช้แสดงผล
   location?: string;
   time?: string;
   contact?: string;
@@ -56,10 +57,14 @@ export default function VaccineProgramPage() {
     }
   };
 
-  // Categories
+  // Categories (เก็บรหัสไว้กรอง แต่โชว์ชื่อไทยให้ผู้ใช้)
+  const categoryMap = new Map<string, string>();
+  vaccines.forEach((v) => {
+    if (v.category) categoryMap.set(v.category, v.category_label || v.category);
+  });
   const categories = [
-    "ทั้งหมด",
-    ...Array.from(new Set(vaccines.map((v) => v.category).filter(Boolean))),
+    { code: "ทั้งหมด", label: "ทั้งหมด" },
+    ...Array.from(categoryMap, ([code, label]) => ({ code, label })),
   ];
 
   // Filter
@@ -114,18 +119,18 @@ export default function VaccineProgramPage() {
         <div className="flex flex-wrap items-center gap-2 mb-8">
           {categories.map((cat) => (
             <button
-              key={cat as string}
+              key={cat.code}
               onClick={() => {
-                setActiveCategory(cat as string);
+                setActiveCategory(cat.code);
                 setCurrentPage(1);
               }}
               className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all cursor-pointer ${
-                activeCategory === cat
+                activeCategory === cat.code
                   ? "bg-[#f97316] text-white shadow-md"
                   : "bg-white text-gray-600 hover:bg-orange-50 hover:text-orange-600 border border-gray-200"
               }`}
             >
-              {cat as string}
+              {cat.label}
             </button>
           ))}
         </div>
@@ -181,7 +186,7 @@ export default function VaccineProgramPage() {
                   {/* Price/Category Tag top left */}
                   <div className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-md bg-[#f97316] text-white text-[11px] font-semibold shadow-sm flex items-center gap-1">
                     <Tag className="w-3 h-3" />
-                    <span>{item.category || "วัคซีน"}</span>
+                    <span>{item.category_label || item.category || "วัคซีน"}</span>
                   </div>
 
                   {/* Hover Zoom Overlay */}
@@ -284,7 +289,7 @@ export default function VaccineProgramPage() {
             <div className="bg-gray-900 text-white px-6 py-4 flex items-center justify-between border-b border-gray-800">
               <div>
                 <span className="inline-block px-2.5 py-0.5 rounded text-[11px] font-semibold bg-[#f97316] text-white mb-1">
-                  {selectedPoster.category || "วัคซีน"}
+                  {selectedPoster.category_label || selectedPoster.category || "วัคซีน"}
                 </span>
                 <h3 className="font-bold text-base sm:text-lg text-white line-clamp-1">
                   {selectedPoster.title}

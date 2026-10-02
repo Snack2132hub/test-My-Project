@@ -12,7 +12,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
-      await pool.query("UPDATE patient_reg_steps SET title=?,description=?,display_order=? WHERE id=?", [body.title, body.description, body.display_order, id]);
+      await pool.query("UPDATE patient_reg_steps SET title=?,description=?,display_order=? WHERE patient_reg_step_id=?", [body.title, body.description, body.display_order, id]);
       return NextResponse.json({ ok: true, source: "db" });
     } catch {}
     updateMemoryRegStep(id, body);
@@ -29,7 +29,7 @@ export async function DELETE(_: Request, { params }: { params: Promise<{ id: str
   try {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
-    await pool.query("DELETE FROM patient_reg_steps WHERE id=?", [id]);
+    await pool.query("DELETE FROM patient_reg_steps WHERE patient_reg_step_id=?", [id]);
     return NextResponse.json({ ok: true, source: "db" });
   } catch {}
   deleteMemoryRegStep(id);

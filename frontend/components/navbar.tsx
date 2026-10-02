@@ -171,6 +171,22 @@ export default function Navbar() {
                       วิสัยทัศน์ / พันธกิจ
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href="/about/executives"
+                      className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                    >
+                      ผู้บริหารโรงพยาบาล
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/about/organization"
+                      className="block px-4 py-2 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
+                    >
+                      โครงสร้างองค์กร
+                    </Link>
+                  </li>
                 </ul>
               )}
             </li>
@@ -195,18 +211,10 @@ export default function Navbar() {
                 <ul className="absolute left-0 top-full w-60 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   <li>
                     <Link
-                      href="/specialized-centers"
-                      className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
-                    >
-                      ศูนย์รักษาเฉพาะทาง
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       href="/special-centers"
                       className="block px-4 py-2.5 text-sm text-[#76757C] hover:bg-orange-50 hover:text-[#f97316] transition-colors"
                     >
-                      ศูนย์รักษาพิเศษ
+                      ศูนย์การรักษา
                     </Link>
                   </li>
                   <li
@@ -334,8 +342,10 @@ export default function Navbar() {
             {/* INTRANET */}
             <li>
               <Link
-                href="#"
-                className="px-3 py-2 hover:text-[#f97316] transition-colors block uppercase tracking-wide"
+                href="/intranet"
+                className={`px-3 py-2 hover:text-[#f97316] transition-colors block uppercase tracking-wide ${
+                  pathname?.startsWith("/intranet") ? "text-[#f97316] font-medium" : ""
+                }`}
               >
                 INTRANET
               </Link>
@@ -344,8 +354,10 @@ export default function Navbar() {
             {/* ติดต่อ */}
             <li>
               <Link
-                href="#"
-                className="px-3 py-2 hover:text-[#f97316] transition-colors block"
+                href="/contact"
+                className={`px-3 py-2 hover:text-[#f97316] transition-colors block ${
+                  pathname?.startsWith("/contact") ? "text-[#f97316] font-medium" : ""
+                }`}
               >
                 ติดต่อ
               </Link>
@@ -401,6 +413,20 @@ export default function Navbar() {
                 >
                   วิสัยทัศน์ / พันธกิจ
                 </Link>
+                <Link
+                  href="/about/executives"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  ผู้บริหารโรงพยาบาล
+                </Link>
+                <Link
+                  href="/about/organization"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-[#f97316]"
+                >
+                  โครงสร้างองค์กร
+                </Link>
               </div>
             )}
             <button
@@ -446,14 +472,14 @@ export default function Navbar() {
               บุคลากรแพทย์ (ค้นหาแพทย์)
             </Link>
             <Link
-              href="#"
+              href="/intranet"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
             >
               INTRANET
             </Link>
             <Link
-              href="#"
+              href="/contact"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block px-4 py-2.5 rounded-lg text-base font-normal text-gray-800 hover:bg-orange-50"
             >

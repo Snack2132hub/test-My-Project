@@ -1,3 +1,9 @@
+export const VACCINE_CATEGORY_LABELS: Record<string, string> = {
+  general: "วัคซีนทั่วไป", flu: "วัคซีนไข้หวัดใหญ่", hpv: "วัคซีน HPV", dengue: "วัคซีนไข้เลือดออก",
+  hepatitis_a: "วัคซีนตับอักเสบ A", hepatitis_b: "วัคซีนตับอักเสบ B", pneumococcal: "วัคซีนนิวโมคอคคัส",
+  rabies: "วัคซีนโรคพิษสุนัขบ้า", children: "วัคซีนเด็ก", adult: "วัคซีนผู้ใหญ่", other: "อื่นๆ",
+};
+
 export interface VaccineProgram {
   id: number;
   title: string;
@@ -15,7 +21,7 @@ export const INITIAL_VACCINE_PROGRAMS: VaccineProgram[] = [
     id: 1,
     title: "บริการฉีดวัคซีน ศูนย์ตรวจสุขภาพ โรงพยาบาลปากช่องนานา",
     price: "เริ่มต้น 420 บาท",
-    category: "วัคซีนทั่วไป",
+    category: "general",
     location: "ศูนย์ตรวจสุขภาพ อาคารผู้ป่วยนอก ชั้น 2",
     time: "เปิดให้บริการ จันทร์-ศุกร์ 08.00 - 15.00 น.",
     contact: "044-211356 , 044-312568 ต่อ 631",
@@ -26,7 +32,7 @@ export const INITIAL_VACCINE_PROGRAMS: VaccineProgram[] = [
     id: 2,
     title: "ป้องการคุณและคนที่คุณรัก - วัคซีนไข้หวัดใหญ่ ชนิด 4 สายพันธุ์",
     price: "ราคา 420 บาท",
-    category: "ไข้หวัดใหญ่",
+    category: "flu",
     location: "ศูนย์ตรวจสุขภาพ อาคารผู้ป่วยนอก ชั้น 2",
     time: "เปิดให้บริการ จันทร์-ศุกร์ 08.00 - 15.00 น.",
     contact: "044-211356 , 044-312568 ต่อ 631",
@@ -37,7 +43,7 @@ export const INITIAL_VACCINE_PROGRAMS: VaccineProgram[] = [
     id: 3,
     title: "ไข้เลือดออกป้องกันได้! วัคซีนป้องกันการติดเชื้อไข้เลือดออก",
     price: "ราคา 1,800 บาท / เข็ม",
-    category: "ไข้เลือดออก",
+    category: "dengue",
     location: "ศูนย์ตรวจสุขภาพ อาคารผู้ป่วยนอก ชั้น 2",
     time: "เปิดให้บริการ จันทร์-ศุกร์ 08.00 - 15.00 น.",
     contact: "044-211356 , 044-312568 ต่อ 631",
@@ -48,7 +54,7 @@ export const INITIAL_VACCINE_PROGRAMS: VaccineProgram[] = [
     id: 4,
     title: "วัคซีนรวม คอตีบ บาดทะยัก และไอกรน (Tdap)",
     price: "เริ่มต้น 720 บาท",
-    category: "วัคซีนผู้ใหญ่",
+    category: "adult",
     location: "ศูนย์ตรวจสุขภาพ อาคารผู้ป่วยนอก ชั้น 2",
     image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&q=80&w=800",
     description: "วัคซีนป้องกันโรคคอตีบ บาดทะยัก และไอกรน แนะนำกระตุ้นทุก 10 ปี",
@@ -57,7 +63,7 @@ export const INITIAL_VACCINE_PROGRAMS: VaccineProgram[] = [
     id: 5,
     title: "ผู้ประกันตน รพ.ปากช่องนานา อายุ 50 ปีขึ้นไป ฉีดวัคซีนไข้หวัดใหญ่ฟรี",
     price: "ไม่มีค่าใช้จ่าย",
-    category: "สิทธิประโยชน์",
+    category: "other",
     location: "ศูนย์ตรวจสุขภาพ อาคารผู้ป่วยนอก ชั้น 2",
     image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800",
     description: "สิทธิประโยชน์บริการฉีดวัคซีนไข้หวัดใหญ่ฟรี สำหรับผู้ประกันตน รพ.ปากช่องนานา อายุ 50 ปีขึ้นไป",
@@ -66,7 +72,7 @@ export const INITIAL_VACCINE_PROGRAMS: VaccineProgram[] = [
     id: 6,
     title: "วัคซีน HPV ป้องกันมะเร็งปากมดลูก และมะเร็งจากไวรัส HPV",
     price: "ตามสิทธิ / แพ็คเกจ",
-    category: "วัคซีน HPV",
+    category: "hpv",
     location: "ศูนย์ตรวจสุขภาพ Wellness Center",
     image: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&q=80&w=800",
     description: "ฉีดวัคซีน HPV เพื่อสร้างภูมิคุ้มกันป้องกันมะเร็งปากมดลูก หูดหงอนไก่ และมะเร็งช่องปาก",
@@ -75,7 +81,7 @@ export const INITIAL_VACCINE_PROGRAMS: VaccineProgram[] = [
     id: 7,
     title: "วัคซีนป้องกัน RSV สำหรับผู้สูงอายุ และกลุ่มเสี่ยง",
     price: "ราคาตามสิทธิ",
-    category: "วัคซีน RSV",
+    category: "other",
     location: "ศูนย์ตรวจสุขภาพ อาคารผู้ป่วยนอก ชั้น 2",
     image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800",
     description: "ป้องกันการติดเชื้อไวรัส RSV ในระบบทางเดินหายใจรุนแรงในผู้สูงอายุ",

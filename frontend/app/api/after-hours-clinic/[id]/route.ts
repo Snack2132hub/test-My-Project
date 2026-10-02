@@ -12,9 +12,11 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
-      await pool.query("UPDATE after_hours_clinics SET clinic_name=?,specialist=?,doctor_name=?,schedule=?,phone=?,display_order=? WHERE id=?", [body.clinic_name, body.specialist, body.doctor_name, body.schedule, body.phone, body.display_order, id]);
+      await pool.query("UPDATE smc_clinic SET clinic_name=?,doctor_id=?,schedule=?,phone=?,display_order=? WHERE smc_clinic_id=?", [body.clinic_name, body.doctor_id ? Number(body.doctor_id) : null, body.schedule, body.phone, body.display_order, id]);
       return NextResponse.json({ ok: true, source: "db" });
-    } catch {}
+    } catch (e) {
+      if ((e as { code?: string })?.code === "ER_NO_REFERENCED_ROW_2") return NextResponse.json({ ok: false, message: "ไม่พบแพทย์ตามรหัสที่ระบุ (doctor_id)" }, { status: 400 });
+    }
     updateMemoryAfterHoursClinic(id, body);
     return NextResponse.json({ ok: true, source: "memory" });
   } catch {
@@ -29,7 +31,7 @@ export async function DELETE(_: Request, { params }: { params: Promise<{ id: str
   try {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
-    await pool.query("DELETE FROM after_hours_clinics WHERE id=?", [id]);
+    await pool.query("DELETE FROM smc_clinic WHERE smc_clinic_id=?", [id]);
     return NextResponse.json({ ok: true, source: "db" });
   } catch {}
   deleteMemoryAfterHoursClinic(id);

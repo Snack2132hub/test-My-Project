@@ -4,7 +4,6 @@ export interface Banner {
   title: string;
   subtitle: string;
   description: string;
-  button_text: string;
   show_content: boolean;
   display_order: number;
   is_active: boolean;
@@ -17,7 +16,6 @@ let banners: Banner[] = [
     title: "โรงพยาบาลปากช่องนานา",
     subtitle: "Pakchongnana Hospital",
     description: "ร่วมใจ ใฝ่บริการ บริการดุจญาติมิตร เพื่อสุขภาพที่ดีของท่าน",
-    button_text: "เกี่ยวกับเรา",
     show_content: true,
     display_order: 1,
     is_active: true,
@@ -28,7 +26,6 @@ let banners: Banner[] = [
     title: "",
     subtitle: "",
     description: "",
-    button_text: "",
     show_content: false,
     display_order: 2,
     is_active: true,
@@ -39,7 +36,6 @@ let banners: Banner[] = [
     title: "",
     subtitle: "",
     description: "",
-    button_text: "",
     show_content: false,
     display_order: 3,
     is_active: true,

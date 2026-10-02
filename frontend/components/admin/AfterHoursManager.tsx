@@ -6,6 +6,7 @@ import { Plus, Trash2, Edit3, RefreshCw, Clock } from "lucide-react";
 interface Clinic {
   id: number;
   clinic_name: string;
+  doctor_id?: number | null;
   specialist: string;
   doctor_name: string;
   schedule: string;
@@ -13,7 +14,9 @@ interface Clinic {
   display_order: number;
 }
 
-const emptyForm = { clinic_name: "", specialist: "", doctor_name: "", schedule: "", phone: "", display_order: 99 };
+interface DoctorOption { id: number; name: string; department: string }
+
+const emptyForm = { clinic_name: "", doctor_id: "" as string | number, schedule: "", phone: "", display_order: 99 };
 
 export default function AfterHoursManager() {
   const [items, setItems] = useState<Clinic[]>([]);
@@ -22,8 +25,15 @@ export default function AfterHoursManager() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({ ...emptyForm });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [doctors, setDoctors] = useState<DoctorOption[]>([]);
 
   useEffect(() => { fetchItems(); }, []);
+  useEffect(() => {
+    fetch("/api/doctors")
+      .then(r => r.json())
+      .then(json => { if (json.ok && Array.isArray(json.data)) setDoctors(json.data.map((d: any) => ({ id: d.id, name: d.name, department: d.department || "" }))); })
+      .catch(() => {});
+  }, []);
 
   const fetchItems = async () => {
     setLoading(true);
@@ -44,7 +54,7 @@ export default function AfterHoursManager() {
 
   const openEdit = (item: Clinic) => {
     setEditingId(item.id);
-    setFormData({ clinic_name: item.clinic_name, specialist: item.specialist || "", doctor_name: item.doctor_name || "", schedule: item.schedule || "", phone: item.phone || "", display_order: item.display_order });
+    setFormData({ clinic_name: item.clinic_name, doctor_id: item.doctor_id ?? "", schedule: item.schedule || "", phone: item.phone || "", display_order: item.display_order });
     setShowModal(true);
   };
 
@@ -70,26 +80,6 @@ export default function AfterHoursManager() {
     } catch { alert("เกิดข้อผิดพลาดในการบันทึก"); }
     setIsSubmitting(false);
   };
-
-  const SPECIALTIES = [
-    "อายุรกรรมทั่วไป",
-    "อายุรกรรมระบบหัวใจและหลอดเลือด",
-    "อายุรกรรมระบบทางเดินอาหาร",
-    "อายุรกรรมต่อมไร้ท่อ",
-    "ศัลยกรรมทั่วไป",
-    "ศัลยกรรมกระดูกและข้อ (ออร์โธปิดิกส์)",
-    "ศัลยกรรมระบบทางเดินปัสสาวะ",
-    "กุมารเวชกรรม",
-    "สูตินรีเวช",
-    "จักษุวิทยา",
-    "โสต ศอ นาสิก",
-    "ผิวหนัง",
-    "จิตเวช",
-    "ทันตกรรม",
-    "เวชกรรมฟื้นฟู",
-    "รังสีวิทยา",
-    "อื่นๆ",
-  ];
 
   const field = (label: string, key: keyof typeof emptyForm, placeholder: string, required = false) => (
     <div>
@@ -168,14 +158,13 @@ export default function AfterHoursManager() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {field("ชื่อคลินิก", "clinic_name", "เช่น คลินิกอายุรกรรมนอกเวลา", true)}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">สาขา/ความเชี่ยวชาญ</label>
-                <select value={formData.specialist} onChange={e => setFormData({ ...formData, specialist: e.target.value })}
+                <label className="block text-xs font-semibold text-gray-700 mb-1">แพทย์ประจำคลินิก</label>
+                <select value={formData.doctor_id} onChange={e => setFormData({ ...formData, doctor_id: e.target.value })}
                   className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
-                  <option value="">-- เลือกสาขา --</option>
-                  {SPECIALTIES.map(s => <option key={s} value={s}>{s}</option>)}
+                  <option value="">-- เลือกแพทย์ (สาขาแสดงตามแผนกของแพทย์) --</option>
+                  {doctors.map(d => <option key={d.id} value={d.id}>{d.name}{d.department ? ` — ${d.department}` : ""}</option>)}
                 </select>
               </div>
-              {field("ชื่อแพทย์", "doctor_name", "เช่น นพ.สมชาย ใจดี")}
               {field("วัน-เวลา", "schedule", "เช่น จันทร์-ศุกร์ 17:00-20:00")}
               {field("โทรศัพท์", "phone", "เช่น 044-311856 ต่อ 123")}
               <div>

@@ -9,7 +9,6 @@ interface Banner {
   title: string;
   subtitle: string;
   description: string;
-  button_text: string;
   show_content: boolean;
   display_order: number;
   is_active: boolean;
@@ -20,7 +19,6 @@ const emptyForm = {
   title: "",
   subtitle: "",
   description: "",
-  button_text: "",
   show_content: false,
   display_order: 99,
   is_active: true,
@@ -62,7 +60,6 @@ export default function BannerManager() {
       title: item.title || "",
       subtitle: item.subtitle || "",
       description: item.description || "",
-      button_text: item.button_text || "",
       show_content: item.show_content,
       display_order: item.display_order,
       is_active: item.is_active,
@@ -258,12 +255,6 @@ export default function BannerManager() {
                     <label className="block text-xs font-semibold text-gray-700 mb-1">คำบรรยาย</label>
                     <textarea rows={2} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })}
                       placeholder="เช่น ร่วมใจ ใฝ่บริการ บริการดุจญาติมิตร"
-                      className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">ข้อความปุ่ม</label>
-                    <input value={formData.button_text} onChange={e => setFormData({ ...formData, button_text: e.target.value })}
-                      placeholder="เช่น เกี่ยวกับเรา"
                       className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" />
                   </div>
                 </>

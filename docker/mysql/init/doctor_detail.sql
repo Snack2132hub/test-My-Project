@@ -158,3 +158,40 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- =============================================
+-- เชื่อม FK ไปยัง departments (เพิ่มภายหลังจาก dump เดิม)
+-- MyISAM ไม่รองรับ foreign key ต้องแปลงเป็น InnoDB ก่อน
+-- ตารางนี้รันหลัง 02_departments.sql เสมอ (ลำดับตามชื่อไฟล์) จึงมี departments ให้ join ได้แล้ว
+-- =============================================
+ALTER TABLE `doctor_detail` ENGINE=InnoDB;
+
+ALTER TABLE `doctor_detail`
+  ADD COLUMN `department_id` int DEFAULT NULL AFTER `dr_department`;
+
+UPDATE `doctor_detail` dd
+  JOIN `departments` d ON d.`name_th` = dd.`dr_department`
+  SET dd.`department_id` = d.`department_id`;
+
+ALTER TABLE `doctor_detail`
+  ADD CONSTRAINT `fk_doctor_detail_department`
+    FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`)
+    ON UPDATE CASCADE ON DELETE SET NULL;
+
+-- =============================================
+-- dump เดิมไม่ประกาศ PRIMARY KEY ของ dr_id (ใน DB ที่รันอยู่จริงมี PK + AUTO_INCREMENT อยู่แล้ว)
+-- ประกาศให้ตรงกับของจริง เพื่อให้ FK ที่อ้าง doctor_detail(dr_id) สร้างได้บน volume ใหม่ (โครงสร้างเท่านั้น ไม่แตะข้อมูล)
+-- =============================================
+ALTER TABLE `doctor_detail`
+  MODIFY `dr_id` int NOT NULL AUTO_INCREMENT,
+  ADD PRIMARY KEY (`dr_id`);
+
+-- =============================================
+-- เชื่อม smc_clinic.doctor_id -> doctor_detail.dr_id
+-- อยู่ในไฟล์นี้ (ไม่ใช่ 02_departments.sql) เพราะ doctor_detail ยังไม่มีตอนไฟล์นั้นรัน
+-- =============================================
+ALTER TABLE `smc_clinic`
+  ADD COLUMN `doctor_id` int DEFAULT NULL AFTER `clinic_name`,
+  ADD CONSTRAINT `fk_smc_clinic_doctor`
+    FOREIGN KEY (`doctor_id`) REFERENCES `doctor_detail` (`dr_id`)
+    ON UPDATE CASCADE ON DELETE SET NULL;

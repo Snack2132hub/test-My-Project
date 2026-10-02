@@ -1,0 +1,25 @@
+/* [project]/components/home/ScrollToTop.css [app-client] (css) */
+.scroll-to-top {
+  color: #fff;
+  cursor: pointer;
+  z-index: 9999;
+  background: #f57c00;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 24px;
+  font-weight: bold;
+  transition: all .3s;
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  box-shadow: 0 4px 12px #0003;
+}
+
+.scroll-to-top:hover {
+  background: #db6e01;
+  transform: translateY(-5px);
+}
+
+/*# sourceMappingURL=components_home_ScrollToTop_17r_0q5.css.map*/

@@ -1,3 +1,4 @@
+import { getCurrentAdminId } from "@/lib/adminAccounts";
 import { NextResponse } from "next/server";
 import {
   getMemoryAnnouncements,
@@ -14,7 +15,7 @@ export async function GET() {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
     const [rows] = await pool.query<any[]>(
-      "SELECT id, title, date, category, image, description, pinned FROM health_checkup_announcements ORDER BY id DESC"
+      "SELECT checkup_announcement_id AS id, title, date, category, image, description, pinned FROM health_checkup_announcements ORDER BY checkup_announcement_id DESC"
     );
     if (Array.isArray(rows) && rows.length > 0) {
       return NextResponse.json({ ok: true, source: "db", data: rows });
@@ -42,9 +43,11 @@ export async function POST(request: Request) {
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
+      const adminId = await getCurrentAdminId();
       const [result]: any = await pool.query(
-        "INSERT INTO health_checkup_announcements (title, date, category, image, description, pinned) VALUES (?, ?, ?, ?, ?, ?)",
-        [newItem.title, newItem.date, newItem.category, newItem.image, newItem.description, newItem.pinned ? 1 : 0]
+        "INSERT INTO health_checkup_announcements (title, date, category, image, description, pinned, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [newItem.title, newItem.date, newItem.category, newItem.image, newItem.description, newItem.pinned ? 1 : 0, adminId
+        ]
       );
       if (result && result.insertId) {
         return NextResponse.json({ ok: true, data: { id: result.insertId, ...newItem }, source: "db" });
@@ -67,7 +70,7 @@ export async function DELETE(request: Request) {
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
-      await pool.query("DELETE FROM health_checkup_announcements WHERE id = ?", [id]);
+      await pool.query("DELETE FROM health_checkup_announcements WHERE checkup_announcement_id = ?", [id]);
     } catch {}
 
     deleteMemoryAnnouncement(id);
@@ -96,7 +99,7 @@ export async function PUT(request: Request) {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
       await pool.query(
-        "UPDATE health_checkup_announcements SET title = ?, date = ?, category = ?, image = ?, description = ?, pinned = ? WHERE id = ?",
+        "UPDATE health_checkup_announcements SET title = ?, date = ?, category = ?, image = ?, description = ?, pinned = ? WHERE checkup_announcement_id = ?",
         [updatedData.title, updatedData.date, updatedData.category, updatedData.image, updatedData.description, updatedData.pinned ? 1 : 0, id]
       );
     } catch {}

@@ -1,3 +1,4 @@
+import { getCurrentAdminId } from "@/lib/adminAccounts";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +24,7 @@ export async function GET() {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
     const [rows] = await pool.query<any[]>(
-      "SELECT id, image, title FROM announcements ORDER BY id ASC"
+      "SELECT announcement_id AS id, image, title FROM announcements ORDER BY announcement_id ASC"
     );
     if (Array.isArray(rows) && rows.length > 0) {
       return NextResponse.json({ ok: true, source: "db", data: rows });
@@ -52,9 +53,11 @@ export async function POST(request: Request) {
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
+      const adminId = await getCurrentAdminId();
       const [result]: any = await pool.query(
-        "INSERT INTO announcements (image, title) VALUES (?, ?)",
-        [newItem.image, newItem.title]
+        "INSERT INTO announcements (image, title, created_by) VALUES (?, ?, ?)",
+        [newItem.image, newItem.title, adminId
+        ]
       );
       if (result?.insertId) {
         return NextResponse.json({ ok: true, data: { ...newItem, id: result.insertId }, source: "db" });
@@ -81,7 +84,7 @@ export async function DELETE(request: Request) {
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
-      await pool.query("DELETE FROM announcements WHERE id = ?", [id]);
+      await pool.query("DELETE FROM announcements WHERE announcement_id = ?", [id]);
     } catch {
       // ignore
     }

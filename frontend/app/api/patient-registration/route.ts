@@ -1,3 +1,4 @@
+import { getCurrentAdminId } from "@/lib/adminAccounts";
 import { NextResponse } from "next/server";
 import { getMemoryRegSteps, addMemoryRegStep } from "@/lib/patientRegData";
 
@@ -7,7 +8,7 @@ export async function GET() {
   try {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
-    const [rows] = await pool.query<any[]>("SELECT * FROM patient_reg_steps ORDER BY display_order ASC");
+    const [rows] = await pool.query<any[]>("SELECT *, patient_reg_step_id AS id FROM patient_reg_steps ORDER BY display_order ASC");
     if (Array.isArray(rows) && rows.length > 0)
       return NextResponse.json({ ok: true, source: "db", data: rows });
   } catch {}
@@ -21,7 +22,9 @@ export async function POST(request: Request) {
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
-      const [r] = await pool.query<any>("INSERT INTO patient_reg_steps (title,description,display_order) VALUES (?,?,?)", [title, description, display_order]);
+      const adminId = await getCurrentAdminId();
+      const [r] = await pool.query<any>("INSERT INTO patient_reg_steps (title,description,display_order, created_by) VALUES (?,?,?, ?)", [title, description, display_order, adminId
+        ]);
       return NextResponse.json({ ok: true, source: "db", id: r.insertId });
     } catch {}
     const step = addMemoryRegStep({ title, description, display_order });

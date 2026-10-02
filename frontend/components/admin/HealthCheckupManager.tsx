@@ -18,11 +18,26 @@ interface Item {
   title: string;
   date?: string;
   category?: string;
+  category_label?: string; // ชื่อหมวดวัคซีนภาษาไทย (เติมมาจาก API เฉพาะแท็บ vaccines)
   price?: string;
   image: string;
   description?: string;
   pinned?: boolean;
 }
+
+const VACCINE_CATEGORIES: { code: string; label: string }[] = [
+  { code: "general", label: "วัคซีนทั่วไป" },
+  { code: "flu", label: "วัคซีนไข้หวัดใหญ่" },
+  { code: "hpv", label: "วัคซีน HPV" },
+  { code: "dengue", label: "วัคซีนไข้เลือดออก" },
+  { code: "hepatitis_a", label: "วัคซีนตับอักเสบ A" },
+  { code: "hepatitis_b", label: "วัคซีนตับอักเสบ B" },
+  { code: "pneumococcal", label: "วัคซีนนิวโมคอคคัส" },
+  { code: "rabies", label: "วัคซีนโรคพิษสุนัขบ้า" },
+  { code: "children", label: "วัคซีนเด็ก" },
+  { code: "adult", label: "วัคซีนผู้ใหญ่" },
+  { code: "other", label: "อื่นๆ" },
+];
 
 export default function HealthCheckupManager({ initialTab = "announcements" }: { initialTab?: "announcements" | "checkup" | "vaccines" }) {
   const activeTab = initialTab;
@@ -74,7 +89,7 @@ export default function HealthCheckupManager({ initialTab = "announcements" }: {
     setFormData({
       title: "",
       date: "",
-      category: activeTab === "vaccines" ? "วัคซีนทั่วไป" : "ข่าวสาร",
+      category: activeTab === "vaccines" ? "general" : "ข่าวสาร",
       price: "",
       image: "",
       description: "",
@@ -248,7 +263,7 @@ export default function HealthCheckupManager({ initialTab = "announcements" }: {
                     {activeTab === "vaccines" && (
                       <td className="py-3 px-4">
                         <span className="px-2.5 py-1 rounded-md text-xs font-medium bg-orange-100 text-orange-700">
-                          {item.category || "วัคซีน"}
+                          {item.category_label || item.category || "วัคซีน"}
                         </span>
                       </td>
                     )}
@@ -330,7 +345,7 @@ export default function HealthCheckupManager({ initialTab = "announcements" }: {
                   <label className="block text-xs font-semibold text-gray-700 mb-1">หมวดหมู่</label>
                   <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}
                     className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
-                    {["วัคซีนทั่วไป","วัคซีนไข้หวัดใหญ่","วัคซีน HPV","วัคซีนไข้เลือดออก","วัคซีนตับอักเสบ A","วัคซีนตับอักเสบ B","วัคซีนนิวโมคอคคัส","วัคซีนโรคพิษสุนัขบ้า","วัคซีนเด็ก","วัคซีนผู้ใหญ่","อื่นๆ"].map(c => <option key={c} value={c}>{c}</option>)}
+                    {VACCINE_CATEGORIES.map(c => <option key={c.code} value={c.code}>{c.label}</option>)}
                   </select>
                 </div>
               )}

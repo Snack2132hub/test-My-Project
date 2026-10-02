@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["file:///app/components/home/ScrollToTop.css"],"sourcesContent":[".scroll-to-top {\r\n  position: fixed;\r\n  right: 25px;\r\n  bottom: 25px;\r\n\r\n  width: 45px;\r\n  height: 45px;\r\n\r\n  border-radius: 50%;\r\n  border: none;\r\n\r\n  background: #f57c00;\r\n  color: white;\r\n\r\n  font-size: 24px;\r\n  font-weight: bold;\r\n\r\n  cursor: pointer;\r\n\r\n  box-shadow: 0 4px 12px rgba(0,0,0,0.2);\r\n\r\n  transition: all 0.3s ease;\r\n\r\n  z-index: 9999;\r\n}\r\n\r\n.scroll-to-top:hover {\r\n  transform: translateY(-5px);\r\n  background: #db6e01;\r\n}"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;AA0BA"}}]
+}

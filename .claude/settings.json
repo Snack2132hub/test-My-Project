@@ -11,7 +11,28 @@
       "Bash(taskkill //PID 26044 //F)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" --max-time 30 http://127.0.0.1:3000/)",
       "Bash(node test_db_tmp.mjs)",
-      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" --max-time 90 http://localhost:3000/)"
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" --max-time 90 http://localhost:3000/)",
+      "Bash(python -c \"from pdf2image import convert_from_path; images = convert_from_path\\(r'C:\\\\Users\\\\sunwa\\\\OneDrive\\\\เดสก์ท็อป\\\\โปรเจคสหกิจ\\\\เสร็จสมบูรณ์\\\\Black and White0036.pdf', dpi=150\\); images[0].save\\(r'C:\\\\Users\\\\sunwa\\\\OneDrive\\\\เดสก์ท็อป\\\\โปรเจคสหกิจ\\\\เสร็จสมบูรณ์\\\\page.jpg', 'JPEG'\\)\")",
+      "Bash(python \"C:\\\\Users\\\\sunwa\\\\.claude\\\\skills\\\\synced\\\\f98ac22c-d9b8-4c73-90e2-e1d101034779_ef4d9bea-1111-42f9-9b85-17130f985fc3\\\\docx\\\\scripts\\\\office\\\\soffice.py\" --headless --convert-to pdf \"C:\\\\Users\\\\sunwa\\\\OneDrive\\\\เดสก์ท็อป\\\\โปรเจคสหกิจ\\\\เสร็จสมบูรณ์\\\\Black and White0036.pdf\")",
+      "Bash(convert -version)",
+      "PowerShell(Get-Command magick -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command python -ErrorAction SilentlyContinue)",
+      "PowerShell(pip install pdf2image -q)",
+      "PowerShell(python -c \"from pdf2image import convert_from_path; images = convert_from_path\\(r'C:\\\\Users\\\\sunwa\\\\OneDrive\\\\�ʡ��ͻ\\\\��ਤ�ˡԨ\\\\��������ó�\\\\Black and White0036.pdf', dpi=150\\); images[0].save\\(r'C:\\\\Users\\\\sunwa\\\\OneDrive\\\\�ʡ��ͻ\\\\��ਤ�ˡԨ\\\\��������ó�\\\\page.jpg', 'JPEG'\\); print\\('PDF converted to JPEG successfully'\\)\")",
+      "PowerShell(pip install PyMuPDF -q)",
+      "PowerShell(python -c \"import fitz; pdf = fitz.open\\(r'C:\\\\Users\\\\sunwa\\\\OneDrive\\\\�ʡ��ͻ\\\\��ਤ�ˡԨ\\\\��������ó�\\\\Black and White0036.pdf'\\); page = pdf[0]; pix = page.get_pixmap\\(matrix=fitz.Matrix\\(1.5, 1.5\\)\\); pix.save\\(r'C:\\\\Users\\\\sunwa\\\\OneDrive\\\\�ʡ��ͻ\\\\��ਤ�ˡԨ\\\\��������ó�\\\\page.jpg'\\); print\\('PDF converted to JPEG successfully'\\)\")",
+      "PowerShell(python -c \"import pymupdf; pdf = pymupdf.open\\(r'C:\\\\Users\\\\sunwa\\\\OneDrive\\\\�ʡ��ͻ\\\\Black and White0036.pdf'\\); page = pdf[0]; pix = page.get_pixmap\\(matrix=pymupdf.Matrix\\(1.5, 1.5\\)\\); pix.save\\(r'C:\\\\Users\\\\sunwa\\\\AppData\\\\Local\\\\Temp\\\\page.jpg'\\); print\\('PDF converted successfully'\\)\")",
+      "Bash(unzip -q \"เล่มรายงานสหกิจรพ_แก้ไข7.docx\" -d unpacked)",
+      "PowerShell($docPath = \"C:\\\\Users\\\\sunwa\\\\OneDrive\\\\เดสก์ท็อป\\\\โปรเจคสหกิจ\\\\เสร็จสมบูรณ์\"; Copy-Item \"$env:TEMP\\\\page.jpg\" \"$docPath\\\\unpacked\\\\word\\\\media\\\\image1.jpg\"; dir \"$docPath\\\\unpacked\\\\word\\\\media\\\\\")",
+      "PowerShell($docPath = \"C:\\\\Users\\\\sunwa\\\\OneDrive\\\\เดสก์ท็อป\\\\โปรเจคสหกิจ\\\\เสร็จสมบูรณ์\"; Move-Item \"$docPath\\\\unpacked\\\\word\\\\media\\\\image1.jpg\" \"$docPath\\\\unpacked\\\\word\\\\media\\\\image22.jpg\" -Force; Get-Content \"$docPath\\\\unpacked\\\\word\\\\_rels\\\\document.xml.rels\" | Select-String \"image\" | head -5)",
+      "PowerShell($docPath = \"C:\\\\Users\\\\sunwa\\\\OneDrive\\\\เดสก์ท็อป\\\\โปรเจคสหกิจ\\\\เสร็จสมบูรณ์\"; Move-Item \"$docPath\\\\unpacked\\\\word\\\\media\\\\image1.jpg\" \"$docPath\\\\unpacked\\\\word\\\\media\\\\image22.jpg\" -Force; Get-Content \"$docPath\\\\unpacked\\\\word\\\\_rels\\\\document.xml.rels\" | Select-String \"image\" | Select-Object -First 5)",
+      "PowerShell($docPath = \"C:\\\\Users\\\\sunwa\\\\OneDrive\\\\เดสก์ท็อป\\\\โปรเจคสหกิจ\\\\เสร็จสมบูรณ์\"; $imagePath = \"$docPath\\\\unpacked\\\\word\\\\media\"; if \\(Test-Path \"$imagePath\\\\image22.jpg\"\\) { dir \"$imagePath\\\\image22.jpg\" } else { Copy-Item \"$env:TEMP\\\\page.jpg\" \"$imagePath\\\\image22.jpg\"; \"Image copied successfully\" })",
+      "PowerShell($docPath = \"C:\\\\Users\\\\sunwa\\\\OneDrive\\\\เดสก์ท็อป\\\\โปรเจคสหกิจ\\\\เสร็จสมบูรณ์\"; $content = [System.IO.File]::ReadAllText\\(\"$docPath\\\\unpacked\\\\word\\\\document.xml\"\\); $content.Substring\\($content.Length - 1000\\))",
+      "PowerShell(& \"C:\\\\Users\\\\sunwa\\\\AppData\\\\Local\\\\Temp\\\\add_image.ps1\")",
+      "PowerShell($skillPath = \"C:\\\\Users\\\\sunwa\\\\.claude\\\\skills\\\\synced\\\\f98ac22c-d9b8-4c73-90e2-e1d101034779_ef4d9bea-1111-42f9-9b85-17130f985fc3\\\\docx\"; Copy-Item \"C:\\\\Users\\\\sunwa\\\\AppData\\\\Local\\\\Temp\\\\create_template.js\" \"$skillPath\\\\create_template.js\"; cd $skillPath; node create_template.js)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\sunwa\\AppData\\Local\\Temp"
     ]
   }
 }

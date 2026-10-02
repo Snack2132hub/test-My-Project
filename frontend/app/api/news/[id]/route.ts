@@ -14,7 +14,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
       await pool.query(
-        "UPDATE news SET title=?, category=?, image_url=?, content=?, document_url=?, deadline_at=? WHERE id=?",
+        "UPDATE news SET title=?, category=?, image_url=?, content=?, document_url=?, deadline_at=? WHERE news_id=?",
         [title ?? "", category ?? "pr_news", image_url ?? "", content ?? "", document_url ?? "", deadline_at || null, id]
       );
       return NextResponse.json({ ok: true, source: "db" });
@@ -35,7 +35,7 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
   try {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
-    await pool.query("DELETE FROM news WHERE id = ?", [id]);
+    await pool.query("DELETE FROM news WHERE news_id = ?", [id]);
     return NextResponse.json({ ok: true, source: "db" });
   } catch {
     // fall back to memory

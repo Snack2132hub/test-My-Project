@@ -7,7 +7,7 @@ import NewsManager from "@/components/admin/NewsManager";
 
 /**
  * รวมเมนู "คลินิกพิเศษนอกเวลา" ไว้ที่เดียว — แต่แยกการเพิ่มข้อมูลด้านในเป็น 2 แท็บ:
- *  1. ตารางแพทย์ออกตรวจ  (ตาราง after_hours_clinics)
+ *  1. ตารางแพทย์ออกตรวจ  (ตาราง smc_clinic)
  *  2. ข่าวคลินิกนอกเวลา   (ตาราง news หมวด after_hours)
  */
 export default function AfterHoursAdmin() {

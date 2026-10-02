@@ -14,8 +14,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
       await pool.query(
-        "UPDATE banners SET image_url=?, title=?, subtitle=?, description=?, button_text=?, show_content=?, display_order=?, is_active=? WHERE id=?",
-        [body.image_url, body.title, body.subtitle, body.description, body.button_text, body.show_content ? 1 : 0, body.display_order, body.is_active ? 1 : 0, id]
+        "UPDATE banners SET image_url=?, title=?, subtitle=?, description=?, show_content=?, display_order=?, is_active=? WHERE banner_id=?",
+        [body.image_url, body.title, body.subtitle, body.description, body.show_content ? 1 : 0, body.display_order, body.is_active ? 1 : 0, id]
       );
       return NextResponse.json({ ok: true, source: "db" });
     } catch {}
@@ -35,7 +35,7 @@ export async function DELETE(_: Request, { params }: { params: Promise<{ id: str
   try {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
-    await pool.query("DELETE FROM banners WHERE id=?", [id]);
+    await pool.query("DELETE FROM banners WHERE banner_id=?", [id]);
     return NextResponse.json({ ok: true, source: "db" });
   } catch {}
 

@@ -74,8 +74,6 @@ services:
       PMA_PORT: 3306
       PMA_ARBITRARY: 0
       UPLOAD_LIMIT: 256M
-    profiles:
-      - tools
     depends_on:
       db:
         condition: service_healthy

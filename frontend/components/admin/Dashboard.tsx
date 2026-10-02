@@ -19,7 +19,6 @@ import HealthCheckupManager from '@/components/admin/HealthCheckupManager'
 import DoctorManager from '@/components/admin/DoctorManager'
 import NewsManager from '@/components/admin/NewsManager'
 import CentersManager from '@/components/admin/CentersManager'
-import TreatmentCentersManager from '@/components/admin/TreatmentCentersManager'
 import BannerManager from '@/components/admin/BannerManager'
 import PatientRegistrationManager from '@/components/admin/PatientRegistrationManager'
 import AfterHoursAdmin from '@/components/admin/AfterHoursAdmin'
@@ -357,11 +356,11 @@ export default function Dashboard({ username, onLogout }: Props) {
             </div>
           ) : activeNav === 'treatment-centers' ? (
             <div className="max-w-6xl mx-auto">
-              <TreatmentCentersManager />
+              <CentersManager category="specialized" />
             </div>
           ) : activeNav === 'centers-special' ? (
             <div className="max-w-6xl mx-auto">
-              <CentersManager />
+              <CentersManager category="special" />
             </div>
           ) : activeNav === 'patient-reg' ? (
             <div className="max-w-6xl mx-auto">

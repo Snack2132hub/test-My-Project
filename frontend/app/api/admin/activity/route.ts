@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import type { RowDataPacket } from "mysql2";
+import { getMemoryNews } from "@/lib/newsData";
+import { DOCTORS_DATA } from "@/lib/doctorsData";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +12,13 @@ interface ActivityItem {
   timestamp: number;
 }
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const CATEGORY_LABELS: Record<string, string> = {
+  pr_news: "ข่าวประชาสัมพันธ์",
+  activity: "กิจกรรม",
+  after_hours: "คลินิกพิเศษนอกเวลา",
+  job: "การสมัครงาน / รับบุคลากร",
+  procurement: "ข่าวจัดซื้อจัดจ้าง",
+};
 
 function formatThaiDate(dateStr: string): string {
   try {
@@ -25,43 +34,63 @@ function formatThaiDate(dateStr: string): string {
 export async function GET() {
   const items: ActivityItem[] = [];
 
-  // ดึงข่าวล่าสุด
+  // ดึงข่าวล่าสุด — /api/news (ตาราง news) แทน Express backend เดิม
   try {
-    const res = await fetch(`${API}/api/news?page=1&limit=5`, { cache: "no-store" });
-    const json = await res.json();
-    if (json.ok && Array.isArray(json.data)) {
-      for (const news of json.data) {
-        const categoryMap: Record<string, string> = {
-          pr_news: "ข่าวประชาสัมพันธ์",
-          activity: "กิจกรรม",
-          after_hours: "คลินิกพิเศษนอกเวลา",
-        };
-        items.push({
-          date: formatThaiDate(news.published_at || news.created_at || new Date().toISOString()),
-          actor: categoryMap[news.category] || "ข่าวสาร",
-          detail: news.title,
-          timestamp: new Date(news.published_at || news.created_at || 0).getTime(),
-        });
+    let newsRows: { title: string; category: string; published_at: string }[] = [];
+    try {
+      const { default: getPool } = await import("@/lib/db");
+      const pool = getPool();
+      const [rows] = await pool.query<RowDataPacket[]>(
+        "SELECT title, category, published_at FROM news ORDER BY published_at DESC LIMIT 5"
+      );
+      if (Array.isArray(rows) && rows.length > 0) {
+        newsRows = rows as unknown as typeof newsRows;
       }
+    } catch {
+      // DB unavailable — fall back to memory
+    }
+    if (newsRows.length === 0) {
+      newsRows = getMemoryNews().slice(0, 5);
+    }
+    for (const news of newsRows) {
+      items.push({
+        date: formatThaiDate(news.published_at),
+        actor: CATEGORY_LABELS[news.category] || "ข่าวสาร",
+        detail: news.title,
+        timestamp: new Date(news.published_at || 0).getTime(),
+      });
     }
   } catch {}
 
-  // ดึงข้อมูลแพทย์ล่าสุด
+  // ดึงข้อมูลแพทย์ล่าสุด — ตาราง doctor_detail แทน Express backend เดิม
   try {
-    const res = await fetch(`${API}/api/doctors?page=1&limit=5`, { cache: "no-store" });
-    const json = await res.json();
-    const doctors = json.data || json.doctors || [];
-    if (Array.isArray(doctors)) {
-      for (const dr of doctors.slice(0, 5)) {
-        const name = dr.dr_name || dr.name || "";
-        if (!name) continue;
-        items.push({
-          date: formatThaiDate(dr.updated_at || dr.created_at || new Date().toISOString()),
-          actor: "แพทย์",
-          detail: `ลงข้อมูลแพทย์ ${name}`,
-          timestamp: new Date(dr.updated_at || dr.created_at || 0).getTime(),
-        });
+    let doctorRows: { name: string; updated: string | null }[] = [];
+    try {
+      const { default: getPool } = await import("@/lib/db");
+      const pool = getPool();
+      const [rows] = await pool.query<RowDataPacket[]>(
+        "SELECT dr_name, edit_date, date_add FROM doctor_detail ORDER BY dr_id DESC LIMIT 5"
+      );
+      if (Array.isArray(rows) && rows.length > 0) {
+        doctorRows = rows.map((r) => ({
+          name: String(r.dr_name ?? ""),
+          updated: (r.edit_date || r.date_add || null) as string | null,
+        }));
       }
+    } catch {
+      // DB unavailable — fall back to bundled data
+    }
+    if (doctorRows.length === 0) {
+      doctorRows = DOCTORS_DATA.slice(0, 5).map((d) => ({ name: d.name, updated: null }));
+    }
+    for (const dr of doctorRows) {
+      if (!dr.name) continue;
+      items.push({
+        date: formatThaiDate(dr.updated || new Date().toISOString()),
+        actor: "แพทย์",
+        detail: `ลงข้อมูลแพทย์ ${dr.name}`,
+        timestamp: dr.updated ? new Date(dr.updated).getTime() : 0,
+      });
     }
   } catch {}
 
@@ -69,16 +98,16 @@ export async function GET() {
   try {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
-    const [rows] = await pool.query<any[]>(
-      "SELECT * FROM banners ORDER BY id DESC LIMIT 3"
+    const [rows] = await pool.query<RowDataPacket[]>(
+      "SELECT title, created_at FROM banners ORDER BY id DESC LIMIT 3"
     );
     if (Array.isArray(rows)) {
       for (const b of rows) {
         items.push({
-          date: formatThaiDate(b.created_at || b.updated_at || new Date().toISOString()),
+          date: formatThaiDate(String(b.created_at ?? new Date().toISOString())),
           actor: "แบนเนอร์",
           detail: `อัพเดทแบนเนอร์หน้าแรก${b.title ? ": " + b.title : ""}`,
-          timestamp: new Date(b.created_at || b.updated_at || 0).getTime(),
+          timestamp: new Date(String(b.created_at ?? 0)).getTime(),
         });
       }
     }

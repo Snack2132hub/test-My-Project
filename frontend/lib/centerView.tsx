@@ -13,7 +13,7 @@ import {
   FileText,
   Sparkles,
 } from "lucide-react";
-import type { TreatmentCenter } from "@/lib/treatmentCentersData";
+import type { Center } from "@/lib/centersData";
 
 export interface UIDoctor {
   id: string;
@@ -39,29 +39,33 @@ export interface UICenter {
   doctorDepartment: string;
 }
 
-export const CENTER_ICON_MAP: Record<string, ElementType> = {
-  "shield-alert": ShieldAlert,
-  "heart-pulse": HeartPulse,
-  stethoscope: Stethoscope,
-  scissors: Scissors,
-  smile: Smile,
-  baby: Baby,
-  bone: Bone,
-  activity: Activity,
-  heart: Heart,
-  "file-text": FileText,
+// ไอคอนของแต่ละศูนย์ผูกกับ slug (เป็นเรื่องการแสดงผล จึงไม่เก็บในฐานข้อมูล)
+export const CENTER_ICON_BY_SLUG: Record<string, ElementType> = {
+  diabetes: Activity,
+  hypertension: HeartPulse,
+  cancer: FileText,
+  emergency: ShieldAlert,
+  obgyn: HeartPulse,
+  internal: Stethoscope,
+  surgery: Scissors,
+  dental: Smile,
+  pediatrics: Baby,
+  orthopedics: Bone,
+  "physical-therapy": Activity,
+  rehab: Heart,
+  ent: FileText,
   eye: Eye,
-  sparkles: Sparkles,
+  thai: Sparkles,
 };
 
 export const FALLBACK_BANNER = "/img/indexbanner/herobannertest01.png";
 
-export function toUICenter(c: TreatmentCenter): UICenter {
+export function toUICenter(c: Center): UICenter {
   return {
     id: c.slug,
     titleTh: c.title_th,
     titleEn: c.title_en,
-    icon: CENTER_ICON_MAP[c.icon_type] || Stethoscope,
+    icon: CENTER_ICON_BY_SLUG[c.slug] || Stethoscope,
     description: c.description,
     highlightText: c.highlight_text,
     banners: c.banners.length ? c.banners : [FALLBACK_BANNER],

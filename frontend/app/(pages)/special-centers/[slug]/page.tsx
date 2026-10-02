@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import type { TreatmentCenter } from "@/lib/treatmentCentersData";
+import type { Center } from "@/lib/centersData";
 import { type UICenter, toUICenter } from "@/lib/centerView";
 import CenterView from "@/components/patient-services/CenterView";
 
@@ -15,10 +15,10 @@ export default function SpecialCenterDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/centers")
+    fetch("/api/centers?category=special")
       .then((r) => r.json())
       .then((json) => {
-        const rows: TreatmentCenter[] = json?.ok && Array.isArray(json.data) ? json.data : [];
+        const rows: Center[] = json?.ok && Array.isArray(json.data) ? json.data : [];
         setCenters(rows.map(toUICenter));
       })
       .catch(() => {})

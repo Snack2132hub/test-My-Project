@@ -1,6 +1,7 @@
+import { getCurrentAdminId } from "@/lib/adminAccounts";
 import { NextResponse } from "next/server";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
-import type { TreatmentCenter } from "@/lib/treatmentCentersData";
+import type { Center, CenterCategory } from "@/lib/centersData";
 import { getMemoryCenters, addMemoryCenter } from "@/lib/centersData";
 
 export const dynamic = "force-dynamic";
@@ -18,13 +19,13 @@ function parseList(value: unknown): string[] {
   return [];
 }
 
-function mapRow(row: RowDataPacket): TreatmentCenter {
+function mapRow(row: RowDataPacket): Center {
   return {
     id: Number(row.id),
+    category: (row.category === "special" ? "special" : "specialized") as CenterCategory,
     slug: String(row.slug),
     title_th: String(row.title_th ?? ""),
     title_en: String(row.title_en ?? ""),
-    icon_type: String(row.icon_type ?? "stethoscope"),
     description: String(row.description ?? ""),
     highlight_text: String(row.highlight_text ?? ""),
     banners: parseList(row.banners),
@@ -35,6 +36,7 @@ function mapRow(row: RowDataPacket): TreatmentCenter {
     hours_emergency: String(row.hours_emergency ?? ""),
     contact_ext: String(row.contact_ext ?? ""),
     doctor_department: String(row.doctor_department ?? ""),
+    department_id: row.department_id != null ? Number(row.department_id) : undefined,
     display_order: Number(row.display_order ?? 99),
   };
 }
@@ -42,33 +44,22 @@ function mapRow(row: RowDataPacket): TreatmentCenter {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get("slug") || undefined;
+  const category = (searchParams.get("category") as CenterCategory | null) || undefined;
 
   try {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
 
-    // Seed the table on first use so admin edits persist from the start.
-    const [countRows] = await pool.query<RowDataPacket[]>("SELECT COUNT(*) as total FROM hospital_centers");
-    if (Number(countRows?.[0]?.total || 0) === 0) {
-      for (const c of getMemoryCenters()) {
-        await pool.query(
-          `INSERT INTO hospital_centers
-            (slug, title_th, title_en, icon_type, description, highlight_text, banners, services, facilities,
-             hours_regular, hours_after, hours_emergency, contact_ext, doctor_department, display_order, is_active)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)`,
-          [
-            c.slug, c.title_th, c.title_en, c.icon_type, c.description, c.highlight_text,
-            JSON.stringify(c.banners), JSON.stringify(c.services), JSON.stringify(c.facilities),
-            c.hours_regular, c.hours_after, c.hours_emergency, c.contact_ext, c.doctor_department, c.display_order,
-          ]
-        );
-      }
-    }
+    const where: string[] = ["c.is_active = 1"];
+    const params: string[] = [];
+    if (slug) { where.push("c.slug = ?"); params.push(slug); }
+    if (category) { where.push("c.category = ?"); params.push(category); }
 
-    const where = slug ? "WHERE is_active = 1 AND slug = ?" : "WHERE is_active = 1";
-    const params = slug ? [slug] : [];
+    // doctor_department is derived from the department relationship (no duplicated text column)
     const [rows] = await pool.query<RowDataPacket[]>(
-      `SELECT * FROM hospital_centers ${where} ORDER BY display_order ASC`,
+      `SELECT c.*, c.hospital_center_id AS id, d.name_th AS doctor_department
+       FROM hospital_centers c JOIN departments d ON d.department_id = c.department_id
+       WHERE ${where.join(" AND ")} ORDER BY c.display_order ASC`,
       params
     );
     if (Array.isArray(rows) && rows.length > 0) {
@@ -78,7 +69,7 @@ export async function GET(request: Request) {
     // DB unavailable — fall back to bundled data
   }
 
-  return NextResponse.json({ ok: true, source: "memory", data: getMemoryCenters(slug) });
+  return NextResponse.json({ ok: true, source: "memory", data: getMemoryCenters(category, slug) });
 }
 
 export async function POST(request: Request) {
@@ -88,12 +79,13 @@ export async function POST(request: Request) {
     if (!slug || !title_th) {
       return NextResponse.json({ ok: false, message: "กรุณาระบุ slug และชื่อศูนย์" }, { status: 400 });
     }
+    const category: CenterCategory = body.category === "special" ? "special" : "specialized";
 
-    const data: Omit<TreatmentCenter, "id"> = {
+    const data: Omit<Center, "id"> = {
+      category,
       slug: String(slug).trim(),
       title_th: String(title_th).trim(),
       title_en: String(body.title_en ?? "").trim(),
-      icon_type: String(body.icon_type ?? "stethoscope"),
       description: String(body.description ?? ""),
       highlight_text: String(body.highlight_text ?? ""),
       banners: Array.isArray(body.banners) ? body.banners.filter((v: unknown) => typeof v === "string" && v) : [],
@@ -104,22 +96,24 @@ export async function POST(request: Request) {
       hours_emergency: String(body.hours_emergency ?? ""),
       contact_ext: String(body.contact_ext ?? ""),
       doctor_department: String(body.doctor_department ?? ""),
+      department_id: body.department_id ? Number(body.department_id) : undefined,
       display_order: Number(body.display_order) || 99,
     };
 
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
+      const adminId = await getCurrentAdminId();
       const [result] = await pool.query<ResultSetHeader>(
         `INSERT INTO hospital_centers
-          (slug, title_th, title_en, icon_type, description, highlight_text, banners, services, facilities,
-           hours_regular, hours_after, hours_emergency, contact_ext, doctor_department, display_order, is_active)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)`,
+          (category, slug, title_th, title_en, description, highlight_text, banners, services, facilities,
+           hours_regular, hours_after, hours_emergency, contact_ext, department_id, display_order, is_active, created_by)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1, ?)`,
         [
-          data.slug, data.title_th, data.title_en, data.icon_type, data.description, data.highlight_text,
+          data.category, data.slug, data.title_th, data.title_en, data.description, data.highlight_text,
           JSON.stringify(data.banners), JSON.stringify(data.services), JSON.stringify(data.facilities),
           data.hours_regular, data.hours_after, data.hours_emergency, data.contact_ext,
-          data.doctor_department, data.display_order,
+          data.department_id ?? null, data.display_order, adminId,
         ]
       );
       if (result?.insertId) {

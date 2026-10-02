@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import type { TreatmentCenter } from "@/lib/treatmentCentersData";
+import type { Center } from "@/lib/centersData";
 import { type UICenter, toUICenter } from "@/lib/centerView";
 import CenterView from "@/components/patient-services/CenterView";
 
@@ -13,10 +13,10 @@ function PatientServicesContent() {
   const [selectedSlug, setSelectedSlug] = useState(searchParams?.get("dept") || "emergency");
 
   useEffect(() => {
-    fetch("/api/treatment-centers")
+    fetch("/api/centers?category=specialized")
       .then((r) => r.json())
       .then((json) => {
-        const rows: TreatmentCenter[] = json?.ok && Array.isArray(json.data) ? json.data : [];
+        const rows: Center[] = json?.ok && Array.isArray(json.data) ? json.data : [];
         setCenters(rows.map(toUICenter));
       })
       .catch(() => {})
@@ -38,7 +38,7 @@ function PatientServicesContent() {
       sidebarHeading="ศูนย์รักษาเฉพาะทาง"
       pageHeading="ศูนย์บริการผู้ป่วย - ศูนย์รักษาเฉพาะทาง"
       breadcrumbLabel="ศูนย์รักษาเฉพาะทาง"
-      breadcrumbHref="/specialized-centers"
+      breadcrumbHref="/special-centers"
     />
   );
 }

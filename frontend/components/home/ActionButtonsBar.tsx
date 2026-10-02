@@ -22,13 +22,13 @@ export default function ActionButtonsBar() {
           นัดหมายแพทย์
         </Link>
 
-        {/* ปุ่ม 2: ศูนย์การรักษาเฉพาะทาง */}
+        {/* ปุ่ม 2: ศูนย์การรักษา */}
         <Link
-          href="/specialized-centers"
+          href="/special-centers"
           className="flex-1 flex items-center justify-center gap-2.5 bg-[#f97316] hover:bg-[#ea580c] text-white py-4 md:py-5 transition-colors font-medium text-base md:text-lg border-t border-white/20 md:border-t-0 md:border-l cursor-pointer text-center"
         >
           <Stethoscope className="w-6 h-6 md:w-7 md:h-7" />
-          ศูนย์การรักษาเฉพาะทาง
+          ศูนย์การรักษา
         </Link>
 
         {/* ปุ่ม 3: โปรโมชั่นและแพ็คเกจ */}

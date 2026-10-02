@@ -1,3 +1,4 @@
+import { getCurrentAdminId } from "@/lib/adminAccounts";
 import { NextResponse } from "next/server";
 import {
   getMemoryCheckupPrograms,
@@ -12,7 +13,7 @@ export async function GET() {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
     const [rows] = await pool.query<any[]>(
-      "SELECT id, title, price, location, time, contact, image, description FROM health_checkup_programs ORDER BY id ASC"
+      "SELECT checkup_program_id AS id, title, price, location, time, contact, image, description FROM health_checkup_programs ORDER BY checkup_program_id ASC"
     );
     if (Array.isArray(rows) && rows.length > 0) {
       return NextResponse.json({ ok: true, source: "db", data: rows });
@@ -50,8 +51,9 @@ export async function POST(request: Request) {
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
+      const adminId = await getCurrentAdminId();
       const [result]: any = await pool.query(
-        "INSERT INTO health_checkup_programs (title, price, location, time, contact, image, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO health_checkup_programs (title, price, location, time, contact, image, description, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         [
           newItem.title,
           newItem.price,
@@ -59,7 +61,7 @@ export async function POST(request: Request) {
           newItem.time,
           newItem.contact,
           newItem.image,
-          newItem.description,
+          newItem.description, adminId,
         ]
       );
       if (result && result.insertId) {
@@ -84,7 +86,7 @@ export async function DELETE(request: Request) {
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
-      await pool.query("DELETE FROM health_checkup_programs WHERE id = ?", [id]);
+      await pool.query("DELETE FROM health_checkup_programs WHERE checkup_program_id = ?", [id]);
     } catch {}
     deleteMemoryCheckupProgram(id);
     return NextResponse.json({ ok: true });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Plus, Trash2, Edit3, RefreshCw, Stethoscope, Upload, X, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+import { Plus, Trash2, Edit3, RefreshCw, Stethoscope, Upload, X, ChevronLeft, ChevronRight, ChevronDown, Search } from "lucide-react";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
@@ -94,7 +94,7 @@ const DEPARTMENTS = [
   "อายุรกรรมต่อมไร้ท่อ", "ศัลยกรรมทั่วไป", "ศัลยกรรมกระดูกและข้อ (ออร์โธปิดิกส์)",
   "ศัลยกรรมระบบทางเดินปัสสาวะ", "กุมารเวชกรรม", "สูติ-นรีเวชกรรม",
   "จักษุวิทยา", "โสต ศอ นาสิก", "ผิวหนัง", "จิตเวช", "ทันตกรรม",
-  "ฉุกเฉินและอุบัติเหตุ", "เวชกรรมฟื้นฟู", "รังสีวิทยา", "อื่นๆ",
+  "ฉุกเฉินและอุบัติเหตุ", "เวชกรรมฟื้นฟู", "รังสีวิทยา", "วิสัญญี", "เวชศาสตร์ครอบครัว", "อื่นๆ",
 ];
 
 export default function DoctorManager() {
@@ -102,6 +102,9 @@ export default function DoctorManager() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [filterExpertise, setFilterExpertise] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [customDept, setCustomDept] = useState("");
+  const [deptList, setDeptList] = useState([...DEPARTMENTS]);
   const limit = 10;
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -112,14 +115,15 @@ export default function DoctorManager() {
   const [isFetchingEdit, setIsFetchingEdit] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => { setPage(1); }, [filterExpertise]);
-  useEffect(() => { fetchDoctors(); }, [page, filterExpertise]);
+  useEffect(() => { setPage(1); }, [filterExpertise, searchQuery]);
+  useEffect(() => { fetchDoctors(); }, [page, filterExpertise, searchQuery]);
 
   const fetchDoctors = async () => {
     setLoading(true);
     try {
       const expertiseParam = filterExpertise ? `&expertise=${encodeURIComponent(filterExpertise)}` : "";
-      const res = await fetch(`${API}/api/doctors?page=${page}&limit=${limit}${expertiseParam}`);
+      const searchParam = searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : "";
+      const res = await fetch(`${API}/api/doctors?page=${page}&limit=${limit}${expertiseParam}${searchParam}`);
       const json = await res.json();
       if (json.ok) { setDoctors(json.data); setTotal(json.total); }
     } catch { }
@@ -129,6 +133,7 @@ export default function DoctorManager() {
   const openAdd = () => {
     setEditingId(null);
     setFormData(emptyForm);
+    setCustomDept("");
     setShowModal(true);
   };
 
@@ -223,6 +228,12 @@ export default function DoctorManager() {
       const dr_name = [formData.dr_prefix, formData.dr_firstname, formData.dr_lastname]
         .filter(Boolean).join(" ");
       const payload = { ...formData, dr_name };
+
+      // เพิ่มแผนกใหม่ถ้ากำลังใช้ "อื่นๆ" และพิมพ์แผนกใหม่
+      if (customDept && !deptList.includes(customDept)) {
+        setDeptList([...deptList.slice(0, -1), customDept, "อื่นๆ"]);
+      }
+
       const url = editingId ? `${API}/api/doctors/${editingId}` : `${API}/api/doctors`;
       const res = await fetch(url, {
         method: editingId ? "PUT" : "POST",
@@ -230,7 +241,7 @@ export default function DoctorManager() {
         body: JSON.stringify(payload),
       });
       const json = await res.json();
-      if (json.ok) { setShowModal(false); fetchDoctors(); }
+      if (json.ok) { setShowModal(false); setCustomDept(""); fetchDoctors(); }
       else alert(json.message || "เกิดข้อผิดพลาด");
     } catch { alert("เกิดข้อผิดพลาดในการบันทึก"); }
     setIsSubmitting(false);
@@ -261,20 +272,28 @@ export default function DoctorManager() {
 
       {/* Filter */}
       <div className="flex flex-wrap gap-3 py-4 border-b border-gray-100">
+        <div className="flex flex-col gap-1 flex-1 min-w-[250px]">
+          <label className="text-xs font-semibold text-gray-500">ค้นหาแพทย์</label>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input type="text" placeholder="ค้นหาจากชื่อแพทย์..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400" />
+          </div>
+        </div>
         <div className="flex flex-col gap-1">
           <label className="text-xs font-semibold text-gray-500">ระดับความเชี่ยวชาญ</label>
           <div className="relative">
             <select value={filterExpertise} onChange={e => setFilterExpertise(e.target.value)}
-              className="appearance-none pl-3 pr-8 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-orange-400 min-w-[200px]">
+              className="appearance-none pl-3 pr-8 py-2 border border-gray-200 rounded-xl text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-orange-400 min-w-50">
               <option value="">ทั้งหมด</option>
               {EXPERTISE_LEVELS.map(lv => <option key={lv} value={lv}>{lv}</option>)}
             </select>
             <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           </div>
         </div>
-        {filterExpertise && (
+        {(filterExpertise || searchQuery) && (
           <div className="flex items-end">
-            <button onClick={() => setFilterExpertise("")}
+            <button onClick={() => { setFilterExpertise(""); setSearchQuery(""); }}
               className="flex items-center gap-1 px-3 py-2 rounded-xl border border-gray-200 text-xs text-gray-500 hover:bg-gray-50 transition-colors">
               <X className="w-3.5 h-3.5" /> ล้างตัวกรอง
             </button>
@@ -358,7 +377,7 @@ export default function DoctorManager() {
                 <Stethoscope className="w-5 h-5 text-[#f97316]" />
                 {editingId ? "แก้ไขข้อมูลแพทย์" : "เพิ่มแพทย์ใหม่"}
               </h3>
-              <button onClick={() => setShowModal(false)} className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 transition-colors">
+              <button onClick={() => { setShowModal(false); setCustomDept(""); }} className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -405,12 +424,28 @@ export default function DoctorManager() {
 
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">แผนก <span className="text-red-500">*</span></label>
-                    <select required value={formData.dr_department} onChange={e => setFormData({ ...formData, dr_department: e.target.value })}
+                    <select required value={formData.dr_department} onChange={e => {
+                      setFormData({ ...formData, dr_department: e.target.value });
+                      if (e.target.value !== "อื่นๆ") setCustomDept("");
+                    }}
                       className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
                       <option value="">-- เลือกแผนก --</option>
-                      {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+                      {deptList.map(d => <option key={d} value={d}>{d}</option>)}
                     </select>
                   </div>
+                  {formData.dr_department === "อื่นๆ" && (
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">ระบุแผนกอื่นๆ <span className="text-red-500">*</span></label>
+                      <input value={customDept} onChange={e => {
+                        const val = e.target.value;
+                        setCustomDept(val);
+                        setFormData({ ...formData, dr_department: val || "อื่นๆ" });
+                      }}
+                        placeholder="เช่น วิสัญญีเด็ก, ศัลยกรรมหัวใจ"
+                        className="w-full px-3.5 py-2 border border-gray-300 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                      <p className="text-xs text-gray-400 mt-1">💡 พิมพ์ชื่อแผนกใหม่แล้วจะเพิ่มเข้าระบบอัตโนมัติ</p>
+                    </div>
+                  )}
 
                   {/* ── ความเชี่ยวชาญและวุฒิบัตร ── */}
                   <SectionHeader label="ความเชี่ยวชาญและวุฒิบัตร" />
@@ -506,13 +541,13 @@ export default function DoctorManager() {
 
             {/* Modal Footer */}
             <div className="flex items-center justify-end gap-3 p-6 pt-4 border-t border-gray-100 shrink-0">
-              <button type="button" onClick={() => setShowModal(false)}
+              <button type="button" onClick={() => { setShowModal(false); setCustomDept(""); }}
                 className="px-4 py-2 border border-gray-300 rounded-xl text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                 ยกเลิก
               </button>
-              <button type="submit" form="doctor-form" disabled={isSubmitting || isFetchingEdit}
+              <button type="submit" form="doctor-form" disabled={isSubmitting || isFetchingEdit || isUploading}
                 className="px-5 py-2 bg-[#f97316] hover:bg-orange-600 text-white rounded-xl text-sm font-medium transition-colors shadow-sm disabled:opacity-60">
-                {isSubmitting ? "กำลังบันทึก..." : "บันทึกข้อมูล"}
+                {isSubmitting ? "กำลังบันทึก..." : isUploading ? "รออัปโหลดรูปให้เสร็จ..." : "บันทึกข้อมูล"}
               </button>
             </div>
           </div>

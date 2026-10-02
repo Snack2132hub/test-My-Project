@@ -1,3 +1,4 @@
+import { getCurrentAdminId } from "@/lib/adminAccounts";
 import { NextResponse } from "next/server";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { getMemoryNews, addMemoryNews } from "@/lib/newsData";
@@ -20,7 +21,7 @@ export async function GET(request: Request) {
     const total = Number(countRows?.[0]?.total || 0);
     if (total > 0) {
       const [rows] = await pool.query<RowDataPacket[]>(
-        `SELECT id, title, category, image_url, content, document_url, deadline_at, published_at FROM news ${where} ORDER BY published_at DESC LIMIT ? OFFSET ?`,
+        `SELECT news_id AS id, title, category, image_url, content, document_url, deadline_at, published_at FROM news ${where} ORDER BY published_at DESC LIMIT ? OFFSET ?`,
         [...params, limit, offset]
       );
       return NextResponse.json({ ok: true, source: "db", total, page, limit, data: rows });
@@ -56,9 +57,11 @@ export async function POST(request: Request) {
     try {
       const { default: getPool } = await import("@/lib/db");
       const pool = getPool();
+      const adminId = await getCurrentAdminId();
       const [result] = await pool.query<ResultSetHeader>(
-        "INSERT INTO news (title, category, image_url, content, document_url, deadline_at) VALUES (?, ?, ?, ?, ?, ?)",
-        [title, category, image_url, content, document_url, deadline_at || null]
+        "INSERT INTO news (title, category, image_url, content, document_url, deadline_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [title, category, image_url, content, document_url, deadline_at || null, adminId
+        ]
       );
       if (result?.insertId) {
         return NextResponse.json({ ok: true, source: "db", data: { id: result.insertId, title } });
