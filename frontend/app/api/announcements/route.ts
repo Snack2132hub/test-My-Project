@@ -9,14 +9,15 @@ interface Announcement {
 }
 
 let memoryAnnouncements: Announcement[] = [
-  { id: 1, image: "/img/indexnews/test01.jpg" },
-  { id: 2, image: "/img/indexbanner/herobannertest02.png" },
-  { id: 3, image: "/img/indexbanner/herobannertest03.png" },
-  { id: 4, image: "/img/indexbanner/herobannertest04.png" },
-  { id: 5, image: "/img/indexbanner/herobannertest05.png" },
-  { id: 6, image: "/img/indexbanner/herobannertest06.png" },
-  { id: 7, image: "/img/indexbanner/herobannertest07.png" },
+  { id: 1, image: "/img/indexbanner/t1.jpg" },
+  { id: 2, image: "/img/indexbanner/t2.jpg" },
+  { id: 3, image: "/img/indexbanner/t3.jpg" },
+  { id: 4, image: "/img/indexbanner/t4.jpg" },
+  { id: 5, image: "/img/indexbanner/t5.jpg" },
+  { id: 6, image: "/img/indexbanner/t6.jpg" },
+  { id: 7, image: "/img/indexbanner/ann1.jpg" },
 ];
+
 
 export async function GET() {
   try {

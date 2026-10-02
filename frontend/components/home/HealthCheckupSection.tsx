@@ -28,14 +28,14 @@ export default function HealthCheckupSection() {
             className="relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer aspect-[16/10] bg-white border border-gray-100 block"
           >
             <Image
-              src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=800"
+              src="/img/Health_check_up/h2.png"
               alt="โปรแกรมตรวจสุขภาพ"
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             {/* โลโก้รพ. มุมขวาบนของการ์ด */}
-            <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 shadow-md flex items-center justify-center p-1 z-10 border border-gray-100">
+            {/* <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 shadow-md flex items-center justify-center p-1 z-10 border border-gray-100">
               <Image
                 src="/img/indexbanner/herobannertest01.png"
                 alt="Hospital Logo"
@@ -43,10 +43,10 @@ export default function HealthCheckupSection() {
                 height={28}
                 className="object-contain rounded-full"
               />
-            </div>
+            </div> */}
 
             {/* แถบริบบิ้นสีส้มด้านล่างการ์ด */}
-            <div className="absolute bottom-4 left-0 w-[85%] sm:w-[80%] bg-gradient-to-r from-[#ffa154] via-[#f97316] to-[#f97316] text-white py-3 px-4 sm:px-5 rounded-r-2xl shadow-lg flex items-center justify-between z-10">
+            {/* <div className="absolute bottom-4 left-0 w-[85%] sm:w-[80%] bg-gradient-to-r from-[#ffa154] via-[#f97316] to-[#f97316] text-white py-3 px-4 sm:px-5 rounded-r-2xl shadow-lg flex items-center justify-between z-10">
               <div className="pr-2">
                 <h3 className="font-bold text-base sm:text-lg text-white leading-tight">
                   โปรแกรมตรวจสุขภาพ
@@ -58,7 +58,7 @@ export default function HealthCheckupSection() {
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/20 border border-white/30 backdrop-blur-xs flex items-center justify-center shrink-0">
                 <HeartPulse className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-            </div>
+            </div> */}
           </Link>
 
           {/* การ์ดที่ 2: โปรแกรมฉีดวัคซีน */}
@@ -67,14 +67,14 @@ export default function HealthCheckupSection() {
             className="relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer aspect-[16/10] bg-white border border-gray-100 block"
           >
             <Image
-              src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&q=80&w=800"
+              src="/img/Health_check_up/h1.png"
               alt="โปรแกรมฉีดวัคซีน"
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             {/* โลโก้รพ. มุมขวาบนของการ์ด */}
-            <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 shadow-md flex items-center justify-center p-1 z-10 border border-gray-100">
+            {/* <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 shadow-md flex items-center justify-center p-1 z-10 border border-gray-100">
               <Image
                 src="/img/indexbanner/herobannertest01.png"
                 alt="Hospital Logo"
@@ -82,10 +82,10 @@ export default function HealthCheckupSection() {
                 height={28}
                 className="object-contain rounded-full"
               />
-            </div>
+            </div> */}
 
             {/* แถบริบบิ้นสีส้มด้านล่างการ์ด */}
-            <div className="absolute bottom-4 left-0 w-[85%] sm:w-[80%] bg-gradient-to-r from-[#ffa154] via-[#f97316] to-[#f97316] text-white py-3 px-4 sm:px-5 rounded-r-2xl shadow-lg flex items-center justify-between z-10">
+            {/* <div className="absolute bottom-4 left-0 w-[85%] sm:w-[80%] bg-gradient-to-r from-[#ffa154] via-[#f97316] to-[#f97316] text-white py-3 px-4 sm:px-5 rounded-r-2xl shadow-lg flex items-center justify-between z-10">
               <div className="pr-2">
                 <h3 className="font-bold text-base sm:text-lg text-white leading-tight">
                   โปรแกรมฉีดวัคซีน
@@ -97,7 +97,7 @@ export default function HealthCheckupSection() {
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/20 border border-white/30 backdrop-blur-xs flex items-center justify-center shrink-0">
                 <Syringe className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-            </div>
+            </div> */}
           </Link>
         </div>
 

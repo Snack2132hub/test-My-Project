@@ -125,17 +125,6 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
               <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
                 {doctor.department}
               </p>
-
-              {/* ปุ่มติดต่อนัดหมายด่วน */}
-              <div className="mt-6">
-                <Link
-                  href="/patient-services?dept=appointment"
-                  className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[#f97316] hover:bg-[#ea580c] text-white font-medium text-sm rounded-xl shadow-xs transition-colors"
-                >
-                  <Calendar className="w-4 h-4" />
-                  <span>นัดหมายแพทย์ท่านนี้</span>
-                </Link>
-              </div>
             </div>
           </div>
 

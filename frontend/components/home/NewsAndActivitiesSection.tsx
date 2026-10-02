@@ -6,9 +6,9 @@ import {
   Clock,
   Megaphone,
   Users,
-  Sparkles,
   ChevronLeft,
   ChevronRight,
+  X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -47,6 +47,17 @@ export default function NewsAndActivitiesSection() {
   const [newsTab, setNewsTab] = useState<TabKey>("clinic");
   const [newsPage, setNewsPage] = useState(0);
   const [cache, setCache] = useState<Partial<Record<TabKey, NewsRow[]>>>({});
+  const [previewImage, setPreviewImage] = useState<{ url: string; title: string } | null>(null);
+
+  // ปิดป็อปอัพเมื่อกดปุ่ม Escape
+  useEffect(() => {
+    if (!previewImage) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPreviewImage(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [previewImage]);
 
   useEffect(() => {
     if (cache[newsTab]) return;
@@ -77,7 +88,8 @@ export default function NewsAndActivitiesSection() {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 w-full bg-white border-t border-slate-100">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col items-center mb-10 text-center">
+        {/* หัวข้อข่าวสารและกิจกรรมภายใน (ชิดขวา) */}
+        <div className="flex flex-col items-end mb-8 text-right">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">
             ข่าวสาร และ กิจกรรมภายใน
           </h2>
@@ -134,20 +146,27 @@ export default function NewsAndActivitiesSection() {
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 min-h-[420px]"
             >
               {pageItems.map((item) => (
-                <div key={item.id} className="flex flex-col group cursor-pointer transition-all duration-300">
-                  <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm group-hover:shadow-md transition-shadow mb-3">
+                <div key={item.id} className="flex flex-col">
+                  {/* กล่องรูปภาพ กดเพื่อเปิดดูภาพขนาดใหญ่ */}
+                  <div
+                    onClick={() =>
+                      setPreviewImage({
+                        url: item.image_url || FALLBACK_IMG,
+                        title: item.title,
+                      })
+                    }
+                    className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm mb-3 cursor-pointer"
+                    title="คลิกเพื่อดูภาพขนาดใหญ่"
+                  >
                     <Image
                       src={item.image_url || FALLBACK_IMG}
                       alt={item.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
-                    <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/90 shadow-xs flex items-center justify-center text-[#f97316]">
-                      <Sparkles size={18} strokeWidth={2} />
-                    </div>
                   </div>
-                  <h4 className="mt-5 text-[18px] font-bold text-gray-800 leading-snug group-hover:text-[#f97316] transition-colors line-clamp-2">
+                  <h4 className="mt-5 text-[18px] font-bold text-gray-800 leading-snug line-clamp-2">
                     {item.title}
                   </h4>
                   <p className="mt-1 text-xs text-gray-400 font-light">{formatThaiDate(item.published_at)}</p>
@@ -156,6 +175,53 @@ export default function NewsAndActivitiesSection() {
             </motion.div>
           </AnimatePresence>
         )}
+
+        {/* Modal ป็อปอัพรูปภาพขนาดใหญ่ */}
+        <AnimatePresence>
+          {previewImage && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setPreviewImage(null)}
+              className="fixed inset-0 z-50 bg-black/85 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 md:p-8"
+            >
+              {/* ปุ่มปิด */}
+              <button
+                onClick={() => setPreviewImage(null)}
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 z-60 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                aria-label="ปิดรูปภาพ"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              <motion.div
+                initial={{ scale: 0.92, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.92, opacity: 0 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center"
+              >
+                <div className="relative w-full h-[65vh] sm:h-[75vh] rounded-2xl overflow-hidden shadow-2xl bg-black/40">
+                  <Image
+                    src={previewImage.url}
+                    alt={previewImage.title}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 1024px) 95vw, 1000px"
+                    priority
+                  />
+                </div>
+                {previewImage.title && (
+                  <p className="mt-3 text-white text-center text-sm sm:text-base font-medium max-w-2xl px-4 line-clamp-2 drop-shadow-md">
+                    {previewImage.title}
+                  </p>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Pagination dots */}
         {!loading && totalPages > 1 && (

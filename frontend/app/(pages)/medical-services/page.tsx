@@ -30,7 +30,7 @@ const services = [
   {
     title: "คลินิกพิเศษนอกเวลา",
     icon: Clock,
-    href: "/patient-services?dept=afterhours",
+    href: "/after-hours-clinic",
   },
   {
     title: "จองห้องพิเศษ",

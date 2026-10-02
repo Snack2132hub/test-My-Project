@@ -74,20 +74,22 @@ export default function ProcurementAndContactSection() {
     (procurementPage + 1) * ITEMS_PER_PAGE
   );
   return (
-    <section
-      className="relative py-20 px-4 sm:px-6 lg:px-8 w-full overflow-hidden bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage:
-          "linear-gradient(to bottom, rgba(254, 243, 199, 0.85), rgba(253, 230, 138, 0.70), rgba(245, 158, 11, 0.85)), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=1600')",
-      }}
-    >
-      {/* โอเวอร์เลย์สีอุ่นนุ่มนวล */}
-      <div className="absolute inset-0 bg-linear-to-b from-orange-50/50 via-amber-100/40 to-orange-200/60 backdrop-blur-[1px]" />
+    <section className="relative pt-14 sm:pt-16 pb-20 px-4 sm:px-6 lg:px-8 w-full overflow-hidden border-t border-orange-100/80">
+      {/* พื้นหลังรูปภาพ bgnew1_2.png ต่อเนื่องเนียนเป็นผืนเดียวกันทั้งเซ็กชั่น */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Image
+          src="/img/BG/bgnew1_2.png"
+          alt="Procurement and Contact Background"
+          fill
+          priority
+          className="object-cover object-center"
+        />
+      </div>
 
-      <div className="max-w-6xl mx-auto relative z-10 space-y-16">
-        {/* ========================================== */}
+      <div className="max-w-6xl mx-auto relative z-10 space-y-10 sm:space-y-12">
+        {/* ======================================================== */}
         {/* 1. การ์ดข่าวจัดซื้อจัดจ้าง & ข่าวสมัครงาน */}
-        {/* ========================================== */}
+        {/* ======================================================== */}
         <div className="max-w-5xl mx-auto">
           {/* แท็บหัวข้อส่วนบน (Tabs) & ปุ่มดูทั้งหมด */}
           <div className="flex items-end justify-between px-2 sm:px-4">
@@ -177,11 +179,11 @@ export default function ProcurementAndContactSection() {
               >
                 ดูทั้งหมด
               </button>
-</div>
+            </div>
           </div>
 
           {/* ปุ่มสลับหน้า (Pagination) */}
-          <div className="flex justify-center items-center gap-3 mt-6">
+          <div className="flex justify-center items-center gap-3 mt-5">
             <button
                 onClick={() => setProcurementPage((prev) => prev > 0 ? prev - 1 : totalPages - 1)}
               className="p-1.5 text-[#f97316] hover:text-[#ea580c] cursor-pointer transition-colors"
@@ -217,20 +219,23 @@ export default function ProcurementAndContactSection() {
           </div>
         </div>
 
-        {/* ========================================== */}
+        {/* ======================================================== */}
         {/* 2. สื่อวิดีโอ & ติดต่อเรา Grid 2 คอลัมน์ */}
-        {/* ========================================== */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 pt-4">
+        {/* ======================================================== */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
           {/* ฝั่งซ้าย: สื่อวิดีโอ */}
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2.5 text-[#ea580c]">
-                <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-[#ea580c]">
-                  <Play className="w-5 h-5 fill-[#ea580c]" />
+              <div className="flex flex-col items-start">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white shadow-xs">
+                    <Play className="w-4 h-4 fill-white" />
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-md">
+                    สื่อวิดีโอ
+                  </h2>
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 drop-shadow-xs">
-                  สื่อวิดีโอ
-                </h2>
+                <div className="w-20 h-1 bg-[#f97316] mt-1.5 rounded-full shadow-xs"></div>
               </div>
               <a
                 href="https://youtu.be/XxGFqrPq7lk?si=h2hWjMh4_kSWRcrs"
@@ -244,10 +249,10 @@ export default function ProcurementAndContactSection() {
               </a>
             </div>
 
-            <div className="bg-white/95 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-orange-100/80 p-2 relative group aspect-[16/10] flex items-center justify-center">
+            <div className="w-full aspect-video rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg bg-black relative group flex items-center justify-center">
               {isVideoPlaying ? (
                 <iframe
-                  className="w-full h-full rounded-xl sm:rounded-2xl"
+                  className="w-full h-full border-0 block"
                   src="https://www.youtube.com/embed/XxGFqrPq7lk?autoplay=1"
                   title="วิดีโอแนะนำโรงพยาบาลปากช่องนานา"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -256,10 +261,10 @@ export default function ProcurementAndContactSection() {
               ) : (
                 <div
                   onClick={() => setIsVideoPlaying(true)}
-                  className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer group/video"
+                  className="relative w-full h-full overflow-hidden cursor-pointer group/video"
                 >
                   <Image
-                    src="https://img.youtube.com/vi/XxGFqrPq7lk/hqdefault.jpg"
+                    src="https://img.youtube.com/vi/XxGFqrPq7lk/maxresdefault.jpg"
                     alt="สื่อวิดีโอแนะนำโรงพยาบาล"
                     fill
                     referrerPolicy="no-referrer"
@@ -293,13 +298,18 @@ export default function ProcurementAndContactSection() {
 
           {/* ฝั่งขวา: ติดต่อเรา */}
           <div className="flex flex-col">
-            <div className="flex items-center gap-2.5 mb-4 text-[#ea580c]">
-              <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-[#ea580c]">
-                <Phone className="w-5 h-5" strokeWidth={2.5} />
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-col items-start">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white shadow-xs">
+                    <Phone className="w-4 h-4 stroke-[2.5]" />
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-md">
+                    ติดต่อเรา
+                  </h2>
+                </div>
+                <div className="w-20 h-1 bg-[#f97316] mt-1.5 rounded-full shadow-xs"></div>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 drop-shadow-xs">
-                ติดต่อเรา
-              </h2>
             </div>
 
             {/* การ์ดรายละเอียดการติดต่อ + แผนที่ */}
@@ -336,9 +346,6 @@ export default function ProcurementAndContactSection() {
                     <span>อีเมล : info@pakchongnana.go.th</span>
                   </div>
                 </div>
-
-                {/* ปุ่มโซเชียลมีเดีย 4 ไอคอน */}
-                
               </div>
 
               {/* แผนที่ Google Maps ฝั่งขวาของการ์ด */}

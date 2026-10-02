@@ -49,7 +49,7 @@ export default function CheckupProgramPage() {
     <div className="bg-white min-h-screen text-gray-800 pb-24">
       {/* 1. Breadcrumbs */}
       <div className="bg-[#f8f9fa] border-b border-gray-200/80 py-2.5 px-4 sm:px-6 lg:px-8 text-xs sm:text-sm text-gray-600">
-        <div className="max-w-4xl mx-auto flex items-center gap-1.5 flex-wrap">
+        <div className="max-w-6xl mx-auto flex items-center gap-1.5 flex-wrap justify-start">
           <Link href="/" className="hover:text-orange-500 transition-colors">
             หน้าแรก
           </Link>
@@ -67,18 +67,44 @@ export default function CheckupProgramPage() {
       </div>
 
       {/* 2. Main Content Container */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-8 sm:pt-10">
-        {/* Header Title */}
-        <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10">
+        {/* Header Title (ชิดซ้าย) */}
+        <div className="mb-6 text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100/80 text-orange-700 text-xs font-semibold mb-3">
+            <Sparkles className="w-4 h-4 text-[#f97316]" />
+            <span>ศูนย์ตรวจสุขภาพ Wellness Center</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
             โปรแกรมตรวจสุขภาพ
           </h1>
-          <div className="w-16 h-1 bg-[#f97316] rounded-full mt-2"></div>
+          <div className="w-20 h-1 bg-[#f97316] rounded-full mt-3"></div>
+        </div>
+
+        {/* Tab เมนูบน (ชิดซ้าย) */}
+        <div className="flex flex-wrap items-center gap-2 mb-8 justify-start">
+          <Link
+            href="/health-checkup/checkup-program"
+            className="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all bg-[#f97316] text-white shadow-md flex items-center gap-1.5"
+          >
+            <span>โปรแกรมตรวจสุขภาพ</span>
+          </Link>
+          <Link
+            href="/health-checkup/vaccine-program"
+            className="px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all bg-white text-gray-600 hover:bg-orange-50 hover:text-orange-600 border border-gray-200 flex items-center gap-1.5"
+          >
+            <span>โปรแกรมฉีดวัคซีน</span>
+          </Link>
+          <Link
+            href="/health-checkup"
+            className="px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all bg-white text-gray-600 hover:bg-orange-50 hover:text-orange-600 border border-gray-200 flex items-center gap-1.5"
+          >
+            <span>ข่าวสารและประกาศ</span>
+          </Link>
         </div>
 
         {/* Loading State */}
         {loading ? (
-          <div className="space-y-8 py-4">
+          <div className="space-y-8 py-4 max-w-3xl mr-auto">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
@@ -87,21 +113,21 @@ export default function CheckupProgramPage() {
             ))}
           </div>
         ) : (
-          /* Programs List - 3 Posters Stacked matching Image 2 */
-          <div className="space-y-8 sm:space-y-10">
+          /* Programs List - 3 Posters Left-Aligned */
+          <div className="space-y-8 sm:space-y-10 max-w-3xl mr-auto">
             {programs.map((item) => (
               <div
                 key={item.id}
                 onClick={() => setSelectedPoster(item)}
-                className="relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-200/90 transition-all duration-300 group cursor-pointer"
+                className="relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-200/90 transition-all duration-300 group cursor-pointer text-left"
               >
-                {/* Poster Image */}
-                <div className="relative w-full flex items-center justify-center bg-white">
+                {/* Poster Image (รูปชิดซ้าย) */}
+                <div className="relative w-full flex items-start justify-start bg-white">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-auto object-contain block group-hover:scale-[1.008] transition-transform duration-300"
+                    className="w-full h-auto object-contain object-left block group-hover:scale-[1.008] transition-transform duration-300"
                     loading="lazy"
                   />
 

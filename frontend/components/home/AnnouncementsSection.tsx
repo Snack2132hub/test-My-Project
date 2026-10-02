@@ -11,16 +11,73 @@ export interface AnnouncementItem {
   title?: string;
 }
 
-// ข้อมูลสำรองตั้งต้น 7 รูปภาพ
+// ข้อมูลสำรองตั้งต้น 7 รูปภาพ (รองรับทั้ง .jpg และ .png)
 const INITIAL_ANNOUNCEMENTS: AnnouncementItem[] = [
-  { id: 1, image: "/img/indexnews/test01.jpg" },
-  { id: 2, image: "/img/indexbanner/herobannertest02.png" },
-  { id: 3, image: "/img/indexbanner/herobannertest03.png" },
-  { id: 4, image: "/img/indexbanner/herobannertest04.png" },
-  { id: 5, image: "/img/indexbanner/herobannertest05.png" },
-  { id: 6, image: "/img/indexbanner/herobannertest06.png" },
-  { id: 7, image: "/img/indexbanner/herobannertest07.png" },
+  { id: 1, image: "/img/indexnews/t1.jpg" },
+  { id: 2, image: "/img/indexbanner/t2.jpg" },
+  { id: 3, image: "/img/indexbanner/t3.jpg" },
+  { id: 4, image: "/img/indexbanner/t4.jpg" },
+  { id: 5, image: "/img/indexbanner/t5.jpg" },
+  { id: 6, image: "/img/indexbanner/t6.jpg" },
+  { id: 7, image: "/img/indexbanner/ann1.jpg" },
 ];
+
+/**
+ * SmartAnnouncementImage
+ * คอมโพเนนต์แสดงผลรูปภาพที่รองรับทั้ง .jpg และ .png โดยอัตโนมัติ
+ * หากสกุลไฟล์ที่ระบุ (เช่น .jpg) ไม่พบ จะสลับไปลองโหลด .png (และในทางกลับกัน) ให้ทันที
+ */
+function SmartAnnouncementImage({
+  src,
+  alt,
+  fill,
+  className,
+  sizes,
+  quality,
+}: {
+  src: string;
+  alt: string;
+  fill?: boolean;
+  className?: string;
+  sizes?: string;
+  quality?: number;
+}) {
+  const [currentSrc, setCurrentSrc] = useState(src);
+  const [attempted, setAttempted] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCurrentSrc(src);
+    setAttempted([]);
+  }, [src]);
+
+  const handleError = () => {
+    if (currentSrc.toLowerCase().endsWith(".jpg") && !attempted.includes("png")) {
+      setAttempted((prev) => [...prev, "png"]);
+      setCurrentSrc(currentSrc.replace(/\.jpg$/i, ".png"));
+    } else if (currentSrc.toLowerCase().endsWith(".png") && !attempted.includes("jpg")) {
+      setAttempted((prev) => [...prev, "jpg"]);
+      setCurrentSrc(currentSrc.replace(/\.png$/i, ".jpg"));
+    } else if (currentSrc.toLowerCase().endsWith(".jpeg") && !attempted.includes("png")) {
+      setAttempted((prev) => [...prev, "png"]);
+      setCurrentSrc(currentSrc.replace(/\.jpeg$/i, ".png"));
+    } else if (!attempted.includes("fallback")) {
+      setAttempted((prev) => [...prev, "fallback"]);
+      setCurrentSrc("/img/indexbanner/herobannertest02.png");
+    }
+  };
+
+  return (
+    <Image
+      src={currentSrc}
+      alt={alt}
+      fill={fill}
+      className={className}
+      sizes={sizes}
+      quality={quality}
+      onError={handleError}
+    />
+  );
+}
 
 /**
  * คอมโพเนนต์ AnnouncementsSection (ส่วนข่าวประกาศสำคัญ)
@@ -198,7 +255,7 @@ export default function AnnouncementsSection() {
                     }
                   }}
                 >
-                  <Image
+                  <SmartAnnouncementImage
                     src={item.image}
                     alt={item.title || "ภาพประกาศ"}
                     fill
@@ -264,7 +321,7 @@ export default function AnnouncementsSection() {
             </button>
 
             <div className="relative w-full aspect-[3/4] max-h-[85vh] bg-slate-100">
-              <Image
+              <SmartAnnouncementImage
                 src={selectedAnnouncement.image}
                 alt={selectedAnnouncement.title || "ภาพประกาศขยายใหญ่"}
                 fill

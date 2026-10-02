@@ -15,17 +15,16 @@ export default function AfterHoursClinicSection() {
   const [selectedClinicMonth, setSelectedClinicMonth] = useState<"thisMonth" | "nextMonth">("thisMonth");
 
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 w-full overflow-hidden bg-slate-50/50 border-t border-slate-100">
-      {/* ฉากหลังรูปภาพเบลอโปร่งแสง */}
-      <div className="absolute inset-0 z-0">
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8 w-full overflow-hidden border-t border-orange-100/80">
+      {/* พื้นหลังรูปภาพ 1438_594.png */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <Image
-          src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=1200"
-          alt="Hospital Background"
+          src="/img/BG/1438_594.png"
+          alt="After Hours Clinic Background"
           fill
-          className="object-cover opacity-[0.06] blur-xs"
-          referrerPolicy="no-referrer"
+          priority
+          className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-white/70 via-transparent to-white/90" />
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
@@ -50,8 +49,8 @@ export default function AfterHoursClinicSection() {
                 <Image
                   src={
                     selectedClinicMonth === "thisMonth"
-                      ? "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=1000"
-                      : "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=1000"
+                       ? "/img/AfterHoursClinicSection/smc/smc_july.png"
+                      : "/img/AfterHoursClinicSection/smc/smc_apr.png"
                   }
                   alt="ตารางคลินิกพิเศษนอกเวลา"
                   fill
@@ -92,31 +91,49 @@ export default function AfterHoursClinicSection() {
             {/* การ์ดข้อมูลข่าวสารและรายละเอียด 3 รายการ */}
             <div className="flex flex-col gap-4 mt-1">
               {/* รายการที่ 1 */}
-              <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300 cursor-pointer group">
-                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#ffa154] to-[#f97316] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs group-hover:scale-105 transition-transform">
-                  LG
+              <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100">
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
+                  <Image
+                    src="/img/AfterHoursClinicSection/LG.png"
+                    alt="LG Icon"
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <span className="text-gray-800 font-bold text-sm sm:text-base leading-snug group-hover:text-[#f97316] transition-colors">
+                <span className="text-gray-800 font-bold text-sm sm:text-base leading-snug">
                   จองคิวตรวจผ่าน แอปพลิเคชัน &quot;หมอพร้อม&quot;
                 </span>
               </div>
 
               {/* รายการที่ 2 */}
-              <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300 cursor-pointer group">
-                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#ffa154] to-[#f97316] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs group-hover:scale-105 transition-transform">
-                  LG
+              <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100">
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
+                  <Image
+                    src="/img/AfterHoursClinicSection/LG.png"
+                    alt="LG Icon"
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <span className="text-gray-800 font-bold text-sm sm:text-base leading-snug group-hover:text-[#f97316] transition-colors">
+                <span className="text-gray-800 font-bold text-sm sm:text-base leading-snug">
                   อาคารผู้ป่วยนอก ชั้น 3 เวลา 16.00-20.00 น.
                 </span>
               </div>
 
               {/* รายการที่ 3 */}
-              <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300 cursor-pointer group">
-                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#ffa154] to-[#f97316] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs group-hover:scale-105 transition-transform">
-                  LG
+              <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100">
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
+                  <Image
+                    src="/img/AfterHoursClinicSection/LG.png"
+                    alt="LG Icon"
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <span className="text-gray-800 font-bold text-sm sm:text-base leading-snug group-hover:text-[#f97316] transition-colors">
+                <span className="text-gray-800 font-bold text-sm sm:text-base leading-snug">
                   ค่าบริการเริ่มต้นที่ 350 บาท
                 </span>
               </div>

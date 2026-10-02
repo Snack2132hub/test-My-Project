@@ -88,7 +88,7 @@ export default function HealthCheckupPage() {
             บริการทางการแพทย์
           </Link>
           <span>/</span>
-          <span className="text-orange-600 font-medium">ศูนย์ตรวจสุขภาพ</span>
+          <span className="text-orange-600 font-medium">โปรโมชั่นและแพ็คเกจ</span>
         </div>
       </div>
 
@@ -97,7 +97,7 @@ export default function HealthCheckupPage() {
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-14">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-            ศูนย์ตรวจสุขภาพ
+            โปรโมชั่นและแพ็คเกจ
           </h1>
           <div className="w-24 h-1 bg-[#f97316] rounded-full mx-auto mt-3"></div>
         </div>
@@ -189,7 +189,7 @@ export default function HealthCheckupPage() {
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-[#f97316]" />
-                ข่าวสารและประกาศ ศูนย์ตรวจสุขภาพ
+                ข่าวสารและประกาศ โปรโมชั่นและแพ็คเกจ
               </h2>
               <p className="text-xs sm:text-sm text-gray-500 mt-1">
                 ติดตามข่าวสารการให้บริการ โปรแกรมตรวจสุขภาพ และสิทธิประโยชน์ต่างๆ
@@ -373,9 +373,9 @@ export default function HealthCheckupPage() {
             <X className="w-6 h-6 transform group-hover:scale-110 transition-transform" />
           </button>
 
-          {/* Modal Content */}
+          {/* Modal Content - ฟิกขนาดจริงตามรูปภาพ (Display actual intrinsic size of image) */}
           <div
-            className="relative bg-white rounded-2xl overflow-hidden shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-200 cursor-default"
+            className="relative bg-white rounded-2xl overflow-hidden shadow-2xl w-fit max-w-[95vw] min-w-[320px] sm:min-w-[480px] max-h-[95vh] flex flex-col animate-in zoom-in-95 duration-200 cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Poster Header */}
@@ -390,20 +390,21 @@ export default function HealthCheckupPage() {
               </div>
             </div>
 
-            {/* Image display */}
-            <div className="relative bg-gray-950 flex items-center justify-center p-2 sm:p-4 overflow-auto max-h-[65vh]">
+            {/* Image display - แสดงรูปตามขนาดจริงของรูป (Actual real image size) */}
+            <div className="relative bg-gray-950 flex items-center justify-center p-2 sm:p-4 overflow-auto max-h-[75vh]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={selectedPoster.image}
                 alt={selectedPoster.title}
-                className="max-h-[60vh] w-auto object-contain rounded-lg shadow-md"
+                className="w-auto h-auto max-w-none block rounded-lg shadow-md"
+                style={{ width: "auto", height: "auto", maxWidth: "none" }}
               />
             </div>
 
             {/* Description & Date */}
             <div className="p-5 bg-white border-t border-gray-100 flex flex-col gap-2">
               <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                {selectedPoster.description || "ประกาศเกี่ยวกับบริการศูนย์ตรวจสุขภาพ โรงพยาบาลปากช่องนานา"}
+                {selectedPoster.description || "ประกาศเกี่ยวกับบริการโปรโมชั่นและแพ็คเกจ โรงพยาบาลปากช่องนานา"}
               </p>
               <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100 text-xs text-gray-600">
                 <span className="flex items-center gap-1">

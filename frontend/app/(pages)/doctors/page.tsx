@@ -9,7 +9,6 @@ import { ChevronDown, Search, X, Stethoscope, User } from "lucide-react";
 import { Kanit } from "next/font/google";
 import {
   Doctor,
-  POSITION_LEVELS,
   MEDICAL_CENTERS,
 } from "@/lib/doctorsData";
 
@@ -21,10 +20,8 @@ const kanit = Kanit({
 function DoctorsDirectoryContent() {
   const searchParams = useSearchParams();
   const initialDept = searchParams.get("dept") || "ทั้งหมด";
-  const initialPosition = searchParams.get("level") || "ทั้งหมด";
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedPosition, setSelectedPosition] = useState(initialPosition);
   const [selectedCenter, setSelectedCenter] = useState(initialDept);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,13 +59,6 @@ function DoctorsDirectoryContent() {
         }
       }
 
-      // กรองตามระดับความเชี่ยวชาญ
-      if (selectedPosition !== "ทั้งหมด") {
-        if (!doctor.position.includes(selectedPosition)) {
-          return false;
-        }
-      }
-
       // กรองตามศูนย์การรักษา
       if (selectedCenter !== "ทั้งหมด") {
         const deptNorm = doctor.departmentCategory || doctor.department;
@@ -82,11 +72,10 @@ function DoctorsDirectoryContent() {
 
       return true;
     });
-  }, [doctors, searchQuery, selectedPosition, selectedCenter]);
+  }, [doctors, searchQuery, selectedCenter]);
 
   const handleResetFilters = () => {
     setSearchQuery("");
-    setSelectedPosition("ทั้งหมด");
     setSelectedCenter("ทั้งหมด");
   };
 
@@ -151,32 +140,7 @@ function DoctorsDirectoryContent() {
               </div>
             </div>
 
-            {/* ดรอปดาวน์ 1: ระดับความเชี่ยวชาญ (Frame 1000005985) */}
-            <div className="min-w-[170px] sm:min-w-[190px]">
-              <label
-                htmlFor="filter-position-level"
-                className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
-                ระดับความเชี่ยวชาญ
-              </label>
-              <div className="relative">
-                <select
-                  id="filter-position-level"
-                  value={selectedPosition}
-                  onChange={(e) => setSelectedPosition(e.target.value)}
-                  className="w-full appearance-none bg-white border border-[#f97316] text-[#f97316] font-medium text-sm rounded-xl px-4 py-2 pr-9 outline-hidden focus:ring-2 focus:ring-orange-200 cursor-pointer shadow-2xs hover:bg-orange-50/40 transition-colors"
-                >
-                  {POSITION_LEVELS.map((level) => (
-                    <option key={level} value={level} className="text-gray-800 font-normal">
-                      {level}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="w-4 h-4 text-[#f97316] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
-              </div>
-            </div>
-
-            {/* ดรอปดาวน์ 2: ศูนย์การรักษา (Frame 1000005992) */}
+            {/* ดรอปดาวน์: ศูนย์การรักษา (Frame 1000005992) */}
             <div className="min-w-[170px] sm:min-w-[190px]">
               <label
                 htmlFor="filter-medical-center"
@@ -209,14 +173,14 @@ function DoctorsDirectoryContent() {
             <span>
               พบแพทย์ทั้งหมด <strong className="text-[#f97316] font-bold">{filteredDoctors.length}</strong> ท่าน
             </span>
-            {(selectedPosition !== "ทั้งหมด" || selectedCenter !== "ทั้งหมด" || searchQuery) && (
+            {(selectedCenter !== "ทั้งหมด" || searchQuery) && (
               <span className="text-xs bg-orange-100/70 text-[#f97316] px-2.5 py-0.5 rounded-full font-medium">
                 กำลังกรองผลลัพธ์
               </span>
             )}
           </div>
 
-          {(selectedPosition !== "ทั้งหมด" || selectedCenter !== "ทั้งหมด" || searchQuery) && (
+          {(selectedCenter !== "ทั้งหมด" || searchQuery) && (
             <button
               onClick={handleResetFilters}
               className="text-xs sm:text-sm text-gray-500 hover:text-[#f97316] flex items-center gap-1 cursor-pointer transition-colors"
@@ -291,7 +255,7 @@ function DoctorsDirectoryContent() {
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-2">ไม่พบรายชื่อแพทย์ที่ตรงกับเงื่อนไข</h3>
             <p className="text-sm text-gray-500 mb-6">
-              กรุณาลองเปลี่ยนคำค้นหา หรือเลือกตัวกรองระดับความเชี่ยวชาญและศูนย์การรักษาใหม่อีกครั้ง
+              กรุณาลองเปลี่ยนคำค้นหา หรือเลือกตัวกรองศูนย์การรักษาใหม่อีกครั้ง
             </p>
             <button
               onClick={handleResetFilters}

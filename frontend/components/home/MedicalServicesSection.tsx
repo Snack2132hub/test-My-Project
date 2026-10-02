@@ -29,22 +29,22 @@ import { motion } from "motion/react";
  * รายการคลินิกและบริการทางการแพทย์
  */
 const services = [
-  { title: "ศูนย์ตรวจสุขภาพ", icon: Stethoscope },
-  { title: "คลินิกพิเศษนอกเวลา", icon: Clock },
-  { title: "จองห้องพิเศษ", icon: Bed },
-  { title: "โปรแกรมฉีดวัคซีน", icon: Syringe },
-  { title: "ลงทะเบียนผู้ป่วยใหม่", icon: UserPlus },
-  { title: "คลินิกทันตกรรม", icon: Smile },
-  { title: "คลินิกโรคหัวใจ", icon: HeartPulse },
-  { title: "คลินิกจักษุและสายตา", icon: Eye },
-  { title: "คลินิกกุมารเวช", icon: Baby },
-  { title: "คลินิกกระดูกและข้อ", icon: Bone },
-  { title: "คลินิกกายภาพบำบัด", icon: Activity },
-  { title: "ศูนย์ศัลยกรรมผ่าตัด", icon: Scissors },
-  { title: "ศูนย์อุบัติเหตุ-ฉุกเฉิน", icon: ShieldAlert },
-  { title: "ศูนย์วินิจฉัยและเอ็กซเรย์", icon: Microscope },
-  { title: "ศูนย์ผิวหนังและความงาม", icon: Sparkles },
-  { title: "ตรวจวิเคราะห์ห้องแล็บ", icon: FileText },
+  { title: "ศูนย์ตรวจสุขภาพ", icon: Stethoscope, href: "/patient-services?dept=checkup" },
+  { title: "คลินิกพิเศษนอกเวลา", icon: Clock, href: "/after-hours-clinic" },
+  { title: "จองห้องพิเศษ", icon: Bed, href: "/patient-services?dept=specialroom" },
+  { title: "โปรแกรมฉีดวัคซีน", icon: Syringe, href: "/patient-services?dept=vaccine" },
+  { title: "ลงทะเบียนผู้ป่วยใหม่", icon: UserPlus, href: "/patient-services?dept=register" },
+  { title: "คลินิกทันตกรรม", icon: Smile, href: "/patient-services?dept=dental" },
+  { title: "คลินิกโรคหัวใจ", icon: HeartPulse, href: "/patient-services?dept=cardiology" },
+  { title: "คลินิกจักษุและสายตา", icon: Eye, href: "/patient-services?dept=eye" },
+  { title: "คลินิกกุมารเวช", icon: Baby, href: "/patient-services?dept=pediatrics" },
+  { title: "คลินิกกระดูกและข้อ", icon: Bone, href: "/patient-services?dept=ortho" },
+  { title: "คลินิกกายภาพบำบัด", icon: Activity, href: "/patient-services?dept=physio" },
+  { title: "ศูนย์ศัลยกรรมผ่าตัด", icon: Scissors, href: "/patient-services?dept=surgery" },
+  { title: "ศูนย์อุบัติเหตุ-ฉุกเฉิน", icon: ShieldAlert, href: "/patient-services?dept=emergency" },
+  { title: "ศูนย์วินิจฉัยและเอ็กซเรย์", icon: Microscope, href: "/patient-services?dept=imaging" },
+  { title: "ศูนย์ผิวหนังและความงาม", icon: Sparkles, href: "/patient-services?dept=derma" },
+  { title: "ตรวจวิเคราะห์ห้องแล็บ", icon: FileText, href: "/patient-services?dept=lab" },
 ];
 
 /**
@@ -63,19 +63,23 @@ export default function MedicalServicesSection() {
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
+  const hasDraggedRef = useRef(false);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
     isDraggingRef.current = true;
+    hasDraggedRef.current = false;
     startXRef.current = e.pageX - scrollRef.current.offsetLeft;
     scrollLeftRef.current = scrollRef.current.scrollLeft;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDraggingRef.current || !scrollRef.current) return;
-    e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - startXRef.current) * 1.5;
+    if (Math.abs(x - startXRef.current) > 5) {
+      hasDraggedRef.current = true;
+    }
     scrollRef.current.scrollLeft = scrollLeftRef.current - walk;
   };
 
@@ -111,17 +115,16 @@ export default function MedicalServicesSection() {
   };
 
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 w-full overflow-hidden bg-[#fffdfa] border-t border-orange-50/50">
-      {/* พื้นหลังรูปภาพเบลอโปร่งแสง */}
+    <section className="relative pt-16 sm:pt-20 pb-[56px] px-4 sm:px-6 lg:px-8 w-full overflow-hidden bg-[#fffdfa] border-t border-orange-50/50">
+      {/* พื้นหลังรูปภาพ FrameBg02 */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <Image
-          src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=1200"
-          alt="Hospital Corridor Background"
+          src="/img/BG/FrameBg02.png"
+          alt="Medical Services Background"
           fill
-          className="object-cover opacity-[0.05] blur-xs"
-          referrerPolicy="no-referrer"
+          priority
+          className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-transparent via-[#fbf8f3]/30 to-transparent" />
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
@@ -160,8 +163,12 @@ export default function MedicalServicesSection() {
                 {services.map((service, index) => {
                   const IconComponent = service.icon;
                   return (
-                    <div
+                    <Link
                       key={`${service.title}-${index}`}
+                      href={service.href || "/medical-services"}
+                      onClick={(e) => {
+                        if (hasDraggedRef.current) e.preventDefault();
+                      }}
                       className="snap-start flex-none w-[130px] sm:w-[150px] md:w-[170px] flex flex-col items-center text-center group cursor-pointer"
                     >
                       {/* ปุ่มวงกลมไอคอน */}
@@ -175,7 +182,7 @@ export default function MedicalServicesSection() {
                           {service.title}
                         </span>
                       </div>
-                    </div>
+                    </Link>
                   );
                 })}
               </div>
@@ -217,8 +224,9 @@ export default function MedicalServicesSection() {
             {services.map((service, index) => {
               const IconComponent = service.icon;
               return (
-                <div
+                <Link
                   key={index}
+                  href={service.href || "/medical-services"}
                   className="flex flex-col items-center text-center group cursor-pointer w-full"
                 >
                   <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-linear-to-br from-[#ffa154] to-[#f97316] group-hover:from-[#f97316] group-hover:to-[#ea580c] group-hover:opacity-80 flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition-all duration-300 relative border border-white/10 shrink-0">
@@ -230,17 +238,17 @@ export default function MedicalServicesSection() {
                       {service.title}
                     </span>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </motion.div>
         )}
 
         {/* ปุ่มไปหน้าดูบริการทั้งหมด */}
-        <div className="flex justify-center mt-12 sm:mt-14">
+        <div className="flex justify-center mt-[62px]">
           <Link
             href="/medical-services"
-            className="px-10 py-3 sm:px-12 sm:py-3.5 bg-white hover:bg-[#f97316] text-[#f97316] hover:text-white border-2 border-[#f97316] font-medium text-sm sm:text-base rounded-full transition-all duration-300 shadow-xs hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5 active:scale-98 inline-block text-center"
+            className="inline-flex items-center justify-center w-[clamp(120px,12vw,200px)] min-w-[120px] max-w-[200px] px-4 sm:px-6 py-3 sm:py-3.5 bg-white hover:bg-[#f97316] text-[#f97316] hover:text-white border-2 border-[#f97316] font-medium text-sm sm:text-base rounded-full transition-all duration-300 shadow-xs hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5 active:scale-98 text-center"
           >
             ดูทั้งหมด
           </Link>

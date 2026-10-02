@@ -30,7 +30,7 @@ export default function PatientRegistrationPage() {
     <div className="bg-gradient-to-b from-[#fffaf3] via-[#fffdfa] to-white min-h-screen text-gray-800 pb-24">
       {/* Breadcrumb */}
       <div className="bg-gray-50/80 border-b border-gray-200/80 py-2.5 px-4 sm:px-6 lg:px-8 text-xs sm:text-sm text-gray-600">
-        <div className="max-w-4xl mx-auto flex items-center gap-1.5 flex-wrap">
+        <div className="max-w-7xl mx-auto flex items-center gap-1.5 flex-wrap justify-start text-left">
           <Link href="/" className="hover:text-orange-500 transition-colors">หน้าแรก</Link>
           <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
           <span className="text-gray-500">ศูนย์บริการผู้ป่วย</span>
@@ -39,7 +39,7 @@ export default function PatientRegistrationPage() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14">
         <div className="mb-8 sm:mb-10">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#ffa154] to-[#f97316] text-white flex items-center justify-center shrink-0">

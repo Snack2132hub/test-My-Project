@@ -50,7 +50,10 @@ export default function OnlineAppointmentSection() {
   ];
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 w-full bg-gradient-to-b from-[#ffedd5]/80 via-[#fed7aa]/40 to-[#ffedd5]/60 border-t border-orange-100">
+    <section
+      id="online-appointment"
+      className="py-20 px-4 sm:px-6 lg:px-8 w-full bg-gradient-to-b from-[#ffedd5]/80 via-[#fed7aa]/40 to-[#ffedd5]/60 border-t border-orange-100 scroll-mt-24"
+    >
       <div className="max-w-6xl mx-auto">
         {/* หัวข้อส่วนระบบนัดหมายออนไลน์ */}
         <div className="flex flex-col items-center mb-14 text-center">
@@ -74,19 +77,19 @@ export default function OnlineAppointmentSection() {
               }
               className="flex flex-col items-center text-center group cursor-pointer"
             >
-              <div className="relative w-full rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 bg-white border border-orange-200/80 aspect-[16/11] flex items-center justify-center p-2">
+              <div className="relative w-full rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-shadow duration-300 bg-white aspect-[390/278]">
                 <Image
                   src={card.src}
                   alt={card.alt}
                   fill
-                  className="object-contain p-1.5 group-hover:scale-105 transition-transform duration-500"
+                  className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
 
                 {/* Hover overlay indicator */}
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2 text-white font-medium text-sm backdrop-blur-[1px]">
-                  <span className="bg-[#f97316] text-white px-3.5 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 transform group-hover:scale-105 transition-transform">
+                  <span className="bg-[#f97316] text-white px-3.5 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
                     <ZoomIn className="w-4 h-4" />
                     คลิกเพื่อดูรูปขยาย
                   </span>
