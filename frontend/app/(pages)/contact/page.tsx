@@ -56,7 +56,7 @@ export default function ContactPage() {
                 /* ภาพแผนที่ตาม Mockup ดีไซน์ */
                 <div className="relative w-full h-full">
                   <Image
-                    src="/img/contact_map.png"
+                    src="/img/mappnnh.png"
                     alt="แผนที่ โรงพยาบาลปากช่องนานา"
                     fill
                     sizes="(max-width: 1024px) 100vw, 60vw"
@@ -69,7 +69,7 @@ export default function ContactPage() {
                 /* แผนที่ Interactive Google Maps สด */
                 <iframe
                   title="แผนที่นำทาง โรงพยาบาลปากช่องนานา"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3868.5283478954756!2d101.3965074!3d14.677348!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x311c2bb093cfd1e7%3A0x5176c0b131a14db1!2z4Lij4LieLuC4m-C4suC4geC4iuC5iOC4reC4h-C4meC4suC4meC4siAy!5e0!3m2!1sth!2sth!4v1725249900000!5m2!1sth!2sth"
+                  src="img/mappnnh.png"
                   className="w-full h-full border-0"
                   allowFullScreen
                   loading="lazy"
@@ -89,7 +89,7 @@ export default function ContactPage() {
                 </button>
 
                 <a
-                  href="https://maps.app.goo.gl/kmmJGZF4aPs64MAV7"
+                  href="https://maps.app.goo.gl/iWUGGCQnVGUm61UV8"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="pointer-events-auto bg-white/95 hover:bg-white text-gray-700 hover:text-[#f97316] text-xs font-medium py-1.5 px-3 rounded-xl shadow-md border border-gray-200/80 backdrop-blur-sm transition-all cursor-pointer flex items-center gap-1.5"

@@ -9,27 +9,52 @@ export async function GET(request: Request) {
   const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
   const limit = Math.min(200, parseInt(searchParams.get("limit") || "12"));
   const category = searchParams.get("category") || undefined;
+  const search = searchParams.get("search")?.trim() || "";
   const offset = (page - 1) * limit;
 
   try {
     const { default: getPool } = await import("@/lib/db");
     const pool = getPool();
-    const where = category ? "WHERE is_active = 1 AND category = ?" : "WHERE is_active = 1";
-    const params = category ? [category] : [];
+
+    // Check if news table has records
+    const [allCountRows] = await pool.query<RowDataPacket[]>("SELECT COUNT(*) as total FROM news");
+    const dbTotal = Number(allCountRows?.[0]?.total || 0);
+
+    // If database table is empty, auto-seed default categorized news & activities
+    if (dbTotal === 0) {
+      const defaultNews = getMemoryNews();
+      for (const item of defaultNews) {
+        await pool.query(
+          "INSERT INTO news (title, category, image_url, content, published_at, is_active) VALUES (?, ?, ?, ?, ?, 1)",
+          [item.title, item.category, item.image_url, item.content || "", item.published_at]
+        );
+      }
+    }
+
+    let where = "WHERE is_active = 1";
+    const params: (string | number)[] = [];
+    if (category && category !== "all") {
+      where += " AND category = ?";
+      params.push(category);
+    }
+    if (search) {
+      where += " AND (title LIKE ? OR content LIKE ?)";
+      params.push(`%${search}%`, `%${search}%`);
+    }
+
     const [countRows] = await pool.query<RowDataPacket[]>(`SELECT COUNT(*) as total FROM news ${where}`, params);
     const total = Number(countRows?.[0]?.total || 0);
-    if (total > 0) {
-      const [rows] = await pool.query<RowDataPacket[]>(
-        `SELECT id, title, category, image_url, content, published_at FROM news ${where} ORDER BY published_at DESC LIMIT ? OFFSET ?`,
-        [...params, limit, offset]
-      );
-      return NextResponse.json({ ok: true, source: "db", total, page, limit, data: rows });
-    }
+
+    const [rows] = await pool.query<RowDataPacket[]>(
+      `SELECT id, title, category, image_url, content, published_at FROM news ${where} ORDER BY published_at DESC LIMIT ? OFFSET ?`,
+      [...params, limit, offset]
+    );
+    return NextResponse.json({ ok: true, source: "db", total, page, limit, data: rows });
   } catch {
-    // DB unavailable, fall back to memory
+    // Database unavailable or not configured — fall back to in-memory bundled data
   }
 
-  const all = getMemoryNews(category);
+  const all = getMemoryNews(category === "all" ? undefined : category, search);
   return NextResponse.json({
     ok: true,
     source: "memory",
