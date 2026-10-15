@@ -12,7 +12,7 @@ import {
   Briefcase,
 } from "lucide-react";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API = "";
 
 interface ProcurementItem {
   id: number;
@@ -45,7 +45,7 @@ const LIMIT = 10;
 function formatThaiDate(value: string | null): string {
   if (!value) return "-";
   const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return "-";
+  if (Number.isNaN(d.getTime())) return value;
   return d.toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric" });
 }
 

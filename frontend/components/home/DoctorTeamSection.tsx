@@ -10,6 +10,41 @@ import type { Doctor } from "@/lib/doctorsData";
  * คอมโพเนนต์ DoctorTeamSection (ส่วนทีมแพทย์เชี่ยวชาญ)
  * ดึงข้อมูลจาก /api/doctors (จัดการผ่านหน้า admin)
  */
+function DoctorImage({ src, alt }: { src?: string; alt: string }) {
+  const [imgSrc, setImgSrc] = useState(src || "/img/doc_img/nonpic.jpg");
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(src || "/img/doc_img/nonpic.jpg");
+    setHasError(false);
+  }, [src]);
+
+  if (hasError || !imgSrc) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center text-orange-300">
+        <User className="w-1/3 h-1/3" strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      fill
+      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+      sizes="(max-width: 768px) 100vw, 25vw"
+      onError={() => {
+        if (imgSrc !== "/img/doc_img/nonpic.jpg") {
+          setImgSrc("/img/doc_img/nonpic.jpg");
+        } else {
+          setHasError(true);
+        }
+      }}
+    />
+  );
+}
+
 export default function DoctorTeamSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -84,24 +119,14 @@ export default function DoctorTeamSection() {
               <Link
                 key={doctor.id}
                 href={`/doctors/${doctor.id}`}
-                className="flex flex-col items-center text-center cursor-pointer"
+                className="group flex flex-col items-center text-center cursor-pointer transition-transform duration-300 hover:-translate-y-1 focus:outline-hidden"
               >
-                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 via-[#ffedd5]/80 to-[#fed7aa]/40 border border-orange-100 shadow-sm mb-4">
-                  {doctor.image ? (
-                    <Image
-                      src={doctor.image}
-                      alt={doctor.name}
-                      fill
-                      className="object-cover object-top"
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-orange-300">
-                      <User className="w-1/3 h-1/3" strokeWidth={1.5} />
-                    </div>
-                  )}
+                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 via-[#ffedd5]/80 to-[#fed7aa]/40 border border-orange-100 shadow-xs group-hover:shadow-md transition-all duration-300 mb-4">
+                  <DoctorImage src={doctor.image} alt={doctor.name} />
+                  {/* Overlay เฟดดำเมื่อ hover (Hover black fade) */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/35 transition-colors duration-300 pointer-events-none z-10" />
                 </div>
-                <h3 className="text-[20px] font-bold text-gray-800 leading-snug">
+                <h3 className="text-[20px] font-bold text-gray-800 leading-snug transition-colors">
                   {doctor.name}
                 </h3>
                 <p className="text-[13px] text-[#f97316] font-medium mt-0.5">

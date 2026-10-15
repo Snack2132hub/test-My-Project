@@ -152,20 +152,72 @@ export default function AnnouncementsSection() {
     isDraggingRef.current = false;
   };
 
+  const [isPaused, setIsPaused] = useState(false);
+
+  // ฟังก์ชันเลื่อนไปยังภาพถัดไป (พร้อมวนลูปกลับมาเริ่มต้นเมื่อสุดทาง)
+  const nextSlide = () => {
+    if (!scrollRef.current || announcements.length <= 1) return;
+    const container = scrollRef.current;
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+    const maxScroll = scrollWidth - clientWidth;
+    if (maxScroll <= 0) return;
+
+    // คำนวณระยะก้าวของการเลื่อน (card width + gap 24px)
+    const cardEl = container.querySelector(".snap-start") as HTMLElement | null;
+    const step = cardEl ? cardEl.offsetWidth + 24 : 344;
+
+    // หากเลื่อนจนใกล้สุดขอบแล้ว ให้วนกลับไปเริ่มต้นที่ 0
+    if (scrollLeft >= maxScroll - 20) {
+      container.scrollTo({ left: 0, behavior: "smooth" });
+    } else {
+      const target = Math.min(scrollLeft + step, maxScroll);
+      container.scrollTo({ left: target, behavior: "smooth" });
+    }
+  };
+
+  // ฟังก์ชันเลื่อนย้อนกลับ
+  const prevSlide = () => {
+    if (!scrollRef.current || announcements.length <= 1) return;
+    const container = scrollRef.current;
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+    const maxScroll = scrollWidth - clientWidth;
+    if (maxScroll <= 0) return;
+
+    const cardEl = container.querySelector(".snap-start") as HTMLElement | null;
+    const step = cardEl ? cardEl.offsetWidth + 24 : 344;
+
+    if (scrollLeft <= 20) {
+      container.scrollTo({ left: maxScroll, behavior: "smooth" });
+    } else {
+      const target = Math.max(scrollLeft - step, 0);
+      container.scrollTo({ left: target, behavior: "smooth" });
+    }
+  };
+
   // เลื่อนไปทางซ้าย/ขวา เมื่อกดปุ่มลูกศร
   const scrollByAmount = (direction: "left" | "right") => {
-    if (!scrollRef.current) return;
-    const cardWidth = 320;
-    const targetScroll =
-      direction === "left"
-        ? scrollRef.current.scrollLeft - cardWidth
-        : scrollRef.current.scrollLeft + cardWidth;
-
-    scrollRef.current.scrollTo({
-      left: targetScroll,
-      behavior: "smooth",
-    });
+    if (direction === "left") {
+      prevSlide();
+    } else {
+      nextSlide();
+    }
   };
+
+  // สลับหมุนเวียนภาพประกาศอัตโนมัติทุกๆ ~5 วินาที
+  // พักการเล่นอัตโนมัติเมื่อผู้ใช้นำเมาส์ไปชี้, ลากด้วยตนเอง หรือเปิด Modal ดูภาพใหญ่
+  useEffect(() => {
+    if (isLoading || announcements.length <= 1 || isPaused || selectedAnnouncement !== null) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      if (!isDraggingRef.current) {
+        nextSlide();
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isLoading, announcements.length, isPaused, selectedAnnouncement]);
 
   // คำนวณหา index สำหรับจุด Indicator
   const handleScroll = () => {
@@ -206,7 +258,13 @@ export default function AnnouncementsSection() {
         </div>
 
         {/* Container สไลเดอร์ลากรูปภาพ */}
-        <div className="relative group/carousel">
+        <div
+          className="relative group/carousel"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
+        >
           {/* ปุ่มเลื่อนซ้าย */}
           <button
             onClick={() => scrollByAmount("left")}
@@ -275,25 +333,25 @@ export default function AnnouncementsSection() {
         </div>
 
         {/* จุดนำทางสไลด์ (Carousel Dots Indicator) */}
-        <div className="flex justify-center items-center gap-3 mt-8">
-          {[0, 1, 2, 3, 4].map((dotIndex) => {
+        <div className="flex justify-center items-center gap-2 mt-8">
+          {[0, 1, 2, 3].map((dotIndex) => {
             const isActive =
               Math.round(
-                (activeDot / Math.max(1, announcements.length - 1)) * 4
+                (activeDot / Math.max(1, announcements.length - 1)) * 3
               ) === dotIndex;
             return (
               <button
                 key={dotIndex}
                 onClick={() => {
                   const targetIndex = Math.round(
-                    (dotIndex / 4) * (announcements.length - 1)
+                    (dotIndex / 3) * (announcements.length - 1)
                   );
                   scrollToIndex(targetIndex);
                 }}
-                className={`transition-all duration-300 rounded-full cursor-pointer shadow-sm ${
+                className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? "w-8 h-3.5 bg-[#f97316]"
-                    : "w-3.5 h-3.5 bg-gray-300 hover:bg-gray-400"
+                    ? "w-8 bg-[#f97316]"
+                    : "w-2.5 bg-orange-200 hover:bg-orange-300"
                 }`}
                 aria-label={`Go to slide section ${dotIndex + 1}`}
               />

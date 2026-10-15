@@ -17,6 +17,42 @@ const kanit = Kanit({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+function DoctorImage({ src, alt, priority }: { src?: string; alt: string; priority?: boolean }) {
+  const [imgSrc, setImgSrc] = useState(src || "/img/doc_img/nonpic.jpg");
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(src || "/img/doc_img/nonpic.jpg");
+    setHasError(false);
+  }, [src]);
+
+  if (hasError || !imgSrc) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center text-orange-300">
+        <User className="w-1/3 h-1/3" strokeWidth={1.5} />
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      fill
+      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+      priority={priority}
+      onError={() => {
+        if (imgSrc !== "/img/doc_img/nonpic.jpg") {
+          setImgSrc("/img/doc_img/nonpic.jpg");
+        } else {
+          setHasError(true);
+        }
+      }}
+    />
+  );
+}
+
 function DoctorsDirectoryContent() {
   const searchParams = useSearchParams();
   const initialDept = searchParams.get("dept") || "ทั้งหมด";
@@ -116,7 +152,7 @@ function DoctorsDirectoryContent() {
             {/* ช่องค้นหาชื่อแพทย์ */}
             <div className="relative min-w-[200px] sm:min-w-[220px]">
               <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
-                ค้นหาชื่อ / ความเชี่ยวชาญ
+                ค้นหาชื่อ 
               </label>
               <div className="relative">
                 <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -214,27 +250,20 @@ function DoctorsDirectoryContent() {
                 id={`doctor-card-${doctor.id}`}
                 className="group flex flex-col items-center text-center cursor-pointer transition-transform duration-300 hover:-translate-y-1 focus:outline-hidden"
               >
-                {/* กรอบรูปภาพทรงสี่เหลี่ยมแนวตั้ง โทนส้มอุ่น (Peach Frame ตามแบบในภาพ 1) */}
-                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 via-[#ffedd5]/80 to-[#fed7aa]/40 border border-orange-100/90 shadow-2xs group-hover:shadow-md group-hover:border-orange-300 transition-all duration-300">
-                  {doctor.image ? (
-                    <Image
-                      src={doctor.image}
-                      alt={doctor.name}
-                      fill
-                      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      priority={doctor.id === 401 || doctor.id === 101}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-orange-300">
-                      <User className="w-1/3 h-1/3" strokeWidth={1.5} />
-                    </div>
-                  )}
+                {/* กรอบรูปภาพทรงสี่เหลี่ยมแนวตั้ง */}
+                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 via-[#ffedd5]/80 to-[#fed7aa]/40 border border-orange-100/90 shadow-2xs group-hover:shadow-md transition-all duration-300">
+                  <DoctorImage
+                    src={doctor.image}
+                    alt={doctor.name}
+                    priority={doctor.id === 401 || doctor.id === 101}
+                  />
+                  {/* Overlay เฟดดำเมื่อ hover (Hover black fade) */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/35 transition-colors duration-300 pointer-events-none z-10" />
                 </div>
 
                 {/* ข้อมูลใต้รูป */}
                 <div className="mt-3.5 w-full px-1">
-                  <h2 className="text-[17px] font-bold text-gray-800 group-hover:text-[#f97316] transition-colors leading-snug">
+                  <h2 className="text-[17px] font-bold text-gray-800 transition-colors leading-snug">
                     {doctor.name}
                   </h2>
                   <p className="text-[13px] text-[#f97316] font-medium mt-0.5">

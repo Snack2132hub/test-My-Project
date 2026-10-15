@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Plus, Trash2, Edit3, RefreshCw, Stethoscope, Upload, X, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+import { normalizeDoctorImage } from "@/lib/doctorsMap";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API = "";
 
 const EXPERTISE_LEVELS = [
   "นายแพทย์เชี่ยวชาญ",
@@ -304,8 +305,19 @@ export default function DoctorManager() {
                   <td className="py-3 px-4">
                     <div className="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden border border-gray-200 shrink-0 flex items-center justify-center">
                       {d.dr_img
-                        ? <img src={d.dr_img.startsWith("/") ? d.dr_img : `/img/${d.dr_img}`} alt={d.dr_name} className="w-full h-full object-cover"
-                            onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        ? <img
+                            src={normalizeDoctorImage(d.dr_img, d.dr_department)}
+                            alt={d.dr_name}
+                            className="w-full h-full object-cover"
+                            onError={e => {
+                              const target = e.currentTarget;
+                              if (!target.src.includes("nonpic.jpg")) {
+                                target.src = "/img/doc_img/nonpic.jpg";
+                              } else {
+                                target.style.display = "none";
+                              }
+                            }}
+                          />
                         : <Stethoscope className="w-5 h-5 text-gray-300" />
                       }
                     </div>
@@ -470,7 +482,7 @@ export default function DoctorManager() {
                     <div className="relative w-full h-36 rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={formData.dr_img.startsWith("/") ? formData.dr_img : `/img/${formData.dr_img}`}
+                        src={normalizeDoctorImage(formData.dr_img, formData.dr_department)}
                         alt="preview"
                         className="w-full h-full object-contain"
                       />

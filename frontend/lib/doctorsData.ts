@@ -1531,7 +1531,84 @@ export const DOCTORS_DATA: Doctor[] = [
   }
 ];
 
-export function getDoctorById(id: number | string): Doctor | undefined {
-  const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
-  return DOCTORS_DATA.find((d) => d.id === numericId);
+const DEPT_FOLDER_MAP: Record<string, string> = {
+  "สูตินรีเวช": "OB",
+  "สูติ-นรีเวชกรรม": "OB",
+  "ศัลยกรรมทั่วไป": "SURG",
+  "ศัลยกรรมยูโรวิทยา": "SURG",
+  "ศัลยกรรม": "SURG",
+  "ศัลยศาสตร์ออร์โธปิดิกส์": "ORTHO",
+  "อายุรกรรม": "MED",
+  "กุมารเวชกรรม": "PED",
+  "จักษุวิทยา": "OPH",
+  "รังสีวิทยาวินิจฉัย": "XRAY",
+  "วิสัญญี": "ANES",
+  "เวชศาสตร์ฟื้นฟู": "REH",
+  "จิตเวชศาสตร์": "PSY",
+  "โสต ศอ นาสิก": "ENT",
+  "เวชศาสตร์ฉุกเฉิน": "ER",
+  "เวชบำบัดวิกฤต": "MED",
+  "เวชศาสตร์ครอบครัว": "FM",
+};
+
+import { normalizeDoctorImage } from "@/lib/doctorsMap";
+
+export function resolveDoctorRealPhoto(d: Doctor): Doctor {
+  const photoUrl = normalizeDoctorImage(d.originalImg || d.image, d.departmentCategory || d.department);
+  return {
+    ...d,
+    image: photoUrl,
+  };
 }
+
+export function doctorToRawRow(d: Doctor) {
+  const resolved = resolveDoctorRealPhoto(d);
+  return {
+    dr_id: resolved.id,
+    dr_name: resolved.name,
+    dr_department: resolved.department,
+    dr_record1: resolved.position || resolved.specialties[0] || "",
+    dr_record2: resolved.specialties[0] || "",
+    dr_record3: resolved.specialties[1] || "",
+    dr_record4: resolved.specialties[2] || "",
+    dr_record5: resolved.specialties[3] || "",
+    dr_record6: resolved.specialties[4] || "",
+    dr_record7: resolved.specialties[5] || "",
+    dr_record8: resolved.specialties[6] || "",
+    dr_record9: resolved.specialties[7] || "",
+    dr_record10: resolved.specialties[8] || "",
+    educational_record1: resolved.education[0] || "",
+    educational_record2: resolved.education[1] || "",
+    educational_record3: resolved.education[2] || "",
+    educational_record4: resolved.education[3] || "",
+    educational_record5: resolved.education[4] || "",
+    educational_record6: resolved.education[5] || "",
+    educational_record7: resolved.education[6] || "",
+    educational_record8: resolved.education[7] || "",
+    educational_record9: resolved.education[8] || "",
+    educational_record10: resolved.education[9] || "",
+    position1: resolved.positions[0] || resolved.position || "",
+    position2: resolved.positions[1] || "",
+    position3: resolved.positions[2] || "",
+    position4: resolved.positions[3] || "",
+    position5: resolved.positions[4] || "",
+    contribution1: resolved.contributions[0] || "",
+    contribution2: resolved.contributions[1] || "",
+    contribution3: resolved.contributions[2] || "",
+    contribution4: resolved.contributions[3] || "",
+    contribution5: resolved.contributions[4] || "",
+    contribution_link: "",
+    contribution_file: "",
+    dr_check1: resolved.schedules[0] || "",
+    dr_check2: resolved.schedules[1] || "",
+    dr_check3: resolved.schedules[2] || "",
+    dr_img: resolved.image || "",
+  };
+}
+
+export function getDoctorById(id: number | string): Doctor | undefined {
+  const numericId = typeof id === "string" ? parseInt(id, 10) : id;
+  const found = DOCTORS_DATA.find((d) => d.id === numericId);
+  return found ? resolveDoctorRealPhoto(found) : undefined;
+}
+

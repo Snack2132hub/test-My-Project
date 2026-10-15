@@ -94,7 +94,7 @@ export default function AfterHoursClinicSection() {
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100">
                 <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                   <Image
-                    src="/img/AfterHoursClinicSection/LG.png"
+                    src="/img/AfterHoursClinicSection/mp.png"
                     alt="LG Icon"
                     width={48}
                     height={48}
@@ -110,7 +110,7 @@ export default function AfterHoursClinicSection() {
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100">
                 <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                   <Image
-                    src="/img/AfterHoursClinicSection/LG.png"
+                    src="/img/AfterHoursClinicSection/lo.png"
                     alt="LG Icon"
                     width={48}
                     height={48}
@@ -126,7 +126,7 @@ export default function AfterHoursClinicSection() {
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100">
                 <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                   <Image
-                    src="/img/AfterHoursClinicSection/LG.png"
+                    src="/img/AfterHoursClinicSection/money.png"
                     alt="LG Icon"
                     width={48}
                     height={48}

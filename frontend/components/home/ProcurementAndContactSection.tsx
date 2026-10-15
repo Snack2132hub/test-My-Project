@@ -14,21 +14,28 @@ import {
   Mail,
   Globe,
   ExternalLink,
+  FileText,
+  Download,
+  X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API = "";
 const ITEMS_PER_PAGE = 8;
 
 interface ProcurementRow {
   id: number;
   title: string;
   published_at: string;
+  document_url?: string;
+  detail?: string;
+  files?: Array<{ label: string; url: string }>;
 }
 
 function formatThaiDate(value: string): string {
+  if (!value) return "";
   const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return "";
+  if (Number.isNaN(d.getTime())) return value;
   return d.toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric" });
 }
 /**
@@ -42,6 +49,7 @@ export default function ProcurementAndContactSection() {
   const [procurementTab, setProcurementTab] = useState<"procurement" | "jobs">("procurement");
   const [procurementPage, setProcurementPage] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<ProcurementRow | null>(null);
   const [cache, setCache] = useState<Partial<Record<"procurement" | "jobs", ProcurementRow[]>>>({});
   const router = useRouter();
 
@@ -152,20 +160,124 @@ export default function ProcurementAndContactSection() {
                   paginatedNews.map((item) => (
                     <div
                       key={item.id}
-                      className="py-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1 group cursor-pointer hover:bg-orange-50/40 rounded-lg transition-colors"
+                      onClick={() => setSelectedItem(item)}
+                      className="py-2.5 px-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1 group cursor-pointer hover:bg-orange-50/60 rounded-xl transition-colors"
+                      title="คลิกเพื่อดูรายละเอียดและเอกสารแนบ"
                     >
-                      <h4 className="text-[18px] font-bold text-gray-800 group-hover:text-[#f97316] transition-colors line-clamp-1 leading-snug">
-                        {item.title}
-                      </h4>
+                      <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                        <FileText className="w-4 h-4 text-[#f97316] shrink-0 opacity-75 group-hover:opacity-100 transition-opacity" />
+                        <h4 className="text-[17px] sm:text-[18px] font-bold text-gray-800 group-hover:text-[#f97316] transition-colors line-clamp-1 leading-snug">
+                          {item.title}
+                        </h4>
+                      </div>
 
-                      <span className="text-[16px] text-gray-400 font-light shrink-0">
-                        {formatThaiDate(item.published_at)}
-                      </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-[15px] sm:text-[16px] text-gray-400 font-light">
+                          {formatThaiDate(item.published_at)}
+                        </span>
+                        {(item.document_url || (item.files && item.files.length > 0)) && (
+                          <span className="hidden sm:inline-flex items-center gap-1 text-xs font-medium text-[#f97316] bg-orange-100/70 px-2 py-0.5 rounded-md">
+                            <Download className="w-3 h-3" />
+                            เอกสาร
+                          </span>
+                        )}
+                      </div>
                     </div>
                   ))
                 )}
               </motion.div>
             </AnimatePresence>
+
+            {/* Modal แสดงรายละเอียดข่าวจัดซื้อจัดจ้าง/สมัครงาน */}
+            {selectedItem && (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fadeIn"
+                onClick={() => setSelectedItem(null)}
+              >
+                <div
+                  className="bg-white rounded-2xl md:rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-orange-100 flex flex-col max-h-[90vh] overflow-y-auto relative"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={() => setSelectedItem(null)}
+                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+                    aria-label="Close"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+
+                  <div className="flex items-center gap-2 text-xs font-medium text-[#f97316] mb-2">
+                    <span className="px-2.5 py-0.5 rounded-full bg-orange-100">
+                      {procurementTab === "procurement" ? "จัดซื้อจัดจ้าง" : "รับสมัครงาน"}
+                    </span>
+                    <span>•</span>
+                    <span className="text-gray-500">{formatThaiDate(selectedItem.published_at)}</span>
+                  </div>
+
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-snug mb-4 pr-6">
+                    {selectedItem.title}
+                  </h3>
+
+                  {selectedItem.detail && (
+                    <div className="text-sm text-gray-600 leading-relaxed bg-orange-50/40 p-4 rounded-xl border border-orange-100/60 mb-5 whitespace-pre-line">
+                      {selectedItem.detail}
+                    </div>
+                  )}
+
+                  {/* รายการเอกสารแนบจากฐานข้อมูล purchase */}
+                  <div className="space-y-2 mt-2">
+                    <h5 className="text-xs font-bold text-gray-500 uppercase tracking-wider">เอกสารที่เกี่ยวข้อง</h5>
+                    {selectedItem.files && selectedItem.files.length > 0 ? (
+                      selectedItem.files.map((f, idx) => (
+                        <a
+                          key={idx}
+                          href={f.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-between p-3 rounded-xl border border-orange-100 hover:border-orange-300 hover:bg-orange-50/50 transition-colors group/file text-sm text-gray-800"
+                        >
+                          <span className="flex items-center gap-2 font-medium group-hover/file:text-[#f97316] truncate">
+                            <FileText className="w-4 h-4 text-[#f97316] shrink-0" />
+                            {f.label}
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#f97316] shrink-0">
+                            <Download className="w-3.5 h-3.5" />
+                            ดาวน์โหลด
+                          </span>
+                        </a>
+                      ))
+                    ) : selectedItem.document_url ? (
+                      <a
+                        href={selectedItem.document_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between p-3 rounded-xl border border-orange-100 hover:border-orange-300 hover:bg-orange-50/50 transition-colors group/file text-sm text-gray-800"
+                      >
+                        <span className="flex items-center gap-2 font-medium group-hover/file:text-[#f97316] truncate">
+                          <FileText className="w-4 h-4 text-[#f97316] shrink-0" />
+                          เอกสารแนบ
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#f97316] shrink-0">
+                          <Download className="w-3.5 h-3.5" />
+                          ดาวน์โหลด
+                        </span>
+                      </a>
+                    ) : (
+                      <p className="text-xs text-gray-400 italic">ไม่มีไฟล์แนบสำหรับประกาศนี้</p>
+                    )}
+                  </div>
+
+                  <div className="mt-6 flex justify-end">
+                    <button
+                      onClick={() => setSelectedItem(null)}
+                      className="px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition-colors cursor-pointer"
+                    >
+                      ปิดหน้าต่าง
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="flex justify-end mt-4 pr-4">
               <button
                 onClick={() => {
