@@ -33,7 +33,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "Tiger HR",
     description: "ระบบ Scan ใบหน้า / ใบลา / OT",
     category: "personnel",
-    url: "#",
+    url: "http://192.168.29.242:8081/webtime/default1.aspx",
     iconType: "tiger_hr",
   },
   {
@@ -41,7 +41,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "HRS",
     description: "ระบบรายงานสารสนเทศโรงพยาบาล (HRS)",
     category: "medical_records",
-    url: "#",
+    url: "http://192.168.29.3/report/pnnh/login.php",
     iconType: "folders",
   },
   {
@@ -49,7 +49,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "HMD",
     description: "ระบบแดชบอร์ดบริหารโรงพยาบาล (HMD)",
     category: "medical_records",
-    url: "#",
+    url: "http://192.168.29.77:3000/d/to89fj4/dashboard-list?orgId=1&from=now-6h&to=now&timezone=browser",
     iconType: "dashboard_monitor",
   },
   {
@@ -57,7 +57,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "SAFEMIND AI",
     description: "ระบบอัจฉริยะดูแลจิตใจ ปลอดภัยทั้งอำเภอ",
     category: "clinical",
-    url: "#",
+    url: "https://safemind-ai.net/intra/login",
     iconType: "safemind",
   },
 
@@ -69,7 +69,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "E-Office",
     description: "โปรแกรมสำนักงานอิเล็กทรอนิกส์ E-Office",
     category: "organization",
-    url: "#",
+    url: "https://eoffice-pnnh.moph.go.th/api/auth/login",
     iconType: "e_office",
   },
   {
@@ -77,7 +77,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "โสตทัศนศึกษา",
     description: "ระบบงาน โสตทัศนศึกษา",
     category: "organization",
-    url: "#",
+    url: "https://sites.google.com/view/audiovisual",
     iconType: "multimedia",
   },
   {
@@ -85,7 +85,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ITSM",
     description: "ระบบ ITSM / IT Service Management",
     category: "organization",
-    url: "#",
+    url: "http://45.144.164.204/new_itsm/index_pc",
     iconType: "itsm_diagram",
   },
   {
@@ -93,7 +93,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "PMS",
     description: "ระบบประเมินผลการปฏิบัติงานราชการออนไลน์",
     category: "medical_records",
-    url: "#",
+    url: "http://192.168.29.3/pms/login.php",
     iconType: "pms_gauge",
   },
 
@@ -105,7 +105,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "HRMS",
     description: "ระบบจัดการความเสี่ยงของสถานพยาบาล",
     category: "organization",
-    url: "#",
+    url: "https://pcn.thai-nrls.org",
     iconType: "risk_chart",
   },
   {
@@ -113,7 +113,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ระบบนัดหมาย",
     description: "ระบบรายการนัดตามช่วงเวลา",
     category: "clinical",
-    url: "#",
+    url: "http://192.168.29.12/q-slot/login.php",
     iconType: "calendar_appointment",
   },
   {
@@ -121,7 +121,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "NANA Refill",
     description: "ระบบ Refill ยา",
     category: "clinical",
-    url: "#",
+    url: "http://192.168.29.3/refill/login.php",
     iconType: "nana_refill",
   },
   {
@@ -129,7 +129,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ระบบเบิกน้ำเกลือ",
     description: "ระบบเบิกน้ำเกลือ",
     category: "clinical",
-    url: "#",
+    url: "http://192.168.29.23/saline/?pcnana=login",
     iconType: "iv_bottle",
   },
 
@@ -141,7 +141,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ระบบติดตามเวชระเบียน",
     description: "ระบบติดตามเวชระเบียนผู้ป่วยใน",
     category: "medical_records",
-    url: "#",
+    url: "http://192.168.29.23/IPTracer_h/?pcnana=login",
     iconType: "medical_record_track",
   },
   {
@@ -149,7 +149,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "P4P",
     description: "Pay for Performance : P4P",
     category: "personnel",
-    url: "#",
+    url: "http://192.168.29.94/p4p/",
     iconType: "p4p_system",
   },
   {
@@ -157,7 +157,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "Salary",
     description: "ระบบข้อมูลเงินเดือน รพ.ปากช่องนานา",
     category: "personnel",
-    url: "#",
+    url: "http://192.168.29.242:83/RlBQQeXlveABqArPPQjXSq/$/",
     iconType: "salary_system",
   },
   {
@@ -165,7 +165,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "Telegram Alert",
     description: "ระบบลงทะเบียน Telegram แจ้งเตือนข้อมูลเงินเดือน",
     category: "personnel",
-    url: "#",
+    url: "http://192.168.29.51/Staff.dll/RvPLZzrSPKsxg1BFL8mDJG/$/",
     iconType: "telegram_alert",
   },
 
@@ -177,7 +177,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "KPHIS",
     description: "KPHIS ระบบลงข้อมูลผู้ป่วยใน",
     category: "medical_records",
-    url: "#",
+    url: "http://192.168.29.88/index.php",
     iconType: "kphis_network",
   },
   {
@@ -185,7 +185,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "RMC+",
     description: "ระบบบริหารจัดการเครื่องมือแพทย์",
     category: "organization",
-    url: "#",
+    url: "https://rmcplus.com",
     iconType: "rmc_plus",
   },
   {
@@ -193,7 +193,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "LAB Online",
     description: "ระบบรายงานผล Lab Online",
     category: "medical_records",
-    url: "#",
+    url: "https://loginsmedical.co.th/labonline/pakchongnana10890/",
     iconType: "lab_atom",
   },
   {
@@ -201,7 +201,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "Tonkla Clinic",
     description: "คลินิกต้นกล้า",
     category: "clinical",
-    url: "#",
+    url: "http://192.168.29.3/pcnana108/index.php",
     iconType: "tonkla_plant",
   },
 
@@ -213,7 +213,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "IPISS",
     description: "ระบบบันทึกคะแนนและประเมินผลตามแผนฯ IPISS",
     category: "medical_records",
-    url: "#",
+    url: "http://192.168.29.3/ipiss/#/login",
     iconType: "rubiks_cube",
   },
   {
@@ -221,7 +221,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "HRD",
     description: "ระบบบันทึกข้อมูลไปราชการ/ประชุม/อบรม",
     category: "personnel",
-    url: "#",
+    url: "https://script.google.com/macros/s/AKfycbybBV1zbIaJnd18nzdu2aOKCTy107qw6-hjYI8YpGZhk-Qhp-7tpr2aXzLZ8rnA-w5RZg/exec",
     iconType: "hrd_rainbow",
   },
   {
@@ -229,7 +229,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ระบบขออนุมัติรายการที่มีค่าใช้จ่ายสูง",
     description: "ขออนุมัติรายการที่มีค่าใช้จ่ายสูง",
     category: "organization",
-    url: "#",
+    url: "https://pnnh.moph.go.th/web/content/aphc/",
     iconType: "cost_approval",
   },
   {
@@ -237,7 +237,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ENV",
     description: "งานสิ่งแวดล้อมและความปลอดภัย (ENV)",
     category: "organization",
-    url: "#",
+    url: "https://sites.google.com/view/env-pnnh/",
     iconType: "env_globe",
   },
 
@@ -249,7 +249,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ระบบจัดซื้อจัดจ้าง",
     description: "ระบบจัดซื้อจัดจ้าง",
     category: "organization",
-    url: "#",
+    url: "http://192.168.29.3/product/login.php",
     iconType: "invoice_procurement",
   },
   {
@@ -257,7 +257,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ระบบบริหารจัดการทรัพยากรบุคคลดิจิทัล",
     description: "บริหารทรัพยากรบุคคล",
     category: "organization",
-    url: "#",
+    url: "http://192.168.29.3/discontinued_user/login.php",
     iconType: "door_exit",
   },
   {
@@ -265,7 +265,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ระบบรายงาน พรบ.",
     description: "ระบบรายงาน พรบ.",
     category: "medical_records",
-    url: "#",
+    url: "http://192.168.29.12/insurance-medical/login.php",
     iconType: "wsu_act_book",
   },
   {
@@ -273,7 +273,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ระบบจัดเก็บลูกหนี้ต้นสังกัด",
     description: "โรงพยาบาลปากช่องนานา",
     category: "organization",
-    url: "#",
+    url: "http://192.168.29.3/finan_pnnh/auth/login.php",
     iconType: "debtor_robot",
   },
 
@@ -285,7 +285,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "PakChong OPD Tracker",
     description: "ระบบติดตามระยะเวลารับบริการผู้ป่วยนอก",
     category: "clinical",
-    url: "#",
+    url: "http://192.168.29.3/OPD-Tracker/index.php",
     iconType: "opd_hourglass",
   },
   {
@@ -293,7 +293,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "Death Certificate",
     description: "ระบบออกหนังสือรับรองการตายอิเล็กทรอนิกส์ (EMDC)",
     category: "clinical",
-    url: "#",
+    url: "https://deathcert.moph.go.th/deathcert/login.html",
     iconType: "death_certificate",
   },
 
@@ -321,7 +321,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "แพลตฟอร์มออกเอกสารรับรองความพิการ",
     description: "เอกสารรับรองความพิการ",
     category: "medical_records",
-    url: "#",
+    url: "https://pwdregister.snmri.go.th/login",
     iconType: "disability_support",
   },
   {
@@ -329,7 +329,7 @@ export const INTRANET_SYSTEMS: IntranetSystem[] = [
     name: "ระบบแจ้งซ่อมออนไลน์ (rmcdotnet)",
     description: "ระบบแจ้งซ่อมออนไลน์ รพ.ปากช่องนานา",
     category: "organization",
-    url: "#",
+    url: "http://192.168.29.242:84/rmcdotnet/RMCDOTNET/login.aspx",
     iconType: "technicians_repair",
   },
 ];

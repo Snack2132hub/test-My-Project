@@ -131,7 +131,7 @@ export default function OnlineAppointmentSection() {
             <img
               src={selectedImage.src}
               alt={selectedImage.alt}
-              className="max-h-[90vh] max-w-[92vw] w-auto h-auto object-contain rounded-lg shadow-2xl select-none"
+              className="max-h-[95vh] max-w-[98vw] w-auto h-auto object-contain rounded-lg shadow-2xl select-none"
             />
           </div>
         </div>

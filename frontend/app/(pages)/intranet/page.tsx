@@ -223,7 +223,7 @@ export default function IntranetPage() {
                 onClick={() => handleCardClick(item)}
                 className="group page-card p-3 sm:p-3.5 flex items-center gap-3 hover:border-[#f97316] hover:bg-orange-50/10 transition-all duration-200 cursor-pointer text-left"
               >
-                {/* Left: Round Avatar Badge */}
+                {/* Left: Square Icon Badge */}
                 <IntranetBadge iconType={item.iconType} name={item.name} />
 
                 {/* Right: Title and Description stacked */}

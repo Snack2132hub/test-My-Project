@@ -13,6 +13,10 @@ import {
   Calendar,
   Tag,
   ZoomIn,
+  ZoomOut,
+  Maximize2,
+  Minimize2,
+  RotateCcw,
   Sparkles,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
@@ -63,16 +67,32 @@ export default function NewsAndActivitiesSection() {
   const [selectedSubTag, setSelectedSubTag] = useState<string>("ทั้งหมด");
   const [cache, setCache] = useState<Partial<Record<TabKey, NewsRow[]>>>({});
   const [selectedNews, setSelectedNews] = useState<NewsRow | null>(null);
+  const [zoomLevel, setZoomLevel] = useState<number>(1);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
-  // Close modal on Escape key
+  const closeModal = () => {
+    setSelectedNews(null);
+    setZoomLevel(1);
+    setIsFullscreen(false);
+  };
+
+  // Close modal or reset zoom on Escape key
   useEffect(() => {
     if (!selectedNews) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelectedNews(null);
+      if (e.key === "Escape") {
+        if (isFullscreen) {
+          setIsFullscreen(false);
+        } else if (zoomLevel > 1) {
+          setZoomLevel(1);
+        } else {
+          closeModal();
+        }
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedNews]);
+  }, [selectedNews, isFullscreen, zoomLevel]);
 
   // Fetch news data
   useEffect(() => {
@@ -283,7 +303,11 @@ export default function NewsAndActivitiesSection() {
               {pageItems.map((item) => (
                 <div
                   key={item.id}
-                  onClick={() => setSelectedNews(item)}
+                  onClick={() => {
+                    setSelectedNews(item);
+                    setZoomLevel(1);
+                    setIsFullscreen(false);
+                  }}
                   className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-2xs hover:shadow-lg transition-all duration-300 cursor-pointer"
                 >
                   {/* กล่องรูปภาพ กดเพื่อเปิดดูภาพขนาดใหญ่ */}
@@ -339,19 +363,19 @@ export default function NewsAndActivitiesSection() {
           </AnimatePresence>
         )}
 
-        {/* Modal ป็อปอัพรูปภาพและรายละเอียดขนาดใหญ่ */}
+        {/* Modal ป็อปอัพรูปภาพและรายละเอียดขนาดใหญ่ พร้อมปุ่มขยายและซูมภาพ */}
         <AnimatePresence>
           {selectedNews && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setSelectedNews(null)}
-              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6"
+              onClick={closeModal}
+              className="fixed inset-0 z-50 bg-black/85 backdrop-blur-xs flex items-center justify-center p-2 sm:p-6"
             >
-              {/* ปุ่มปิด */}
+              {/* ปุ่มปิดลอยมุมขวาบนหน้าจอ */}
               <button
-                onClick={() => setSelectedNews(null)}
+                onClick={closeModal}
                 className="fixed top-4 right-4 sm:top-6 sm:right-6 z-60 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all cursor-pointer shadow-xl group"
                 aria-label="ปิดรูปภาพ"
               >
@@ -364,36 +388,153 @@ export default function NewsAndActivitiesSection() {
                 exit={{ scale: 0.94, opacity: 0 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative max-w-4xl w-full max-h-[92vh] flex flex-col bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+                className={`relative ${
+                  isFullscreen
+                    ? "max-w-[98vw] w-full h-[95vh]"
+                    : "max-w-4xl w-full max-h-[92vh]"
+                } flex flex-col bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-300`}
               >
-                {/* Modal Header */}
-                <div className="bg-slate-900 text-white px-5 py-3.5 flex items-center justify-between border-b border-slate-800 shrink-0">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-md bg-[#f97316] text-white text-xs font-semibold">
+                {/* Modal Header พร้อมปุ่มขยาย/ย่อภาพและขยายเต็มจอ */}
+                <div className="bg-slate-900 text-white px-4 sm:px-5 py-3 flex items-center justify-between border-b border-slate-800 shrink-0 gap-2">
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <span className="px-2.5 py-0.5 rounded-md bg-[#f97316] text-white text-xs font-semibold shrink-0">
                       {TAB_LABELS[newsTab]}
                     </span>
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-gray-400 truncate">
                       {formatThaiDate(selectedNews.published_at)}
                     </span>
                   </div>
-                  <button
-                    onClick={() => setSelectedNews(null)}
-                    className="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-medium transition-colors cursor-pointer"
-                  >
-                    ปิด
-                  </button>
+
+                  {/* แถบเครื่องมือ: ปุ่มซูมภาพ และ ปุ่มขยายเต็มจอ */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    {/* ปุ่มขยาย / ย่อขนาดภาพ (Zoom Controls) */}
+                    <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700">
+                      <button
+                        type="button"
+                        onClick={() => setZoomLevel((z) => Math.max(1, Number((z - 0.25).toFixed(2))))}
+                        disabled={zoomLevel <= 1}
+                        className="p-1.5 text-gray-300 hover:text-white hover:bg-slate-700 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                        title="ย่อภาพ (-)"
+                        aria-label="ย่อภาพ"
+                      >
+                        <ZoomOut className="w-4 h-4" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setZoomLevel((z) => (z === 1 ? 1.5 : z === 1.5 ? 2 : z === 2 ? 2.5 : 1))}
+                        className="px-2 py-1 text-xs font-medium text-amber-400 hover:text-amber-300 hover:bg-slate-700 rounded transition-colors cursor-pointer flex items-center gap-1"
+                        title="คลิกเพื่อสลับขนาดขยายภาพ"
+                      >
+                        <ZoomIn className="w-3.5 h-3.5" />
+                        <span>{Math.round(zoomLevel * 100)}%</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setZoomLevel((z) => Math.min(3, Number((z + 0.25).toFixed(2))))}
+                        disabled={zoomLevel >= 3}
+                        className="p-1.5 text-gray-300 hover:text-white hover:bg-slate-700 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                        title="ขยายภาพ (+)"
+                        aria-label="ขยายภาพ"
+                      >
+                        <ZoomIn className="w-4 h-4" />
+                      </button>
+
+                      {zoomLevel > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setZoomLevel(1)}
+                          className="p-1.5 text-gray-400 hover:text-white hover:bg-slate-700 rounded transition-colors cursor-pointer border-l border-slate-700 ml-0.5"
+                          title="รีเซ็ตขนาดปกติ (100%)"
+                          aria-label="รีเซ็ตขนาดปกติ"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* ปุ่มขยายเต็มจอ / ย่อหน้าต่าง (Fullscreen Toggle) */}
+                    <button
+                      type="button"
+                      onClick={() => setIsFullscreen((prev) => !prev)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border ${
+                        isFullscreen
+                          ? "bg-[#f97316] text-white border-[#ea580c] shadow-xs"
+                          : "bg-slate-800 hover:bg-slate-700 text-white border-slate-700"
+                      }`}
+                      title={isFullscreen ? "ย่อหน้าต่างกลับขนาดเดิม" : "ขยายหน้าต่างเต็มจอ"}
+                    >
+                      {isFullscreen ? (
+                        <>
+                          <Minimize2 className="w-3.5 h-3.5" />
+                          <span className="hidden sm:inline">ย่อหน้าต่าง</span>
+                        </>
+                      ) : (
+                        <>
+                          <Maximize2 className="w-3.5 h-3.5 text-[#f97316]" />
+                          <span className="hidden sm:inline">ขยายเต็มจอ</span>
+                        </>
+                      )}
+                    </button>
+
+                    {/* ปุ่มปิด */}
+                    <button
+                      type="button"
+                      onClick={closeModal}
+                      className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-medium transition-colors cursor-pointer ml-1"
+                    >
+                      ปิด
+                    </button>
+                  </div>
                 </div>
 
-                {/* Poster / Photo scrollable area */}
-                <div className="relative bg-black flex items-center justify-center p-2 sm:p-4 overflow-auto max-h-[62vh]">
-                  <Image
-                    src={selectedNews.image_url || FALLBACK_IMG}
-                    alt={selectedNews.title}
-                    width={1200}
-                    height={800}
-                    className="max-h-[58vh] w-auto object-contain rounded shadow-2xl"
-                    priority
-                  />
+                {/* Poster / Photo scrollable area พร้อมระบบขยายรูปภาพ */}
+                <div
+                  className={`relative bg-black flex items-center justify-center p-2 sm:p-4 overflow-auto ${
+                    isFullscreen ? "flex-1 max-h-[75vh]" : "max-h-[62vh]"
+                  } select-none transition-all duration-300`}
+                >
+                  <div
+                    className="transition-transform duration-300 ease-out flex items-center justify-center max-w-full"
+                    style={{
+                      transform: `scale(${zoomLevel})`,
+                      transformOrigin: "center center",
+                    }}
+                  >
+                    <Image
+                      src={selectedNews.image_url || FALLBACK_IMG}
+                      alt={selectedNews.title}
+                      width={1400}
+                      height={900}
+                      className={`${
+                        isFullscreen ? "max-h-[72vh]" : "max-h-[58vh]"
+                      } w-auto object-contain rounded shadow-2xl transition-all duration-300`}
+                      priority
+                    />
+                  </div>
+
+                  {/* ปุ่มกดขยายภาพลอย (Floating Zoom Action) */}
+                  <div className="absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                    <button
+                      type="button"
+                      onClick={() => setZoomLevel((z) => (z > 1 ? 1 : 1.75))}
+                      className="bg-black/75 hover:bg-black/90 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-medium border border-white/20 shadow-lg flex items-center gap-1.5 transition-all cursor-pointer"
+                      title={zoomLevel > 1 ? "คลิกเพื่อย่อกลับขนาดปกติ" : "คลิกเพื่อขยายภาพ"}
+                    >
+                      {zoomLevel > 1 ? (
+                        <>
+                          <ZoomOut className="w-3.5 h-3.5 text-amber-400" />
+                          <span>ย่อขนาดภาพ ({Math.round(zoomLevel * 100)}%)</span>
+                        </>
+                      ) : (
+                        <>
+                          <ZoomIn className="w-3.5 h-3.5 text-[#f97316]" />
+                          <span>กดขยายรูปภาพ</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Modal Footer Description */}

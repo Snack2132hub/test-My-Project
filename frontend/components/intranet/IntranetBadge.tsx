@@ -8,9 +8,9 @@ interface IntranetBadgeProps {
 }
 
 export default function IntranetBadge({ iconType, name }: IntranetBadgeProps) {
-  // Size is fixed to fit the round avatar slot on the left of each card
+  // Size is fixed to fit the square icon badge slot on the left of each card
   const containerClass =
-    "w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shrink-0 relative overflow-hidden shadow-xs select-none transition-transform group-hover:scale-105 duration-200";
+    "w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center shrink-0 relative overflow-hidden shadow-xs select-none transition-transform group-hover:scale-105 duration-200";
 
   switch (iconType) {
     case "tiger_hr":
@@ -65,7 +65,7 @@ export default function IntranetBadge({ iconType, name }: IntranetBadgeProps) {
     case "safemind":
       return (
         <div className={`${containerClass} bg-gradient-to-b from-[#1E3A5F] via-[#28537E] to-[#122438] p-1`}>
-          <div className="w-full h-full rounded-full border border-sky-300/40 flex flex-col items-center justify-center">
+          <div className="w-full h-full rounded-lg border border-sky-300/40 flex flex-col items-center justify-center">
             <div className="w-6 h-5 bg-sky-100 rounded-md border border-sky-300 flex items-center justify-center relative shadow-xs">
               <div className="flex gap-1">
                 <div className="w-1 h-1 bg-slate-800 rounded-full" />

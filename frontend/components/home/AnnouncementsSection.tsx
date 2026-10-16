@@ -214,7 +214,7 @@ export default function AnnouncementsSection() {
       if (!isDraggingRef.current) {
         nextSlide();
       }
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [isLoading, announcements.length, isPaused, selectedAnnouncement]);
