@@ -1,18 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, X, ZoomIn } from "lucide-react";
 
 /**
  * คอมโพเนนต์ AfterHoursClinicSection (ส่วนคลินิกพิเศษนอกเวลา)
  * - ปุ่มสลับเลือกตารางบริการ "เดือนนี้" / "เดือนหน้า"
- * - การ์ดรูปโปสเตอร์ตารางบริการ
+ * - การ์ดรูปโปสเตอร์ตารางบริการ พร้อมป๊อบอัพขยายรูปตารางเวลา
  * - การ์ดข้อมูลสาระสำคัญเพิ่มเติม
  */
 export default function AfterHoursClinicSection() {
   // State สลับตารางบริการประจำเดือน
   const [selectedClinicMonth, setSelectedClinicMonth] = useState<"thisMonth" | "nextMonth">("thisMonth");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // ปิด modal เมื่อกด ESC
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsModalOpen(false);
+      }
+    };
+    if (isModalOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "auto";
+    };
+  }, [isModalOpen]);
+
+  const currentScheduleSrc =
+    selectedClinicMonth === "thisMonth"
+      ? "/img/AfterHoursClinicSection/smc/smc_july.png"
+      : "/img/AfterHoursClinicSection/smc/smc_apr.png";
 
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8 w-full overflow-hidden border-t border-orange-100/80">
@@ -37,26 +60,28 @@ export default function AfterHoursClinicSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* คอลัมน์ซ้าย: รูปภาพโปสเตอร์ตารางให้บริการประจำเดือน */}
+          {/* คอลัมน์ซ้าย: รูปภาพโปสเตอร์ตารางให้บริการประจำเดือน (คลิกเปิดป๊อบอัพได้) */}
           <div className="lg:col-span-7 flex justify-center w-full">
-            <div className="relative w-full rounded-2xl overflow-hidden shadow-lg border border-orange-100 bg-white group">
+            <div
+              onClick={() => setIsModalOpen(true)}
+              className="relative w-full rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl border border-orange-100 bg-white group cursor-pointer transition-all duration-300"
+            >
               <div className="relative aspect-[4/3] w-full">
-                {/* 📌 [จุดเปลี่ยนรูปโปสเตอร์ตารางคลินิกพิเศษนอกเวลา] 
-                    สามารถเปลี่ยน src ตามเดือน เช่น:
-                    - เดือนนี้: "/img/clinic/schedule_this_month.png"
-                    - เดือนหน้า: "/img/clinic/schedule_next_month.png"
-                */}
                 <Image
-                  src={
-                    selectedClinicMonth === "thisMonth"
-                       ? "/img/AfterHoursClinicSection/smc/smc_july.png"
-                      : "/img/AfterHoursClinicSection/smc/smc_apr.png"
-                  }
+                  src={currentScheduleSrc}
                   alt="ตารางคลินิกพิเศษนอกเวลา"
                   fill
-                  className="object-cover object-top"
+                  className="object-cover object-top group-hover:scale-102 transition-transform duration-500"
                   sizes="(max-width: 1024px) 100vw, 60vw"
                 />
+
+                {/* Hover overlay indicator */}
+                <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <span className="px-4 py-2 rounded-full bg-[#f97316] text-white text-xs sm:text-sm font-semibold shadow-xl flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+                    <ZoomIn className="w-4 h-4" />
+                    คลิกเพื่อดูตารางขนาดใหญ่
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -94,7 +119,7 @@ export default function AfterHoursClinicSection() {
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100">
                 <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                   <Image
-                    src="/img/AfterHoursClinicSection/mp.png"
+                    src="/img/AfterHoursClinicSection/lo.png"
                     alt="LG Icon"
                     width={48}
                     height={48}
@@ -110,7 +135,7 @@ export default function AfterHoursClinicSection() {
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100">
                 <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                   <Image
-                    src="/img/AfterHoursClinicSection/lo.png"
+                    src="/img/AfterHoursClinicSection/money.png"
                     alt="LG Icon"
                     width={48}
                     height={48}
@@ -126,7 +151,7 @@ export default function AfterHoursClinicSection() {
               <div className="flex items-center gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100">
                 <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                   <Image
-                    src="/img/AfterHoursClinicSection/money.png"
+                    src="/img/AfterHoursClinicSection/mp.png"
                     alt="LG Icon"
                     width={48}
                     height={48}
@@ -141,6 +166,49 @@ export default function AfterHoursClinicSection() {
           </div>
         </div>
       </div>
+
+      {/* Lightbox Modal ป๊อบอัพรูปตารางเวลาขนาดใหญ่ (แสดงเฉพาะตัวรูปภาพ ไม่มีกรอบซ้ายขวา) */}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fadeIn cursor-zoom-out"
+          onClick={() => setIsModalOpen(false)}
+        >
+          {/* ปุ่มปิดมุมบนขวา */}
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="fixed top-4 right-4 sm:top-6 sm:right-6 z-60 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all cursor-pointer shadow-xl group"
+            aria-label="Close modal"
+          >
+            <X className="w-6 h-6 transform group-hover:scale-110 transition-transform" />
+          </button>
+
+          {/* กล่องแสดงรูปตารางเวลา เพียวๆ ไม่มีกรอบซ้ายขวา */}
+          <div
+            className="relative flex flex-col items-center justify-center max-h-[92vh] max-w-[94vw] cursor-default"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={currentScheduleSrc}
+              alt="ตารางคลินิกพิเศษนอกเวลา ขยายใหญ่"
+              className="max-h-[84vh] max-w-[92vw] w-auto h-auto object-contain rounded-2xl shadow-2xl select-none"
+            />
+
+            {/* แถบระบุเดือนและปุ่มสลับดูตารางเดือนอื่น */}
+            <div className="mt-3 sm:mt-4 px-4 py-1.5 rounded-full bg-slate-900/90 backdrop-blur-md border border-white/10 text-white text-xs sm:text-sm font-medium flex items-center gap-2 sm:gap-3 shadow-lg">
+              <span className="w-2 h-2 rounded-full bg-[#f97316]"></span>
+              <span>ตารางคลินิกพิเศษนอกเวลา ({selectedClinicMonth === "thisMonth" ? "เดือนนี้" : "เดือนหน้า"})</span>
+              <button
+                type="button"
+                onClick={() => setSelectedClinicMonth((prev) => (prev === "thisMonth" ? "nextMonth" : "thisMonth"))}
+                className="ml-1 text-xs text-[#f97316] hover:underline font-semibold cursor-pointer"
+              >
+                สลับดู{selectedClinicMonth === "thisMonth" ? "เดือนหน้า" : "เดือนนี้"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

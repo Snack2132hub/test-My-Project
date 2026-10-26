@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-200 pt-12 pb-12 px-4 sm:px-6 lg:px-8 mt-auto">
+    <footer className="bg-white border-t border-gray-200/80 shadow-[0_-8px_30px_rgba(0,0,0,0.12)] relative z-20 pt-12 pb-12 px-4 sm:px-6 lg:px-8 mt-auto">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-10">
         {/* คอลัมน์ที่ 1: โลโก้ + ที่อยู่โรงพยาบาล */}
         <div className="flex flex-col space-y-4">
@@ -27,9 +27,12 @@ export default function Footer() {
 
         {/* คอลัมน์ที่ 2: OUR PAGES */}
         <div className="flex flex-col">
-          <h3 className="text-sm font-bold text-gray-900 tracking-wider uppercase mb-3">
-            OUR PAGES
-          </h3>
+          <div className="mb-3">
+            <h3 className="text-sm font-bold text-gray-900 tracking-wider uppercase">
+              OUR PAGES
+            </h3>
+            <div className="w-8 h-[2.5px] bg-[#f97316] rounded-full mt-1.5" />
+          </div>
           <ul className="text-xs sm:text-sm text-gray-600 font-light divide-y divide-gray-100">
             <li className="py-2.5">
               <Link href="/about/vision-mission" className="hover:text-[#ea580c] transition-colors block">
@@ -56,9 +59,12 @@ export default function Footer() {
 
         {/* คอลัมน์ที่ 3: MEDICAL SERVICE */}
         <div className="flex flex-col">
-          <h3 className="text-sm font-bold text-gray-900 tracking-wider uppercase mb-3">
-            MEDICAL SERVICE
-          </h3>
+          <div className="mb-3">
+            <h3 className="text-sm font-bold text-gray-900 tracking-wider uppercase">
+              MEDICAL SERVICE
+            </h3>
+            <div className="w-8 h-[2.5px] bg-[#f97316] rounded-full mt-1.5" />
+          </div>
           <ul className="text-xs sm:text-sm text-gray-600 font-light divide-y divide-gray-100">
             <li className="py-2.5">
               <Link href="/patient-services" className="hover:text-[#ea580c] transition-colors block">
@@ -85,9 +91,12 @@ export default function Footer() {
 
         {/* คอลัมน์ที่ 4: ORTHER */}
         <div className="flex flex-col">
-          <h3 className="text-sm font-bold text-gray-900 tracking-wider uppercase mb-3">
-            ORTHER
-          </h3>
+          <div className="mb-3">
+            <h3 className="text-sm font-bold text-gray-900 tracking-wider uppercase">
+              ORTHER
+            </h3>
+            <div className="w-8 h-[2.5px] bg-[#f97316] rounded-full mt-1.5" />
+          </div>
           <ul className="text-xs sm:text-sm text-gray-600 font-light divide-y divide-gray-100">
             <li className="py-2.5">
               <Link href="/jobs" className="hover:text-[#ea580c] transition-colors block">

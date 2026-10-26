@@ -210,19 +210,17 @@ export default function NewsAndActivitiesSection() {
                 <button
                   key={key}
                   onClick={() => switchTab(key)}
-                  className={`flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
-                    newsTab === key
+                  className={`flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 cursor-pointer ${newsTab === key
                       ? "bg-[#f97316] text-white shadow-sm font-semibold"
                       : "text-gray-600 hover:text-gray-900 hover:bg-white/70"
-                  }`}
+                    }`}
                 >
                   <Icon className="w-4 h-4 shrink-0" />
                   <span>{label}</span>
                   {typeof count === "number" && (
                     <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                        newsTab === key ? "bg-white/20 text-white" : "bg-gray-200 text-gray-600"
-                      }`}
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${newsTab === key ? "bg-white/20 text-white" : "bg-gray-200 text-gray-600"
+                        }`}
                     >
                       {count}
                     </span>
@@ -242,11 +240,10 @@ export default function NewsAndActivitiesSection() {
                     setSelectedSubTag(tag);
                     setNewsPage(0);
                   }}
-                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
-                    selectedSubTag === tag
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${selectedSubTag === tag
                       ? "bg-orange-100 text-[#f97316] font-semibold border border-orange-200"
                       : "bg-white text-gray-500 hover:text-gray-800 border border-gray-200 hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   {tag}
                 </button>
@@ -388,21 +385,16 @@ export default function NewsAndActivitiesSection() {
                 exit={{ scale: 0.94, opacity: 0 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 onClick={(e) => e.stopPropagation()}
-                className={`relative ${
-                  isFullscreen
+                className={`relative ${isFullscreen
                     ? "max-w-[98vw] w-full h-[95vh]"
                     : "max-w-4xl w-full max-h-[92vh]"
-                } flex flex-col bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-300`}
+                  } flex flex-col bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-300`}
               >
                 {/* Modal Header พร้อมปุ่มขยาย/ย่อภาพและขยายเต็มจอ */}
                 <div className="bg-slate-900 text-white px-4 sm:px-5 py-3 flex items-center justify-between border-b border-slate-800 shrink-0 gap-2">
                   <div className="flex items-center gap-2 overflow-hidden">
-                    <span className="px-2.5 py-0.5 rounded-md bg-[#f97316] text-white text-xs font-semibold shrink-0">
-                      {TAB_LABELS[newsTab]}
-                    </span>
-                    <span className="text-xs text-gray-400 truncate">
-                      {formatThaiDate(selectedNews.published_at)}
-                    </span>
+                    
+                  
                   </div>
 
                   {/* แถบเครื่องมือ: ปุ่มซูมภาพ และ ปุ่มขยายเต็มจอ */}
@@ -458,11 +450,10 @@ export default function NewsAndActivitiesSection() {
                     <button
                       type="button"
                       onClick={() => setIsFullscreen((prev) => !prev)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border ${
-                        isFullscreen
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border ${isFullscreen
                           ? "bg-[#f97316] text-white border-[#ea580c] shadow-xs"
                           : "bg-slate-800 hover:bg-slate-700 text-white border-slate-700"
-                      }`}
+                        }`}
                       title={isFullscreen ? "ย่อหน้าต่างกลับขนาดเดิม" : "ขยายหน้าต่างเต็มจอ"}
                     >
                       {isFullscreen ? (
@@ -491,9 +482,8 @@ export default function NewsAndActivitiesSection() {
 
                 {/* Poster / Photo scrollable area พร้อมระบบขยายรูปภาพ */}
                 <div
-                  className={`relative bg-black flex items-center justify-center p-2 sm:p-4 overflow-auto ${
-                    isFullscreen ? "flex-1 max-h-[75vh]" : "max-h-[62vh]"
-                  } select-none transition-all duration-300`}
+                  className={`relative bg-black flex items-center justify-center p-2 sm:p-4 overflow-auto ${isFullscreen ? "flex-1 max-h-[75vh]" : "max-h-[62vh]"
+                    } select-none transition-all duration-300`}
                 >
                   <div
                     className="transition-transform duration-300 ease-out flex items-center justify-center max-w-full"
@@ -507,9 +497,8 @@ export default function NewsAndActivitiesSection() {
                       alt={selectedNews.title}
                       width={1400}
                       height={900}
-                      className={`${
-                        isFullscreen ? "max-h-[72vh]" : "max-h-[58vh]"
-                      } w-auto object-contain rounded shadow-2xl transition-all duration-300`}
+                      className={`${isFullscreen ? "max-h-[72vh]" : "max-h-[58vh]"
+                        } w-auto object-contain rounded shadow-2xl transition-all duration-300`}
                       priority
                     />
                   </div>
@@ -537,17 +526,33 @@ export default function NewsAndActivitiesSection() {
                   </div>
                 </div>
 
+
                 {/* Modal Footer Description */}
                 <div className="bg-slate-900/95 text-white p-4 sm:p-5 border-t border-slate-800 shrink-0">
+
+                  {/* หมวดหมู่และวันที่ */}
+                  <div className="flex items-center gap-2 overflow-hidden mb-3">
+                    <span className="px-2.5 py-0.5 rounded-md bg-[#f97316] text-white text-xs font-semibold shrink-0">
+                      {TAB_LABELS[newsTab]}
+                    </span>
+                    <span className="text-xs text-gray-400 truncate">
+                      {formatThaiDate(selectedNews.published_at)}
+                    </span>
+                  </div>
+
+                  {/* หัวข้อข่าว */}
                   <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
                     {selectedNews.title}
                   </h3>
+
+                  {/* รายละเอียดข่าว */}
                   {selectedNews.content && (
                     <p className="mt-1.5 text-xs sm:text-sm text-gray-300 font-light leading-relaxed max-w-3xl whitespace-pre-line">
                       {selectedNews.content}
                     </p>
                   )}
                 </div>
+
               </motion.div>
             </motion.div>
           )}
@@ -578,11 +583,10 @@ export default function NewsAndActivitiesSection() {
                   <button
                     key={idx}
                     onClick={() => setNewsPage(idx)}
-                    className={`w-8 h-8 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
-                      newsPage === idx
+                    className={`w-8 h-8 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${newsPage === idx
                         ? "bg-[#f97316] text-white shadow-xs"
                         : "bg-slate-100 text-gray-600 hover:bg-slate-200"
-                    }`}
+                      }`}
                     aria-label={`Go to news page ${idx + 1}`}
                   >
                     {idx + 1}

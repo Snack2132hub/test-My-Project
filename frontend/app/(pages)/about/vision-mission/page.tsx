@@ -49,7 +49,7 @@ export default function VisionMissionPage() {
         {/* ค่านิยมหลัก */}
         <div className="text-center space-y-3 pt-2">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
-            <span className="inline-block border-b-2 border-[#f97316] pb-1">
+            <span className="inline-block border-b-2 border-[#f97316] pb-1 mb-4">
               ค่านิยมหลัก
             </span>
           </h2>
@@ -72,7 +72,7 @@ export default function VisionMissionPage() {
               />
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-gray-800">
-              <span className="inline-block border-b-2 border-[#f97316] pb-1">
+              <span className="inline-block border-b-2 border-[#f97316] pb-1 mb-4">
                 เข็มมุ่ง
               </span>
             </h3>
@@ -94,7 +94,7 @@ export default function VisionMissionPage() {
               />
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-gray-800">
-              <span className="inline-block border-b-2 border-[#f97316] pb-1">
+              <span className="inline-block border-b-2 border-[#f97316] pb-1 mb-4">
                 วิสัยทัศน์
               </span>
             </h3>
@@ -115,7 +115,7 @@ export default function VisionMissionPage() {
               />
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-gray-800">
-              <span className="inline-block border-b-2 border-[#f97316] pb-1">
+              <span className="inline-block border-b-2 border-[#f97316] pb-1 mb-4">
                 เป้าหมาย
               </span>
             </h3>
@@ -130,7 +130,7 @@ export default function VisionMissionPage() {
         {/* พันธกิจ (Mission) Section */}
         <div className="text-center pt-6 space-y-6 max-w-3xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-            <span className="inline-block border-b-2 border-[#f97316] pb-1">
+            <span className="inline-block border-b-2 border-[#f97316] pb-1 mb-4">
               พันธกิจ
             </span>
           </h2>

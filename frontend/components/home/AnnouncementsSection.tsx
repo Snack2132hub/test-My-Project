@@ -214,7 +214,7 @@ export default function AnnouncementsSection() {
       if (!isDraggingRef.current) {
         nextSlide();
       }
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [isLoading, announcements.length, isPaused, selectedAnnouncement]);
@@ -249,12 +249,15 @@ export default function AnnouncementsSection() {
   return (
     <section className="pt-16 pb-24 px-4 sm:px-6 lg:px-8 w-full flex-1">
       <div className="max-w-6xl mx-auto">
-        {/* หัวข้อส่วนประกาศ (ใช้ไอคอนสีดำ Megaphone ตามเดิม) */}
-        <div className="flex items-center justify-center gap-4 mb-12">
-          <Megaphone className="w-8 h-8 md:w-10 md:h-10 text-gray-700" fill="currentColor" />
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">
-            ประกาศ !!!
-          </h2>
+        {/* หัวข้อส่วนประกาศ พร้อมเส้นสีส้มใต้ข้อความตามแบบในรูป */}
+        <div className="flex items-center justify-center gap-3.5 sm:gap-4 mb-12">
+          <Megaphone className="w-8 h-8 md:w-10 md:h-10 text-gray-700 shrink-0" fill="currentColor" />
+          <div className="flex flex-col items-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">
+              ประกาศ !!!
+            </h2>
+            <div className="w-20 sm:w-24 h-1 bg-[#f97316] mt-3 rounded-full"></div>
+          </div>
         </div>
 
         {/* Container สไลเดอร์ลากรูปภาพ */}
@@ -360,33 +363,40 @@ export default function AnnouncementsSection() {
         </div>
       </div>
 
-      {/* Pop-up ขยายรูปภาพประกาศเมื่อคลิก */}
+      {/* Pop-up ขยายรูปภาพประกาศเมื่อคลิก (แสดงเฉพาะตัวรูปภาพ ไม่มีกรอบซ้ายขวา) */}
       {selectedAnnouncement && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-fadeIn"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-sm animate-fadeIn cursor-zoom-out"
           onClick={() => setSelectedAnnouncement(null)}
         >
+          {/* ปุ่มปิดแบบลอยมุมขวาบน */}
+          <button
+            onClick={() => setSelectedAnnouncement(null)}
+            className="fixed top-4 right-4 sm:top-6 sm:right-6 z-60 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all cursor-pointer shadow-xl group"
+            aria-label="Close modal"
+          >
+            <X className="w-6 h-6 transform group-hover:scale-110 transition-transform" />
+          </button>
+
+          {/* ตัวรูปภาพประกาศเพียวๆ ไม่มีกรอบซ้ายขวา */}
           <div
-            className="relative bg-white rounded-3xl overflow-hidden max-w-3xl w-full shadow-2xl border border-slate-100 flex flex-col"
+            className="relative flex items-center justify-center max-h-[90vh] max-w-[92vw] cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => setSelectedAnnouncement(null)}
-              className="absolute top-4 right-4 z-20 p-2.5 bg-slate-900/70 text-white hover:bg-slate-900 rounded-full transition-colors shadow-md"
-              aria-label="Close modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="relative w-full aspect-[3/4] max-h-[85vh] bg-slate-100">
-              <SmartAnnouncementImage
-                src={selectedAnnouncement.image}
-                alt={selectedAnnouncement.title || "ภาพประกาศขยายใหญ่"}
-                fill
-                className="object-contain"
-                quality={95}
-              />
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={selectedAnnouncement.image}
+              alt={selectedAnnouncement.title || "ภาพประกาศขยายใหญ่"}
+              className="max-h-[88vh] max-w-[92vw] w-auto h-auto object-contain rounded-2xl shadow-2xl select-none"
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (target.src.endsWith(".jpg")) {
+                  target.src = target.src.replace(/\.jpg$/i, ".png");
+                } else if (target.src.endsWith(".png")) {
+                  target.src = target.src.replace(/\.png$/i, ".jpg");
+                }
+              }}
+            />
           </div>
         </div>
       )}

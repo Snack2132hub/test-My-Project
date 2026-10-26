@@ -38,13 +38,13 @@ export default function OnlineAppointmentSection() {
     {
       title: "คลินิก ในเวลาราชการ",
       subtitle: "บริการนัดหมายออนไลน์ ในเวลาราชการ",
-      src: "/img/in.png",
+      src: "/img/appoint3.png",
       alt: "คลินิก ในเวลาราชการ",
     },
     {
       title: "คลินิกเฉพาะทาง นอกเวลาราชการ",
       subtitle: "บริการนัดหมายออนไลน์ นอกเวลาราชการ",
-      src: "/img/out.png",
+      src: "/img/appoint2.png",
       alt: "คลินิกเฉพาะทาง นอกเวลาราชการ",
     },
   ];
@@ -124,14 +124,14 @@ export default function OnlineAppointmentSection() {
 
           {/* รูปภาพขยายใหญ่ ไม่มีกรอบ */}
           <div
-            className="relative flex items-center justify-center max-w-[95vw] max-h-[92vh] animate-in zoom-in-95 duration-200 cursor-default"
+            className="relative flex items-center justify-center w-[100vw] h-[100vh] animate-in zoom-in-95 duration-200 cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={selectedImage.src}
               alt={selectedImage.alt}
-              className="max-h-[95vh] max-w-[98vw] w-auto h-auto object-contain rounded-lg shadow-2xl select-none"
+              className="w-auto h-auto max-w-[98vw] max-h-[95vh] object-contain rounded-lg shadow-2xl select-none"
             />
           </div>
         </div>
