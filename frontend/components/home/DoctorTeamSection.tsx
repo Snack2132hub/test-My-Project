@@ -123,8 +123,6 @@ export default function DoctorTeamSection() {
               >
                 <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#fed7aa]/50 via-[#ffedd5]/80 to-[#fed7aa]/40 border border-orange-100 shadow-xs group-hover:shadow-md transition-all duration-300 mb-4">
                   <DoctorImage src={doctor.image} alt={doctor.name} />
-                  {/* Overlay เฟดดำเมื่อ hover (Hover black fade) */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/35 transition-colors duration-300 pointer-events-none z-10" />
                 </div>
                 <h3 className="text-[20px] font-bold text-gray-800 leading-snug transition-colors">
                   {doctor.name}

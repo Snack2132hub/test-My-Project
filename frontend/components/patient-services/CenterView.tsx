@@ -408,7 +408,7 @@ export default function CenterView({
                   <div
                     className={`w-full ${
                       visibleDoctors.length <= 4
-                        ? "flex flex-wrap justify-center gap-3.5 sm:gap-4"
+                        ? "flex flex-wrap justify-start gap-3.5 sm:gap-4"
                         : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-4"
                     }`}
                   >
@@ -416,7 +416,7 @@ export default function CenterView({
                       <Link
                         key={doc.id}
                         href={`/doctors/${doc.id}`}
-                        className={`group flex flex-col items-center text-center cursor-pointer transition-transform duration-200 hover:-translate-y-1 ${
+                        className={`group flex flex-col items-start text-left cursor-pointer transition-transform duration-200 hover:-translate-y-1 ${
                           visibleDoctors.length <= 4
                             ? "w-[calc(50%-8px)] sm:w-[calc(25%-12px)] max-w-[195px]"
                             : "w-full"
@@ -440,8 +440,8 @@ export default function CenterView({
                         </div>
 
                         {/* Doctor Name, Position, Department (ตามรูปที่ 6 แสดงแค่รูป ชื่อ ตำแหน่ง) */}
-                        <div className="w-full pt-2.5 px-0.5 space-y-0.5">
-                          <h3 className="font-bold text-gray-900 text-xs sm:text-[13px] leading-tight line-clamp-1 group-hover:text-[#f97316] transition-colors">
+                        <div className="w-full pt-2.5 px-0.5 space-y-0.5 text-left">
+                          <h3 className="font-bold text-gray-900 text-xs sm:text-[13px] leading-tight line-clamp-1">
                             {doc.name}
                           </h3>
                           <p className="text-[11px] sm:text-xs text-gray-500 font-normal line-clamp-1">

@@ -166,9 +166,11 @@ function DoctorsDirectoryContent() {
                 />
                 {searchQuery && (
                   <button
+                    type="button"
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-0.5"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#f97316] hover:bg-orange-50 p-1 rounded-full transition-colors cursor-pointer"
                     aria-label="ล้างการค้นหา"
+                    title="ล้างข้อความค้นหา"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -215,16 +217,6 @@ function DoctorsDirectoryContent() {
               </span>
             )}
           </div>
-
-          {(selectedCenter !== "ทั้งหมด" || searchQuery) && (
-            <button
-              onClick={handleResetFilters}
-              className="text-xs sm:text-sm text-gray-500 hover:text-[#f97316] flex items-center gap-1 cursor-pointer transition-colors"
-            >
-              <X className="w-3.5 h-3.5" />
-              ล้างตัวกรองทั้งหมด
-            </button>
-          )}
         </div>
 
         {/* ตารางแสดงการ์ดแพทย์ (4 คอลัมน์ตามรูปที่ 1) */}
@@ -257,8 +249,6 @@ function DoctorsDirectoryContent() {
                     alt={doctor.name}
                     priority={doctor.id === 401 || doctor.id === 101}
                   />
-                  {/* Overlay เฟดดำเมื่อ hover (Hover black fade) */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/35 transition-colors duration-300 pointer-events-none z-10" />
                 </div>
 
                 {/* ข้อมูลใต้รูป */}

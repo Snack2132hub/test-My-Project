@@ -96,12 +96,14 @@ export default function OnlineAppointmentSection() {
                 </div>
               </div>
 
-              <h3 className="mt-5 text-lg sm:text-xl font-bold text-gray-800 group-hover:text-[#f97316] transition-colors flex items-center gap-2">
+              <br />
+              <h3 className="mt-20 text-lg sm:text-xl font-bold text-gray-800 group-hover:text-[#f97316] transition-colors flex items-center gap-2">
                 {card.title}
               </h3>
-              <p className="mt-1 text-xs sm:text-sm text-gray-600 font-light">
+              <p className="mt-2 text-xs sm:text-sm text-gray-600 font-light">
                 {card.subtitle}
               </p>
+              
             </div>
           ))}
         </div>
@@ -110,28 +112,33 @@ export default function OnlineAppointmentSection() {
       {/* Lightbox Modal ขยายรูปใหญ่ แบบไม่มีกรอบ */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200 cursor-zoom-out"
+          className="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200 cursor-pointer"
           onClick={() => setSelectedImage(null)}
+          role="dialog"
+          aria-modal="true"
         >
           {/* ปุ่มปิดแบบลอยมุมขวาบน */}
           <button
-            onClick={() => setSelectedImage(null)}
-            className="fixed top-4 right-4 sm:top-6 sm:right-6 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white/90 hover:text-white border border-white/20 transition-all cursor-pointer z-50 shadow-xl group"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedImage(null);
+            }}
+            className="fixed top-4 right-4 sm:top-6 sm:right-6 p-2.5 rounded-full bg-black/50 hover:bg-black/80 text-white/90 hover:text-white border border-white/20 transition-all cursor-pointer z-50 shadow-xl group"
             aria-label="Close image modal"
           >
             <X className="w-6 h-6 transform group-hover:scale-110 transition-transform" />
           </button>
 
-          {/* รูปภาพขยายใหญ่ ไม่มีกรอบ */}
+          {/* รูปภาพขยายใหญ่ - บล็อกเฉพาะส่วนรูปภาพเพื่อไม่ให้ปิด modal เมื่อคลิกที่รูป */}
           <div
-            className="relative flex items-center justify-center w-[100vw] h-[100vh] animate-in zoom-in-95 duration-200 cursor-default"
+            className="relative flex items-center justify-center max-w-[94vw] max-h-[92vh] animate-in zoom-in-95 duration-200 cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={selectedImage.src}
               alt={selectedImage.alt}
-              className="w-auto h-auto max-w-[98vw] max-h-[95vh] object-contain rounded-lg shadow-2xl select-none"
+              className="w-auto h-auto max-w-[94vw] max-h-[92vh] object-contain rounded-xl shadow-2xl select-none"
             />
           </div>
         </div>

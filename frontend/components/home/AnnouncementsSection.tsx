@@ -324,10 +324,10 @@ export default function AnnouncementsSection() {
                     sizes="(max-width: 768px) 280px, 340px"
                   />
 
-                  {/* Hover effect แสดงไอคอนพรีวิวเมื่อนำเมาส์มาวาง */}
+                  {/* Hover effect แสดงไอคอนพรีวิวเมื่อนำเมาส์มาวาง (ไอคอนดวงตาสีส้ม) */}
                   <div className="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="p-3 bg-white/90 backdrop-blur-md rounded-full text-slate-800 shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
-                      <Eye className="w-6 h-6" />
+                    <span className="p-3 bg-white/95 backdrop-blur-md rounded-full text-[#f97316] shadow-lg transform scale-90 group-hover:scale-100 transition-all border border-orange-100/80">
+                      <Eye className="w-6 h-6 text-[#f97316] stroke-[2.2]" />
                     </span>
                   </div>
                 </div>
@@ -366,13 +366,18 @@ export default function AnnouncementsSection() {
       {/* Pop-up ขยายรูปภาพประกาศเมื่อคลิก (แสดงเฉพาะตัวรูปภาพ ไม่มีกรอบซ้ายขวา) */}
       {selectedAnnouncement && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-sm animate-fadeIn cursor-zoom-out"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/45 backdrop-blur-sm animate-fadeIn cursor-pointer"
           onClick={() => setSelectedAnnouncement(null)}
+          role="dialog"
+          aria-modal="true"
         >
           {/* ปุ่มปิดแบบลอยมุมขวาบน */}
           <button
-            onClick={() => setSelectedAnnouncement(null)}
-            className="fixed top-4 right-4 sm:top-6 sm:right-6 z-60 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all cursor-pointer shadow-xl group"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedAnnouncement(null);
+            }}
+            className="fixed top-4 right-4 sm:top-6 sm:right-6 z-60 p-2.5 rounded-full bg-black/50 hover:bg-black/80 text-white/90 hover:text-white border border-white/20 transition-all cursor-pointer shadow-xl group"
             aria-label="Close modal"
           >
             <X className="w-6 h-6 transform group-hover:scale-110 transition-transform" />

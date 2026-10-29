@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { ChevronRight, X, ZoomIn } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 
 /**
  * คอมโพเนนต์ AfterHoursClinicSection (ส่วนคลินิกพิเศษนอกเวลา)
@@ -167,45 +167,65 @@ export default function AfterHoursClinicSection() {
         </div>
       </div>
 
-      {/* Lightbox Modal ป๊อบอัพรูปตารางเวลาขนาดใหญ่ (แสดงเฉพาะตัวรูปภาพ ไม่มีกรอบซ้ายขวา) */}
+      {/* Lightbox Modal ป๊อบอัพรูปตารางเวลาขนาดใหญ่ (แสดงเฉพาะตัวรูปภาพ พร้อมปุ่มลูกศรซ้าย-ขวาสำหรับสลับเดือน) */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fadeIn cursor-zoom-out"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fadeIn cursor-pointer"
           onClick={() => setIsModalOpen(false)}
+          role="dialog"
+          aria-modal="true"
         >
           {/* ปุ่มปิดมุมบนขวา */}
           <button
-            onClick={() => setIsModalOpen(false)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsModalOpen(false);
+            }}
             className="fixed top-4 right-4 sm:top-6 sm:right-6 z-60 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all cursor-pointer shadow-xl group"
             aria-label="Close modal"
           >
             <X className="w-6 h-6 transform group-hover:scale-110 transition-transform" />
           </button>
 
+          {/* ปุ่มลูกศรซ้ายสำหรับสลับเดือน */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedClinicMonth((prev) => (prev === "thisMonth" ? "nextMonth" : "thisMonth"));
+            }}
+            className="fixed left-3 sm:left-6 top-1/2 -translate-y-1/2 z-60 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all cursor-pointer shadow-2xl group hover:scale-110 active:scale-95"
+            aria-label="Previous month"
+            title="สลับดูตารางเดือนอื่น"
+          >
+            <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
+          </button>
+
+          {/* ปุ่มลูกศรขวาสำหรับสลับเดือน */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedClinicMonth((prev) => (prev === "thisMonth" ? "nextMonth" : "thisMonth"));
+            }}
+            className="fixed right-3 sm:right-6 top-1/2 -translate-y-1/2 z-60 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all cursor-pointer shadow-2xl group hover:scale-110 active:scale-95"
+            aria-label="Next month"
+            title="สลับดูตารางเดือนอื่น"
+          >
+            <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
+          </button>
+
           {/* กล่องแสดงรูปตารางเวลา เพียวๆ ไม่มีกรอบซ้ายขวา */}
           <div
-            className="relative flex flex-col items-center justify-center max-h-[92vh] max-w-[94vw] cursor-default"
+            className="relative flex items-center justify-center max-h-[92vh] max-w-[90vw] cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={currentScheduleSrc}
               alt="ตารางคลินิกพิเศษนอกเวลา ขยายใหญ่"
-              className="max-h-[84vh] max-w-[92vw] w-auto h-auto object-contain rounded-2xl shadow-2xl select-none"
+              className="max-h-[90vh] max-w-[86vw] w-auto h-auto object-contain rounded-2xl shadow-2xl select-none"
             />
-
-            {/* แถบระบุเดือนและปุ่มสลับดูตารางเดือนอื่น */}
-            <div className="mt-3 sm:mt-4 px-4 py-1.5 rounded-full bg-slate-900/90 backdrop-blur-md border border-white/10 text-white text-xs sm:text-sm font-medium flex items-center gap-2 sm:gap-3 shadow-lg">
-              <span className="w-2 h-2 rounded-full bg-[#f97316]"></span>
-              <span>ตารางคลินิกพิเศษนอกเวลา ({selectedClinicMonth === "thisMonth" ? "เดือนนี้" : "เดือนหน้า"})</span>
-              <button
-                type="button"
-                onClick={() => setSelectedClinicMonth((prev) => (prev === "thisMonth" ? "nextMonth" : "thisMonth"))}
-                className="ml-1 text-xs text-[#f97316] hover:underline font-semibold cursor-pointer"
-              >
-                สลับดู{selectedClinicMonth === "thisMonth" ? "เดือนหน้า" : "เดือนนี้"}
-              </button>
-            </div>
           </div>
         </div>
       )}

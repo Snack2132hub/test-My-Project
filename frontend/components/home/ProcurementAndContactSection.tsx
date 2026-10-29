@@ -20,7 +20,8 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
 const API = "";
-const ITEMS_PER_PAGE = 5;
+// แสดงข่าวสูงสุด 10 รายการต่อหน้า
+const ITEMS_PER_PAGE = 10;
 
 interface ProcurementRow {
   id: number;
@@ -162,7 +163,7 @@ export default function ProcurementAndContactSection() {
           </div>
 
           {/* กรอบกล่องหลักข่าวจัดซื้อจัดจ้าง/สมัครงาน */}
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl md:rounded-3xl border-2 border-orange-200/90 shadow-xl px-4 sm:px-5 py-3 min-h-[40px] flex flex-col justify-between">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl md:rounded-3xl border-2 border-orange-200/90 shadow-xl px-4 sm:px-5 py-3 min-h-[520px] sm:min-h-[480px] flex flex-col justify-between">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${procurementTab}-${procurementPage}`}
@@ -170,7 +171,7 @@ export default function ProcurementAndContactSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.25 }}
-                className="divide-y divide-gray-100"
+                className="divide-y divide-gray-100 min-h-[480px] sm:min-h-[440px]"
               >
                 {loading ? (
                   Array.from({ length: 5 }).map((_, i) => (
